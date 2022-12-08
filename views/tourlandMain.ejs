@@ -4,177 +4,184 @@
     <meta charset="UTF-8">
     <title>Insert title here</title>
 </head>
+
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Gothic&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
 <script src="https://kit.fontawesome.com/6f2f0f2d95.js"></script>
 
 <link rel="stylesheet" type="text/css" href="./stylesheets/tourlandMain.css"/>
+
 <body>
 <div id="container">
-    <%- include('./include/userHeader.ejs') %>
+<%- include('./include/userHeader.ejs') %>
 
-    <script>
-        //메인 배너 슬라이드
-        /* $(".box1 > div:gt(0)").hide(); */
-        setInterval(function () {
-            $('.box1 > div:first').fadeOut(1000).next().fadeIn(1000).end()
-                .appendTo('.box1');
-        }, 3000);
+<script>
+    //메인 배너 슬라이드
+    /* $(".box1 > div:gt(0)").hide(); */
+    setInterval(function () {
+        $('.box1 > div:first').fadeOut(1000).next().fadeIn(1000).end()
+            .appendTo('.box1');
+    }, 3000);
 
-        $(function () {
+    $(function () {
 
-            if ($.cookie("popup1") != null) {
-                $("#popup1").css("display", "block");
+        console.log("111=>", $.cookie("popup2"));
+
+        if ($.cookie("popup1") != null) {
+            $("#popup1").css("display", "block");
+        }
+
+        if ($.cookie("popup2") != null) {
+            $("#popup2").css("display", "block");
+        }
+        // alert($.cookie("exeptFor3days"));
+        if ($.cookie("exeptFor3days") == "none") {
+            $("#popup1").css("display", "none");
+        }
+        if ($.cookie("exeptFor3days2") == "none") {
+            $("#popup2").css("display", "none");
+        }
+        //팝업 버튼 누르면 팝업창 사라지기 popup1
+        $(".popupBtnClose").click(function () {
+            if ($(".expireCK").prop("checked") == true) {
+                $.cookie("exeptFor3days", "none", {
+                    expires: 3,
+                    path: "/"
+                });
             }
-
-            if ($.cookie("popup2") != null) {
-                $("#popup2").css("display", "block");
-            }
-            // alert($.cookie("exeptFor3days"));
-            if ($.cookie("exeptFor3days") == "none") {
-                $("#popup1").css("display", "none");
-            }
-            if ($.cookie("exeptFor3days2") == "none") {
-                $("#popup2").css("display", "none");
-            }
-            //팝업 버튼 누르면 팝업창 사라지기 popup1
-            $(".popupBtnClose").click(function () {
-                if ($(".expireCK").prop("checked") == true) {
-                    $.cookie("exeptFor3days", "none", {
-                        expires: 3,
-                        path: "/"
-                    });
-                }
-                $(this).parent().parent().parent().css("display", "none");
-            })
-            $(".popupBtnClose2").click(function () {
-                if ($(".expireCK2").prop("checked") == true) {
-                    $.cookie("exeptFor3days2", "none", {
-                        expires: 3,
-                        path: "/"
-                    });
-                }
-                $(this).parent().parent().parent().css("display", "none");
-            })
-
-            $("#popup1img")
-                .click(
-                    function () {
-                        if ("<%= popup1.link %>" == "") {
-                            location.href = "/customer/tourlandEventList/ingEvent";
-                        } else {
-                            location.href = "<%= popup1.link %>";
-                        }
-
-                    })
-            $("#popup2img")
-                .click(
-                    function () {
-                        if ("<%= popup2.link %>" == "") {
-                            location.href = "/customer/tourlandEventList/ingEvent";
-                        } else {
-                            location.href = "<%= popup2.link %>";
-                        }
-                    })
-
-            $(".label3").click(function () {
-                $(this).prev().attr("checked", true);
-            })
-
-            var currentP = parseInt($("#slideBoxMain").css('top'));
-            $(window).scroll(function () {
-                var positions = $(window).scrollTop();
-                $("#slideBoxMain").stop().animate({
-                    "top": positions + currentP + "px"
-                }, 500);
-            })
-
-            $('#slSpan').click(function () {
-                $('html, body').animate({
-                    scrollTop: 0
-                }, 600); // 이동 스르륵
-                return false;
-            });
-            //닫기화살표 누르면
-            $(document)
-                .on(
-                    "click",
-                    "#arrows",
-                    function () {
-
-                        $("#slideBoxMain").css("margin-right", "-118px");
-                        $("#arrowSide")
-                            .html(
-                                '<i class="fas fa-caret-left" style="margin-left:4px;" id="arrowsBack"></i>');
-
-                    })
-            $(document)
-                .on(
-                    "click",
-                    "#arrowsBack",
-                    function () {
-
-                        $("#slideBoxMain").css("margin-right", "0");
-                        $("#arrowSide")
-                            .html(
-                                '<i class="fas fa-caret-right" style=" margin-left:7px; display:block; width:18px; height:22px; line-height:22px;" id="arrows"></i>');
-
-                    })
-
-            //메인 중앙 검색 박스
-            $("#searchDivBtn button")
-                .click(
-                    function () {
-                        var tourDays = $("#tourDays select").val();
-                        var to = $("#toDiv select").val();
-                        var capa = $("#capa select").val();
-                        var date = $(".datepicker").val();
-
-                        if (tourDays == "선택" || to == "선택" || capa == "선택"
-                            || date == "") {
-                            alert("모든 항목을 선택해주세요.");
-                            return false;
-                        } else {
-                            location.href = "/customer/tourlandProductMainSearchList?tourDays="
-                                + tourDays
-                                + "&to="
-                                + to
-                                + "&capa="
-                                + capa + "&date=" + date;
-                        }
-
-                    })
+            $(this).parent().parent().parent().css("display", "none");
         })
-    </script>
-    <% if (currentProductPrice != null) { %>
-    <script>
-        //최근 본 상품의 이미지를 누르면 링크로 이동 이엘때문에 따로 처리, 동적 추가 docu on
-        $(document).on("click", ".currentP1", function () {
-            location.href = "tourlandProductDetail?pno=" +<%= currentProduct.pno %> +"&price=" +<%= currentProductPrice %>;
+        $(".popupBtnClose2").click(function () {
+            if ($(".expireCK2").prop("checked") == true) {
+                $.cookie("exeptFor3days2", "none", {
+                    expires: 3,
+                    path: "/"
+                });
+            }
+            $(this).parent().parent().parent().css("display", "none");
         })
-    </script>
-    <% } %>
-    <% if (currentProduct2 != null) { %>
-    <script>
-        $(document).on("click", ".currentP2", function () {
-            location.href = "tourlandProductDetail?pno=" +<%= currentProduct2.pno %> +"&price=" +<%= currentProductPrice2 %>;
+
+        $("#popup1img")
+            .click(
+                function () {
+                    if ("<%=popup1.link%>" == "") {
+                        location.href = "/customer/tourlandEventList/ingEvent";
+                    } else {
+                        location.href = "<%=popup1.link%>";
+                    }
+
+                })
+        $("#popup2img")
+            .click(
+                function () {
+                    if ("<%=popup2.link%>" == "") {
+                        location.href = "/customer/tourlandEventList/ingEvent";
+                    } else {
+                        location.href = "<%=popup2.link%>";
+                    }
+                })
+
+        $(".label3").click(function () {
+            $(this).prev().attr("checked", true);
         })
-    </script>
-    <% } %>
+
+        var currentP = parseInt($("#slideBoxMain").css('top'));
+        $(window).scroll(function () {
+            var positions = $(window).scrollTop();
+            $("#slideBoxMain").stop().animate({
+                "top": positions + currentP + "px"
+            }, 500);
+        })
+
+        $('#slSpan').click(function () {
+            $('html, body').animate({
+                scrollTop: 0
+            }, 600); // 이동 스르륵
+            return false;
+        });
+        //닫기화살표 누르면
+        $(document)
+            .on(
+                "click",
+                "#arrows",
+                function () {
+
+                    $("#slideBoxMain").css("margin-right", "-118px");
+                    $("#arrowSide")
+                        .html(
+                            '<i class="fas fa-caret-left" style="margin-left:4px;" id="arrowsBack"></i>');
+
+                })
+        $(document)
+            .on(
+                "click",
+                "#arrowsBack",
+                function () {
+
+                    $("#slideBoxMain").css("margin-right", "0");
+                    $("#arrowSide")
+                        .html(
+                            '<i class="fas fa-caret-right" style=" margin-left:7px; display:block; width:18px; height:22px; line-height:22px;" id="arrows"></i>');
+
+                })
+
+        //메인 중앙 검색 박스
+        $("#searchDivBtn button")
+            .click(
+                function () {
+                    var tourDays = $("#tourDays select").val();
+                    var to = $("#toDiv select").val();
+                    var capa = $("#capa select").val();
+                    var date = $(".datepicker").val();
+
+                    if (tourDays == "선택" || to == "선택" || capa == "선택"
+                        || date == "") {
+                        alert("모든 항목을 선택해주세요.");
+                        return false;
+                    } else {
+                        location.href = "/customer/tourlandProductMainSearchList?tourDays="
+                            + tourDays
+                            + "&to="
+                            + to
+                            + "&capa="
+                            + capa + "&date=" + date;
+                    }
+
+                })
+    })
+</script>
+
+<% if (currentProductPrice != null) { %>
+<script>
+    //최근 본 상품의 이미지를 누르면 링크로 이동 이엘때문에 따로 처리, 동적 추가 docu on
+    $(document).on("click", ".currentP1", function () {
+        location.href = "tourlandProductDetail?pno="+<%= currentProduct.pno %>+
+        "&price=" +<%= currentProductPrice %>;
+    })
+</script>
+<% } %>
+
+<% if (currentProductPrice2 != null) { %>
+<script>
+    $(document).on("click", ".currentP2", function () {
+        location.href = "tourlandProductDetail?pno="+<%= currentProduct2.pno %>+
+        "&price=" + <%=currentProductPrice2 %>;
+    })
+</script>
+<% } %>
+
     <!-- 팝업 -->
     <div id="popup1" style=" margin-left:10%;">  <!-- 1번 팝업 -->
         <% if (popup1 == null) { %>
             <div id="previewPopup1">
-                <img src="//images/event1.jpg"
-                     style="width:400px; height:400px;" id="popup1img">
+                <img src="/images/event1.jpg" style="width:400px; height:400px;" id="popup1img">
                 <p class="popupClose" style="background:black;">
                     <input type="checkbox" class="expireCK">
                     <label for="expireCK" style="color:white" class="label3">3일동안 이 창 열지 않기</label> <!-- for -->
                     <button class="popupBtnClose"> 닫기</button>
                 </p>
             </div>
-        <% } %>
-        <% if (popup1 != null) { %>
+        <% } else { %>
         <div id="previewPopup1">
             <img src="displayFile/popup?filename=<%= popup1.pic %>" style="width:400px; height:400px;" id="popup1img">
             <p class="popupClose" style="background:black;">
@@ -185,20 +192,17 @@
         </div>
         <% } %>
     </div>
-    <div id="popup2" style=" margin-left:10%;">
-        <!-- 2번팝업  -->
+    <div id="popup2" style=" margin-left:10%;"> <!-- 2번팝업  -->
         <% if (popup2 == null) { %>
             <div id="previewPopup2">
-                <img src="/images/event2.jpg"
-                     style="width:400px; height:400px;" id="popup2img">
+                <img src="/resources/images/event2.jpg" style="width:400px; height:400px;" id="popup2img">
                 <p class="popupClose" style="background:black;">
                     <input type="checkbox" class="expireCK2">
                     <label for="expireCK" style="color:white" class="label3">3일동안 이 창 열지 않기</label> <!-- for -->
                     <button class="popupBtnClose2"> 닫기</button>
                 </p>
             </div>
-        <% } %>
-        <% if (popup2 != null) { %>
+        <% } else { %>
         <div id="previewPopup2">
             <img src="displayFile/popup?filename=<%= popup2.pic %>" style="width:400px; height:400px;" id="popup2img">
             <p class="popupClose" style="background:black;">
@@ -214,12 +218,10 @@
         <section id="section1">
             <div id="imgBox">
                 <div class="box1"> <!-- 메인 슬라이드 박스  -->
-                    <div><a href="/loginForm"><img
-                                    src="/images/maincoupon.jpg" style="z-index:2"
-                                    title="로그인 페이지로 이동합니다."></a></div>
-                    <div><a href="/customer/eventDetailPage?no=3"><img
-                                    src="/images/mainevent1.jpg" style="z-index:1"
-                                    title="이벤트 상세 페이지로 이동합니다"></a></div>
+                    <div><a href="/loginForm">
+                            <img src="/images/maincoupon.jpg" style="z-index:2" title="로그인 페이지로 이동합니다."></a></div>
+                    <div><a href="/customer/eventDetailPage?no=3">
+                            <img src="/images/mainevent1.jpg" style="z-index:1" title="이벤트 상세 페이지로 이동합니다"></a></div>
                     <div><img src="/images/mainevent2.jpg"></div>
                 </div>
             </div>
@@ -273,8 +275,9 @@
                 <h2>출발 날짜</h2>
                 <p id="datePick">
                     <!-- <span><i class="far fa-calendar-alt"></i> 날짜별 검색</span>  -->
-                    <span id="picker"><input type="date" class="datepicker" name="rentddate" placeholder="날짜를 선택하려면 클릭."
-                                             style="height:30px;"></span>
+                    <span id="picker">
+                        <input type="date" class="datepicker" name="rentddate" placeholder="날짜를 선택하려면 클릭."
+                               style="height:30px;"></span>
                     <span id="pickSearch"><a href="#"><i class="fas fa-search"></i></a></span>
                 </p>
             </div>
@@ -363,27 +366,25 @@
                     <p>마지막 찬스, 서울 출발</p>
                     <img alt="" src="/images/santo.jpg">
                 </div>
-            <% } %>
-            <% if (banner1 != null) { %>
+            <% } else { %>
             <div class="bannerBox" id="banner1">
-                <h3><%= banner1.title %></h3>
-                <p><%= banner1.content %></p>
+                <h3><%=banner1.title%></h3>
+                <p><%=banner1.content%></p>
                 <img alt="" src="displayFile/banner?filename=<%= banner1.pic %>">
             </div>
             <% } %>
+
             <% if (banner2 == null) { %>
                 <div class="bannerBox">
                     <h3>진짜 오사카를 만나다</h3>
                     <p>간사이 미니 패스, 대구 출발</p>
                     <img alt="" src="/images/osaka.jpg">
                 </div>
-            <% } %>
-            <% if (banner2 != null) { %>
-
+            <% } else { %>
             <div class="bannerBox">
-                <h3><%= banner2.title %></h3>
-                <p><%= banner2.content %></p>
-                <img alt="" src="displayFile/banner?filename=<%= banner2.pic %>">
+                <h3><%=banner2.title%></h3>
+                <p><%=banner2.content%></p>
+                <img alt="" src="displayFile/banner?filename=<%=banner2.pic%>">
             </div>
             <% } %>
         </section>
@@ -414,25 +415,25 @@
                                                                       style="margin-left:8px;" id="arrows"></i></span>
                 </div>
                 <ul>
-                    <li style="background: mistyrose;"><a
-                                href="/customer/tourlandMyReserv"
-                                style="display:block;">예약확인/결제</a></li>
+                    <li style="background: mistyrose;"><a href="/customer/tourlandMyReserv" style="display:block;">예약확인/결제</a>
+                    </li>
                     <li>최근 본 상품</li>
                     <li style="margin-bottom:10px; height:130px;">
                         <% if (currentProduct.pic == null) { %>
                             <span>최근 본 상품이 없습니다.</span>
-                        <% } %>
-                        <% if (currentProduct.pic != null) { %>
-                        <img src="displayFile/product?filename=<%= currentProduct.pic %>"
+                        <% } else { %>
+                        <img src="displayFile/product?filename=<%=currentProduct.pic%>"
                              style="width:100px; height: 100px;" class="currentP1">
                         <span style="width:100px; white-space:nowrap; overflow: hidden; display: block;"
                               class="currentP1"><%= currentProduct.pname %></span>
                         <% } %>
                     </li>
                     <li style="margin-bottom:10px; height:130px;">
-                        <% if (currentProduct2.pic == null) %>
-                        <% if (currentProduct2.pic != null) { %>
-                        <img src="displayFile/product?filename=<%= currentProduct2.pic %>"
+                        <% if (currentProduct.pic == null) { %>
+                            <div></div>
+                        <% } else { %>
+
+                        <img src="displayFile/product?filename=<%=currentProduct2.pic%>"
                              style="width:100px; height: 100px; " class="currentP2">
                         <span style="width:100px; white-space:nowrap; overflow: hidden; display: block;"
                               class="currentP2"><%= currentProduct2.pname %></span>
@@ -445,6 +446,7 @@
 
     </div>
     <%- include('./include/userFooter.ejs') %>
+
 </div>
 </body>
 </html>

@@ -7,7 +7,9 @@
 <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
 <script src="https://kit.fontawesome.com/6f2f0f2d95.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
 <link rel="stylesheet" type="text/css" href="./stylesheets/userHeader.css"/>
+
 <script>
     $(function () {
         $("#nav2 li").mouseover(function () {
@@ -131,6 +133,7 @@
 
     }, 3000)
 
+
 </script>
 
 
@@ -144,12 +147,13 @@
             <% } else { %>
                 <li><a href="/logout" class="balance">로그아웃</a></li>
                 <li><a href="/customer/tourlandBoardNotice">고객센터</a></li>
-                <% if (login == 'user') { %>
+                    <% if (login == 'user') { %>
                     <li><a href="/customer/EditPassword">마이페이지</a></li>
-                    <p id="userAuth">[ <%= Auth.username %> ]님! 반갑습니다.</p>
-                <% } %>
-                <li id="manager" style="margin-left: -15px;"><a href="/manager/statistics">관리자</a></li>
-                <p id="managerAuth">[ <%= Manager.name %> ]님! 반갑습니다.</p>
+                        <p id="userAuth">[ <%=Auth.username%> ]님! 반갑습니다.</p>
+                    <% } %>
+                <li id="manager" style="margin-left: -15px;"><a
+                            href="/manager/statistics">관리자</a></li>
+                <p id="managerAuth">[ <%=Manager.name%> ]님! 반갑습니다.</p>0
             <% } %>
         </ul>
     </nav>
@@ -194,6 +198,17 @@
             <span>패키지 전문 여행사 <i class="fas fa-plane-departure"></i></span>
             <h1><a href="/customer/tourlandMain">투어 랜드</a></h1>
         </div>
+        <div id="search" class="ls">
+            <% if (searchkeyword !=null) { %>
+                <input type="text" placeholder="검색어를 입력하세요." id="mainSearchKeyword" value="<%=searchkeyword%>">
+                <i class="fas fa-search" style="font-size:25px; margin-left:10px;" id="mainSearchIcon"></i>
+            <% } else { %>
+                <input type="text" placeholder="검색어를 입력하세요." id="mainSearchKeyword">
+                <i class="fas fa-search" style="font-size:25px; margin-left:10px;"id="mainSearchIcon"></i>
+
+             <% } %>
+            <!-- <button>찾기</button> -->
+        </div>
     </div>
 
     <div id="nav2">
@@ -201,7 +216,8 @@
             <li><a href="/customer/tourlandProductKRList">제주 패키지</a></li>
             <li><a href="/customer/tourlandProductJPList">일본 패키지</a></li>
             <li><a href="/customer/tourlandProductChinaList">중국 패키지</a></li>
-            <li class="short"><a href="/customer/tourlandEventList/ingEvent">이벤트</a></li>
+            <li class="short"><a href="/customer/tourlandEventList/ingEvent">이벤트</a>
+            </li>
             <li class="short c"><a href="/customer/userpageCoupon">쿠폰</a></li>
         </ul>
     </div>

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const cookieParser = require("cookie-parser");
 const models = require("../models");
+const fs = require('fs');
 
 /* GET home page. */
 router.get('/', async function (req, res, next) {
@@ -37,16 +38,116 @@ router.get('/api/airplane/:id', async function (req, res, next) {
     res.render('index', {title: 'Express'});
 });
 
-router.get('/displayFile/:whichOne', async  (req, res, next) =>{
-    const choice = req.params.whichOne
-    if( )
+
+router.get('/displayFile/:whichOne', async  (req, res, next) => {
+    const choice = req.params.whichOne;
+    const query = req.query.filename;
+    const base_dir = "/home/work/IdeaProjects/tourland/public/displayFile";
+
+    let path;
+    if( choice === "popup"){
+        path = base_dir + "/popup" + query;
+    }
+    if ( choice === "banner"){
+        path = base_dir + "/banner" + query;
+    }
+    if ( choice === "event"){
+        path = base_dir + "/event" + query;
+    }
+    if ( choice === "product" || (choice === "productSmall")){
+        path = base_dir + "/product" + query;
+    }
+    if ( choice === "practice"){
+        path = base_dir + "/practice" + query;
+    }
+    fs.createReadStream(path).pipe(res);
+});
 
 
-})
+router.get('/customer', async (req, res, next) => {
+
+    const currentProductPrice = {};
+    const currentProductPrice2 = {};
+    const currentProduct ={};
+    const currentProduct2 ={};
+
+    const popup1 = await models.popup.findOne({
+        raw: true,
+        where : {
+            position : "R"
+        }
+    });
+
+    console.log("pppp ->", popup1);
+    const startDate = new Date(popup1.enddate) - new Date(popup1.startdate);
+    const endDate = Math.abs(startDate/(24*60*60*1000));
+
+    console.log("startdate->", startDate);
+    console.log("enddate->", endDate);
+
+    const cookieConfig = {
+        expires: new Date(Date.now() + endDate*24*60*60),
+        path: '/',
+        signed: true
+    };
+    res.cookie("popup1", popup1.pic, cookieConfig)
+
+    const popup2 = await models.popup.findOne({
+        raw: true,
+        where : {
+            position : "L"
+        }
+    });
+
+    const startDate2 = new Date(popup2.enddate) - new Date(popup2.startdate);
+    const endDate2 = Math.abs(startDate2/(24*60*60*1000));
+
+    const cookieConfig2 = {
+        expires: new Date(Date.now() + endDate2*24*60*60),
+        path : '/',
+        signed: true,
+    };
+    res.cookie("popup2", popup2.pic, cookieConfig2)
+
+
+    const banner1 = await models.banner.findOne({
+        raw: true,
+        where : {
+            position : "L"
+        }
+    });
+    const banner2 = await models.banner.findOne({
+        raw: true,
+        where : {
+            position : "R"
+        }
+    });
+    const Auth = {};
+    const login = {};
+    const Manager = {};
+    const searchkeyword = {};
+
+
+    res.render('tourlandMain', {
+        currentProductPrice,
+        currentProductPrice2,
+        currentProduct,
+        currentProduct2,
+        popup1:popup1,
+        popup2,
+        banner1,
+        banner2,
+        Auth,
+        login,
+        Manager,
+        searchkeyword
+    });
+
+});
 
 
 /* GET home page. */
-router.get('/customer', async function (req, res, next) {
+router.get('/customer1', async function (req, res, next) {
     const cookieConfig = {
         //cookieConfig는 키, 밸류 외에 설정을 보낼 수 있다.
         maxAge: 30000,
