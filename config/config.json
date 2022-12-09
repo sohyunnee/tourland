@@ -1,21 +1,21 @@
 {
   "development": {
     "username": "root",
-    "password": "yi1333",
+    "password": "rootroot",
     "database": "tourland",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
-    "password": "yi1333",
+    "password": "rootroot",
     "database": "tourland",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "production": {
     "username": "root",
-    "password": "yi1333",
+    "password": "rootroot",
     "database": "tourland",
     "host": "127.0.0.1",
     "dialect": "mysql"

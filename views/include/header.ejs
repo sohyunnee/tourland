@@ -97,18 +97,18 @@
                     class="logo-mini"><b>A</b>LT</span> <!-- logo for regular state and mobile devices -->
             <span class="logo-lg" id="logoTourLand"><b>TourLand</b></span></a>
 
-<!--            <c:if test="${Manager.right==0 }">-->
-<!--            <a href="/manager/statistics"-->
-<!--               class="logo"> &lt;!&ndash; mini logo for sidebar mini 50x50 pixels &ndash;&gt;-->
-<!--                <span-->
-<!--                        class="logo-mini"><b>A</b>LT-->
-<!--                </span>-->
-<!--                &lt;!&ndash; logo for regular state and mobile devices &ndash;&gt;-->
-<!--                <span class="logo-lg" id="logoTourLand">-->
-<!--                    <b>TourLand</b>-->
-<!--                </span>-->
-<!--            </a>-->
-<!--            </c:if> -->
+        <!--            <c:if test="${Manager.right==0 }">-->
+        <!--            <a href="/manager/statistics"-->
+        <!--               class="logo"> &lt;!&ndash; mini logo for sidebar mini 50x50 pixels &ndash;&gt;-->
+        <!--                <span-->
+        <!--                        class="logo-mini"><b>A</b>LT-->
+        <!--                </span>-->
+        <!--                &lt;!&ndash; logo for regular state and mobile devices &ndash;&gt;-->
+        <!--                <span class="logo-lg" id="logoTourLand">-->
+        <!--                    <b>TourLand</b>-->
+        <!--                </span>-->
+        <!--            </a>-->
+        <!--            </c:if> -->
 
         <nav class="navbar navbar-static-top" role="navigation">
             <!-- Sidebar toggle button-->
@@ -201,7 +201,7 @@
                     </li>
                     <!-- Notifications: style can be found in dropdown.less -->
                     <li class="dropdown notifications-menu">
-                        <a href="#"  class="dropdown-toggle" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-bell-o"></i> <span class="label label-warning">10</span>
                         </a>
                         <ul class="dropdown-menu">
@@ -312,7 +312,7 @@
                                                      data-toggle="dropdown"> <img
                                     src="/dist/img/hs.jpg"
                                     class="user-image" alt="User Image"/> <span
-                                    class="hidden-xs"><%=Manager.name%></span>
+                                    class="hidden-xs"><%= Manager.name %></span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
@@ -320,12 +320,13 @@
                                         src="/dist/img/user2-160x160.jpg"
                                         class="img-circle" alt="User Image"/>
                                 <% if(Manager.right == 0) { %>
-                                    <p><$=Manager.name%>
+                                    <p><$=Manager.name
+                                        %>
                                         - Web Developer</p>
                                 <% } %>
                                 <% if(Manager.right == 1) { %>
-                                    <p><%=Manager.name%>
-                                        - administrator</p>
+                                <p><%= Manager.name %>
+                                    - administrator</p>
                                 <% } %>
                                 >
                             </li>
@@ -412,10 +413,10 @@
                     <ul class="treeview-menu">
 
                         <li><a href="/manager/flightMngList"><i class="fa fa-circle-o"></i>항공 관리</a></li>
-<!--                        <li>-->
-<!--                            <a href="/addFlightForm"><i class="fa fa-circle-o"></i>항공 관리-->
-<!--                            </a>-->
-<!--                        </li>-->
+                        <!--                        <li>-->
+                        <!--                            <a href="/addFlightForm"><i class="fa fa-circle-o"></i>항공 관리-->
+                        <!--                            </a>-->
+                        <!--                        </li>-->
                         <li><a href="/manager/hotelMngList"><i class="fa fa-circle-o"></i>호텔 관리</a></li>
                         <li><a href="/manager/tourMngList"><i class="fa fa-circle-o"></i>현지 투어 관리</a></li>
                         <li><a href="/manager/rentcarMngList"><i class="fa fa-circle-o"></i> 렌트카 관리</a></li>
