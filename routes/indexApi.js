@@ -209,40 +209,4 @@ router.get('/customer1', async function (req, res, next) {
 });
 
 
-router.get('/manager/userlist', (req,res,next)=>{
-
-    let cri = {};
-    let btnName = "";
-    let list ={};
-
-    res.render("userMngList",{cri, btnName, list});
-})
-
-router.get('/manager/statistics', (req,res,next)=>{
-
-    let Manager = {};
-    let Auth = {};
-
-    res.render("manager/main/statistics",{Manager, Auth});
-})
-
-
-router.get('/manager/userMngList/:id', (req,res,next)=>{
-    const choice = req.params.id;
-    let cri = {};
-    let list =[{}];
-    let btnName ="";
-    let pageMaker = {};
-    let Manager = {};
-    let usersecess = {};
-    let Auth ={};
-
-
-
-    res.render("manager/user/userMngList",{cri, list, btnName, pageMaker, Manager, usersecess, Auth});
-})
-
-
-
-
 module.exports = router;

@@ -19,7 +19,7 @@ module.exports = function(sequelize, DataTypes) {
     rdate: {
       type: DataTypes.DATE,
       allowNull: true,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp'),
+      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
       comment: "예약날짜"
     },
     rstatus: {

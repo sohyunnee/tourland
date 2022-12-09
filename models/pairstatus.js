@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
       comment: "항공번호",
       references: {
         model: 'airplane',
-        key: 'no'
+        key: 'id'
       }
     }
   }, {

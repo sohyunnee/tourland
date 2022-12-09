@@ -1,0 +1,17 @@
+
+#goToCustomer {
+    height: 50px;
+}
+
+#goToCustomer a {
+    width: 75px;
+    height: 20px;
+    border: none;
+    background: maroon;
+    margin: 15px 30px;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 3px;
+    padding: 0;
+    text-align: center;
+}

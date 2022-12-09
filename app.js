@@ -3,10 +3,13 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+require('dotenv').config({ path: '.env' });
+const cors = require('cors');
 
 const { sequelize } = require('./models/index'); // 시퀄라이즈
 
 var indexRouter = require('./routes/index');
+var apiRouter = require('./routes/indexApi');
 var usersRouter = require('./routes/users');
 
 var app = express();
@@ -32,6 +35,12 @@ sequelize.sync({ force: false }) // 서버 실행시마다 테이블을 재생�
 
 
 app.use('/', indexRouter);
+app.use('/api',
+    cors({
+        origin: true,
+        credentials: true,
+    }),
+    apiRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
