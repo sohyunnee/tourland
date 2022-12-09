@@ -53,7 +53,8 @@
 						    <td><%=userList.userno%></td>
 						    <td><%=userList.username%></td>
 						    <td><%=new Date(userList.userbirth)%></td>
-						    <td><% (userList.userpassport == null) ? '등록필요':'등록완료' %></td>
+						    <td style="background-color: <%=(userList.userpassport == null) ? "red":"green"%>">
+<%=(userList.userpassport == null) ? '등록필요':'등록완료' %></td>
 						    <td><%=userList.userid%></td>
 						    </tr>
 						<% }) %>

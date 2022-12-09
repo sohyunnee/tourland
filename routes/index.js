@@ -1,5 +1,8 @@
 var express = require('express');
 var router = express.Router();
+const sequelize = require("sequelize");
+const Op = sequelize.Op;
+
 const cookieParser = require("cookie-parser");
 const models = require("../models");
 const fs = require('fs');
@@ -231,19 +234,54 @@ router.get('/manager/statistics', (req,res,next)=>{
 })
 
 router.get('/manager/userMngList/:usersecess', async (req,res,next)=>{
-    const usersecess = req.params.usersecess;
-    const { searchType, keyword } = req.query;
+    //usersecess 정상회원, 탈퇴회원 구분
 
-    const contentSize = Number(process.env.CONTENTSIZE);
-    const currentPage = Number(req.query.currentPage) || 1;
+    const usersecess = req.params.usersecess;
+    let { searchType, keyword } = req.query;
+
+    const contentSize = Number(process.env.CONTENTSIZE); // 한페이지에 나올 개수
+    const currentPage = Number(req.query.currentPage) || 1; //현재페이
     const { limit, offset } = getPagination(currentPage, contentSize);
 
+    keyword = keyword ? keyword : "";
+
     let dataAll = await models.user.findAll({
-        where: { usersecess: usersecess }, limit, offset
+        where: {
+            [Op.and] : [
+                {
+                    usersecess: usersecess
+                }
+            ],
+            [Op.or]: [
+                {
+                    userid: { [Op.like]: "%" +keyword+ "%" }
+                },
+                {
+                    username: { [Op.like]: "%" + keyword + "%" }
+                }
+            ]
+
+        },
+        limit, offset
     })
 
     let dataCountAll = await models.user.findAndCountAll({
-        where: { usersecess: usersecess }, limit, offset
+        where: {
+            [Op.and] : [
+                {
+                    usersecess: usersecess
+                }
+            ],
+            [Op.or]: [
+                {
+                    userid: { [Op.like]: "%" +keyword+ "%" }
+                },
+                {
+                    username: { [Op.like]: "%" + keyword + "%" }
+                }
+            ]
+        },
+        limit, offset
     })
 
     const pagingData = getPagingData(dataCountAll, currentPage, limit);
@@ -257,12 +295,24 @@ router.get('/manager/userMngList/:usersecess', async (req,res,next)=>{
     let Auth ={};
     let list = dataAll;
 
-
-
     res.render("manager/user/userMngList",{cri, list, btnName, pagingData, Manager, usersecess, Auth});
 })
 
 
+
+router.get('/manager/userDetailForm/:usersecess', async (req,res,next)=> {
+    //usersecess 정상회원, 탈퇴회원 구분
+    const usersecess = req.params.usersecess;
+    let { no, currentPage, searchType, keyword } = req.query;
+
+    let userVO= {};
+    let cri = {};
+    let Manager = {};
+    let Auth = {};
+    let couponLists =[{}];
+
+    res.render("manager/user/userDetailForm", {userVO, cri, Manager, Auth, usersecess,couponLists});
+});
 
 
 module.exports = router;
