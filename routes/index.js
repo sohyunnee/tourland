@@ -3,6 +3,10 @@ var router = express.Router();
 const cookieParser = require("cookie-parser");
 const models = require("../models");
 const fs = require('fs');
+// import {getPagingData, getPagination} from '@controller/pagination';
+const {getPagingData, getPagination} = require('../controller/pagination');
+
+require('dotenv').config({ path: '.env' });
 
 /* GET home page. */
 router.get('/', async function (req, res, next) {
@@ -226,20 +230,36 @@ router.get('/manager/statistics', (req,res,next)=>{
     res.render("manager/main/statistics",{Manager, Auth});
 })
 
+router.get('/manager/userMngList/:usersecess', async (req,res,next)=>{
+    const usersecess = req.params.usersecess;
+    const { searchType, keyword } = req.query;
 
-router.get('/manager/userMngList/:id', (req,res,next)=>{
-    const choice = req.params.id;
-    let cri = {};
-    let list =[{}];
-    let btnName ="";
-    let pageMaker = {};
+    const contentSize = Number(process.env.CONTENTSIZE);
+    const currentPage = Number(req.query.currentPage) || 1;
+    const { limit, offset } = getPagination(currentPage, contentSize);
+
+    let dataAll = await models.user.findAll({
+        where: { usersecess: usersecess }, limit, offset
+    })
+
+    let dataCountAll = await models.user.findAndCountAll({
+        where: { usersecess: usersecess }, limit, offset
+    })
+
+    const pagingData = getPagingData(dataCountAll, currentPage, limit);
+
+    let cri = {searchType,keyword};
+
+    let btnName = (Boolean(Number(usersecess)) ? "회원 리스트" : "탈퇴회원 조회");
+
+    console.log("usersecbtt->", btnName)
     let Manager = {};
-    let usersecess = {};
     let Auth ={};
+    let list = dataAll;
 
 
 
-    res.render("manager/user/userMngList",{cri, list, btnName, pageMaker, Manager, usersecess, Auth});
+    res.render("manager/user/userMngList",{cri, list, btnName, pagingData, Manager, usersecess, Auth});
 })
 
 

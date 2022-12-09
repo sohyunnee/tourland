@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6"
+  },
+  "include": [
+    "./**/*"
+  ],
+  "exclude": ["node_modules"],
+  "paths": {
+    "@app/*": ["app/*"], // @는 안 붙여줘도 됨.
+    "@controller/*": ["controller/*"], // @는 안 붙여줘도 됨.
+    "@config/*": ["app/_config/*"],
+    "@helpers/*": ["helpers/*"]
+  }
+}
