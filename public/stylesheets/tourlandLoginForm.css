@@ -1,0 +1,102 @@
+
+/* 본문 */
+section {
+    width: 800px;
+    height: 500px;
+    margin: 50px auto;
+}
+
+#loginHead {
+    height: 80px;
+    border-bottom: 2px solid #ff7f00;
+}
+
+#loginBox {
+    width: 600px;
+    height: 300px;
+    border: 1px solid gainsboro;
+    border-radius: 10px;
+    margin: 50px auto; /* background: gray; */
+}
+
+#loginBox h2 {
+    height: 50px;
+    padding: 30px 30px 10px 30px;
+}
+
+#loginInnerBox {
+    width: 450px;
+    height: 100px;
+    margin: 0 auto;
+    padding-left: 80px;
+    position: relative;
+}
+
+#inputBox {
+    width: 250px;
+    height: 100px;
+    float: left;
+}
+
+#inputBox input {
+    border: none;
+    border-bottom: 1px solid gray;
+    width: 200px;
+    height: 30px;
+}
+
+#submitBox {
+    width: 200px;
+    height: 100px;
+    float: right;
+}
+
+#submitBox input {
+    width: 100px;
+    height: 63px;
+    border: none;
+    background: goldenrod;
+}
+
+#loginBtns {
+    width: 500px;
+    height: 50px;
+    text-align: center;
+    padding-left: 50px;
+}
+
+#loginBtns button {
+    width: 150px;
+    height: 30px;
+    border: none;
+    background: gray;
+    color: #fff;
+}
+
+#loginAPI {
+    width: 500px;
+    height: 50px;
+    text-align: center;
+    padding-left: 50px;
+}
+
+#loginAPI button {
+    width: 200px;
+    height: 30px;
+    border: none;
+}
+
+#loginAPI #naver span {
+    color: #228b22;
+    font-weight: bold;
+}
+
+#loginAPI #kakao span {
+    color: goldenrod;
+    font-weight: bold;
+}
+.error{
+    color: red;
+    position: absolute;
+    top: 62px;
+}

@@ -1,0 +1,51 @@
+/* 본문 */
+
+section div#editProfile { width:1073px; height: 100%;
+    margin-left: 22%;
+}
+section div#editProfile h1 { width: 200px;
+    height: 30px;
+    padding: 20px;
+    border-bottom: 1px solid #929292; }
+section div#editProfile form { width: 462px;
+    margin: -30px auto;
+    padding-top: 44px; }
+section div#editProfile label { width: 120px;
+    float: left;
+    font-weight: bold;}
+section div#editProfile p { height: 70px; }
+section div#editProfile input { width: 250px; height: 30px;
+    border: none; border-bottom: 1px solid #929292;}
+.red { color: red;}
+section div#editProfile #btns button { width: 200px; height: 30px;
+    border: none; }
+
+section div#editProfile #withdraw { background: maroon; color: #fff; }
+
+section div#editProfile #inputs input { width: 200px; height: 30px;
+    border: none; }
+#inputs input#submit { background: steelblue; color: #fff; }
+#info { font-size: 13px; color: #929292;
+    margin-left: 10px;  }
+label {
+    float: left;
+    width: 150px;
+    margin-left:20px;
+}
+span.errorMsg{
+    color: tomato;
+    margin-left:140px;
+    font-size: smaller;
+    display: none;
+}
+
+/* 주소  */
+#pAddr input{
+    margin-left:140px;
+}
+.inputAddr{
+    margin-bottom: 8px;
+    position: relative;
+    top: -55px;
+    padding-left: 4px;
+}

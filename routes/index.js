@@ -153,6 +153,22 @@ router.get('/customer', async (req, res, next) => {
 });
 
 
+router.get('/customer/tourlandRegister', function (req, res, next) {
+
+    let autoNo = "";
+    let Auth ={};
+    let login = "";
+    let Manager = {};
+    let searchkeyword = {};
+
+    let userVO = {};
+
+
+
+
+    res.render("user/tourlandRegisterForm",  {autoNo, Auth,login, Manager, searchkeyword,userVO});
+});
+
 /* GET home page. */
 router.get('/customer1', async function (req, res, next) {
     const cookieConfig = {
@@ -305,13 +321,54 @@ router.get('/manager/userDetailForm/:usersecess', async (req,res,next)=> {
     const usersecess = req.params.usersecess;
     let { no, currentPage, searchType, keyword } = req.query;
 
-    let userVO= {};
+    let userVO = await models.user.findOne({
+        raw : true,
+
+        where : {userno : no}
+    })
+    console.log("userid->", userVO);
+
     let cri = {};
     let Manager = {};
     let Auth = {};
     let couponLists =[{}];
 
     res.render("manager/user/userDetailForm", {userVO, cri, Manager, Auth, usersecess,couponLists});
+});
+
+
+router.get('/loginForm', async (req,res,next)=> {
+
+    let registerSuccess = {};
+    let UserStay = {};
+    let EmpStay = {};
+    let error = "에러 발생";
+    let Auth ={};
+    let login ="";
+    let Manager = {};
+    let searchkeyword = "";
+
+
+    res.render("user/tourlandLoginForm", {Auth,login, Manager,searchkeyword, registerSuccess, UserStay, EmpStay, error});
+});
+
+
+
+router.post('/loginForm', async (req,res,next)=> {
+    let { id, pass} = req.body;
+    console.log("loginForm->", id, pass)
+
+    let registerSuccess = {};
+    let UserStay = {};
+    let EmpStay = {};
+    let error = "에러 발생";
+    let Auth ={};
+    let login ="";
+    let Manager = {};
+    let searchkeyword = "";
+
+
+    res.render("user/tourlandLoginForm", {Auth,login, Manager,searchkeyword, registerSuccess, UserStay, EmpStay, error});
 });
 
 

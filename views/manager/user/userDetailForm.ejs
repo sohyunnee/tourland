@@ -11,6 +11,14 @@
   }
 
 </style>
+<link rel="stylesheet" href="https://unpkg.com/js-datepicker/dist/datepicker.min.css">
+<script>
+
+		const datepicker = require('js-datepicker')
+	$( function() {
+		$( "#datepicker" ).datepicker();
+	} );
+</script>
 <div class="content">
 	<div class="row">
 		<div class="col-sm-12">
@@ -30,9 +38,11 @@
 							<input type="text" name="username" required="required" placeholder=" 한글 2-5자리" value="<%=userVO.username%>">
 							<span class="errorMsg">이름을 한글 2자리에서 5자리로 입력해주세요.</span>
 						</div>
+
+
 						<div class="form-group">
 							<label>생년월일</label>
-							<input type="text" name="userbirth" required="required"  placeholder=" 2000-02-02" value="<%=new Date(userVO.userbirth)%> pattern='yyyy-MM-dd'/>">
+							<input type="date" name="userbirth" id="datepicker" placeholder="2000-02-02" value="<%=userVO.userbirth%>">
 							<span class="errorMsg">생년월일 형식에 맞게 넣어주세요. 예시: 2000-02-02</span>
 						</div>
 						<div class="form-group">
@@ -69,7 +79,7 @@
 							<span class="errorMsg">영문, 숫자 포함 5-12자리를 넣어주세요</span>
 						</div>
 						<div class="box-footer">
-							<!-- <button type="submit" class="btn btn-primary">등록</button> -->
+<!--							 <button type="submit" class="btn btn-primary">등록</button>-->
 							<button type="button" class="btn btn-primary" style="margin-top:10px;" id="btnReturnToList">리스트로 돌아가기</button>
 						</div>
 					</div>
