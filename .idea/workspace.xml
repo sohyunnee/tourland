@@ -4,8 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="24bf5a56-4d89-4e95-b085-2f0152d7ad12" name="변경" comment="로그인 폼 수정">
+    <list default="true" id="022f6912-a924-4b38-9214-54f3b4c729bd" name="변경" comment="페이징, 리스트, 등록 수">
+      <change afterPath="$PROJECT_DIR$/.idea/jpa-buddy.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/22__12__12___9_13__________.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/22__12__12__오전_9_13,_업데이트_전에_커밋되지_않은_변경_내용_[변경]/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/tourland.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/controller/passwordCheckUtil.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/routes/managerRoutes/managerRoutes.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/routes/userRoutes/userRoutes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/indexApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/indexApi.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/include/header.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/include/header.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/user/tourlandRegisterForm.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/user/tourlandRegisterForm.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -16,13 +31,23 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="HTML File" />
         <option value="CSS File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/node_modules/express/lib/router/route.js" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2IYztejyokF5x1xaCCOZmxq9xOu" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -33,15 +58,20 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/work/IdeaProjects/tourland/views/user&quot;,
+    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;16.18.1&quot;,
+    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;16.18.1&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/work/IdeaProjects/tourland/public/test3&quot;,
     &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
@@ -49,43 +79,84 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/views/user" />
-      <recent name="$PROJECT_DIR$/views/manager" />
-      <recent name="$PROJECT_DIR$/views/include" />
-      <recent name="$PROJECT_DIR$/routes" />
+      <recent name="$PROJECT_DIR$/public/test3" />
+      <recent name="$PROJECT_DIR$/public/displayFile" />
+      <recent name="$PROJECT_DIR$/public" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/stylesheets" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="디폴트 작업">
-      <changelist id="24bf5a56-4d89-4e95-b085-2f0152d7ad12" name="변경" comment="" />
-      <created>1670500613578</created>
+      <changelist id="022f6912-a924-4b38-9214-54f3b4c729bd" name="변경" comment="" />
+      <created>1670373524494</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1670500613578</updated>
-      <workItem from="1670500615161" duration="18000" />
-      <workItem from="1670500638261" duration="26000" />
-      <workItem from="1670500682732" duration="63000" />
-      <workItem from="1670500756410" duration="805000" />
-      <workItem from="1670502453002" duration="18355000" />
-      <workItem from="1670800374533" duration="1627000" />
-      <workItem from="1670818995621" duration="2350000" />
+      <updated>1670373524494</updated>
+      <workItem from="1670373526013" duration="24137000" />
+      <workItem from="1670454135583" duration="425000" />
+      <workItem from="1670457170498" duration="26548000" />
+      <workItem from="1670545523462" duration="22000" />
+      <workItem from="1670545564608" duration="26000" />
+      <workItem from="1670545592724" duration="42000" />
+      <workItem from="1670545644460" duration="1612000" />
+      <workItem from="1670548144967" duration="154000" />
+      <workItem from="1670548310314" duration="32875000" />
+      <workItem from="1670820979621" duration="12056000" />
+      <workItem from="1670849831206" duration="13000" />
     </task>
-    <task id="LOCAL-00001" summary="관리자 페이지 제">
-      <created>1670545448936</created>
+    <task id="LOCAL-00001" summary="변경">
+      <created>1670416532650</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1670545448936</updated>
+      <updated>1670416532651</updated>
     </task>
-    <task id="LOCAL-00002" summary="로그인 폼 수정">
-      <created>1670800489629</created>
+    <task id="LOCAL-00002" summary="변경1">
+      <created>1670458016233</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1670800489629</updated>
+      <updated>1670458016233</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="변경2">
+      <created>1670489133058</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1670489133058</updated>
+    </task>
+    <task id="LOCAL-00004" summary="변경2">
+      <created>1670489215668</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1670489215668</updated>
+    </task>
+    <task id="LOCAL-00005" summary="footer수정">
+      <created>1670552694542</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1670552694542</updated>
+    </task>
+    <task id="LOCAL-00006" summary="고객관리, 검색기능 수">
+      <created>1670568176078</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1670568176078</updated>
+    </task>
+    <task id="LOCAL-00007" summary="페이징, 리스트, 등록 수">
+      <created>1670574724640</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1670574724640</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -96,15 +167,35 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="관리자 페이지 제" />
-    <MESSAGE value="로그인 폼 수정" />
-    <option name="LAST_COMMIT_MESSAGE" value="로그인 폼 수정" />
+    <MESSAGE value="변경" />
+    <MESSAGE value="변경1" />
+    <MESSAGE value="변경2" />
+    <MESSAGE value="footer수정" />
+    <MESSAGE value="고객관리, 검색기능 수" />
+    <MESSAGE value="페이징, 리스트, 등록 수" />
+    <option name="LAST_COMMIT_MESSAGE" value="페이징, 리스트, 등록 수" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

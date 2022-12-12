@@ -1,18 +1,20 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 require('dotenv').config({ path: '.env' });
 const cors = require('cors');
-
 const { sequelize } = require('./models/index'); // 시퀄라이즈
+const session = require('express-session');
+const MemoryStore = require('memorystore')(session);
 
-var indexRouter = require('./routes/index');
-var apiRouter = require('./routes/indexApi');
-var usersRouter = require('./routes/users');
 
-var app = express();
+const indexRouter = require('./routes/index');
+const apiRouter = require('./routes/indexApi');
+const userRoutes = require('./routes/userRoutes/userRoutes');
+const managerRoutes = require('./routes/managerRoutes/managerRoutes');
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -23,6 +25,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser("1234"));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({}));
 
 sequelize.sync({ force: false }) // 서버 실행시마다 테이블을 재생성할건지에 대한 여부
     .then(() => {
@@ -32,8 +35,7 @@ sequelize.sync({ force: false }) // 서버 실행시마다 테이블을 재생�
       console.error(err);
     });
 
-
-
+//Route 등록
 app.use('/', indexRouter);
 app.use('/api',
     cors({
@@ -41,7 +43,10 @@ app.use('/api',
         credentials: true,
     }),
     apiRouter);
-app.use('/users', usersRouter);
+
+app.use('/customer', userRoutes);
+app.use('/manager', managerRoutes);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
