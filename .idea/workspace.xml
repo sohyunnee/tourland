@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="022f6912-a924-4b38-9214-54f3b4c729bd" name="변경" comment="페이징, 리스트, 등록 수">
+    <list default="true" id="022f6912-a924-4b38-9214-54f3b4c729bd" name="변경" comment="로그인 회원가입 헤드파일 수">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/userRoutes/userRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/userRoutes/userRoutes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/include/header.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/include/header.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/include/userHeader.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/include/userHeader.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,7 +87,7 @@
       <workItem from="1670548310314" duration="32875000" />
       <workItem from="1670820979621" duration="12056000" />
       <workItem from="1670849831206" duration="13000" />
-      <workItem from="1670891032381" duration="7603000" />
+      <workItem from="1670891032381" duration="7894000" />
     </task>
     <task id="LOCAL-00001" summary="변경">
       <created>1670416532650</created>
@@ -142,7 +138,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670574724640</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="로그인 회원가입 헤드파일 수">
+      <created>1670900883098</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1670900883098</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -178,7 +181,8 @@
     <MESSAGE value="footer수정" />
     <MESSAGE value="고객관리, 검색기능 수" />
     <MESSAGE value="페이징, 리스트, 등록 수" />
-    <option name="LAST_COMMIT_MESSAGE" value="페이징, 리스트, 등록 수" />
+    <MESSAGE value="로그인 회원가입 헤드파일 수" />
+    <option name="LAST_COMMIT_MESSAGE" value="로그인 회원가입 헤드파일 수" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

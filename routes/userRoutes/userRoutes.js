@@ -111,14 +111,25 @@ router.get('/', async (req, res, next) => {
 router.get('/tourlandRegister', function (req, res, next) {
 
     let autoNo = "";
-    let Auth ={};
-    let login = "";
-    let Manager = {};
-    let searchkeyword = {};
 
     let userVO = {};
 
 
+    let Auth = null;
+    let login ="";
+
+    let msg = `세션이 존재하지 않습니다.`
+    if (req.session.user) {
+        msg = `${req.session.user.User}`;
+        Auth={username: req.session.user.User};
+        login = req.session.user.login;
+    }
+
+    console.log("Auth->", Auth, msg);
+
+    let Manager = {};
+    let { searchType, keyword, keyword2} = req.query;
+    let searchkeyword = keyword;
 
 
     res.render("user/tourlandRegisterForm",  {autoNo, Auth,login, Manager, searchkeyword,userVO});
