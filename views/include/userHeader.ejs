@@ -143,17 +143,19 @@
             <% if (Auth == null) { %>
                 <li><a href="/customer/tourlandBoardNotice">고객센터</a></li>
                 <li><a href="/customer/tourlandRegister">회원가입</a></li>
-                <li><a href="/loginForm" class="balance">로그인</a></li>
+                <li><a href="/customer/loginForm" class="balance">로그인</a></li>
             <% } else { %>
-                <li><a href="/logout" class="balance">로그아웃</a></li>
+                <li><a href="/customer/logout" class="balance">로그아웃</a></li>
                 <li><a href="/customer/tourlandBoardNotice">고객센터</a></li>
-                    <% if (login == 'user') { %>
-                    <li><a href="/customer/EditPassword">마이페이지</a></li>
-                        <p id="userAuth">[ <%=Auth.username%> ]님! 반갑습니다.</p>
-                    <% } %>
+                <% if (login == 'user') { %>
+                <li><a href="/customer/EditPassword">마이페이지</a></li>
+                <p id="userAuth">[ <%= Auth.username %> ]님! 반갑습니다.</p>
+                <% } %>
+                <% if (login == 'manager') { %>
                 <li id="manager" style="margin-left: -15px;"><a
                             href="/manager/statistics">관리자</a></li>
-                <p id="managerAuth">[ <%=Manager.name%> ]님! 반갑습니다.</p>0
+                <p id="managerAuth">[ <%= Manager.name %> ]님! 반갑습니다.</p>0
+                <% } %>
             <% } %>
         </ul>
     </nav>
@@ -199,14 +201,14 @@
             <h1><a href="/customer/tourlandMain">투어 랜드</a></h1>
         </div>
         <div id="search" class="ls">
-            <% if (searchkeyword !=null) { %>
-                <input type="text" placeholder="검색어를 입력하세요." id="mainSearchKeyword" value="<%=searchkeyword%>">
-                <i class="fas fa-search" style="font-size:25px; margin-left:10px;" id="mainSearchIcon"></i>
+            <% if (searchkeyword != null) { %>
+            <input type="text" placeholder="검색어를 입력하세요." id="mainSearchKeyword" value="<%= searchkeyword %>">
+            <i class="fas fa-search" style="font-size:25px; margin-left:10px;" id="mainSearchIcon"></i>
             <% } else { %>
                 <input type="text" placeholder="검색어를 입력하세요." id="mainSearchKeyword">
-                <i class="fas fa-search" style="font-size:25px; margin-left:10px;"id="mainSearchIcon"></i>
+                <i class="fas fa-search" style="font-size:25px; margin-left:10px;" id="mainSearchIcon"></i>
 
-             <% } %>
+            <% } %>
             <!-- <button>찾기</button> -->
         </div>
     </div>

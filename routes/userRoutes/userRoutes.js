@@ -4,6 +4,8 @@ const sequelize = require("sequelize");
 const Op = sequelize.Op;
 const cookieParser = require("cookie-parser");
 const bcrypt = require('bcrypt');
+const session = require('express-session');
+const MemoryStore = require('memorystore')(session);
 
 const models = require("../../models");
 const fs = require('fs');
@@ -27,12 +29,11 @@ router.get('/', async (req, res, next) => {
         }
     });
 
-    console.log("pppp ->", popup1);
     const startDate = new Date(popup1.enddate) - new Date(popup1.startdate);
     const endDate = Math.abs(startDate/(24*60*60*1000));
 
-    console.log("startdate->", startDate);
-    console.log("enddate->", endDate);
+    // console.log("startdate->", startDate);
+    // console.log("enddate->", endDate);
 
     const cookieConfig = {
         expires: new Date(Date.now() + endDate*24*60*60),
@@ -71,10 +72,22 @@ router.get('/', async (req, res, next) => {
             position : "R"
         }
     });
-    const Auth = {};
-    const login = {};
-    const Manager = {};
-    const searchkeyword = {};
+
+    let Auth = null;
+    let login ="";
+
+    let msg = `세션이 존재하지 않습니다.`
+    if (req.session.user) {
+        msg = `${req.session.user.User}`;
+        Auth={username: req.session.user.User};
+        login = req.session.user.login;
+    }
+
+    console.log("Auth->", Auth, msg);
+
+    let Manager = {};
+    let { searchType, keyword, keyword2} = req.query;
+    let searchkeyword = keyword;
 
 
     res.render('tourlandMain', {
@@ -197,70 +210,114 @@ router.get('/loginForm', async (req,res,next)=> {
 });
 
 
-
-router.post('/loginForm', async (req,res,next)=> {
+const fecthData = async (req) => {
     let { id, pass} = req.body;
-    if(id == null) res.status(400).send('idempty');
-    if(pass == null) res.status(400).send('passempty');
+    let error = "";
 
+    if(id == null){
+        error= 'idempty';
+    }
+    if(pass == null){
+        error= 'passempty';
+    }
 
-    if( id !== null && pass !=null){
-        // ID,PASS가 입력된 경우
-        let userVO = await  models.user.findOne({
-            raw : true,
-            // attributes: ['userid', 'userpass','usersecess'],
-            where : {
-                userid : id
-            }
-        })
+    let userVO;
 
-        // 직원 ID가 없는 경우
-        if(userVO.userid == null){
-            return res.status(402).send("idnoneexist");
-        }else{
-
-            // 직원 ID가 있고 탈퇴한 회원
-            if(userVO.usersecess === 1){
-                return res.status(402).send("retiredcustomer");
-            }else if(userVO.usersecess === 0){
-
-                // Compare passwords
-                bcrypt.compare(pass, userVO.userpass, (err, result) => {
-                    console.log("comparePassword2222->",result);
-                    if (result) {
-                        return res.redirect('/tourlandMain?');
-                    }
-
-                    console.log(err);
-                    return res.status(401).json({ message: "Invalid Credentials" });
-                })
-
-            }
-            else{
-                return res.status(405).send("error----");
-            }
-
+    try {
+        if( id !== null && pass !=null) {
+            // ID,PASS가 입력된 경우
+            userVO = await models.user.findOne({
+                raw: true,
+                // attributes: ['userid', 'userpass','usersecess'],
+                where: {
+                    userid: id
+                }
+            })
         }
 
+    }catch (e){
+        console.log(e);
     }
-    else{
-        return res.redirect('/tourlandLoginForm');
-    }
+
+    return userVO;
+
+}
+
+
+router.post('/loginForm', (req,res,next)=> {
+    let { id, pass} = req.body;
 
     let empVO ={};
     let session = {};
 
     let registerSuccess = {};
-    let UserStay = {};
+    let UserStay;
     let EmpStay = {};
     let error = "";
     let Auth ={};
     let login ="";
     let Manager = {};
     let searchkeyword = "";
+    let loginSuccess = false;
 
-    return res.render("user/tourlandLoginForm", {Auth,login, Manager,searchkeyword, registerSuccess, UserStay, EmpStay, error});
+    fecthData(req).then((userVO)=>{
+
+        // 직원 ID가 없는 경우
+        if(userVO.userid == null){
+            error = "idnoneexist";
+        }else{
+
+            // 직원 ID가 있고 탈퇴한 회원
+            if(userVO.usersecess === 1){
+                error = "retiredcustomer";
+            }else if(userVO.usersecess === 0){
+                bcrypt.compare(req.body.pass, userVO.userpass, (err, result) => {
+                    console.log("comparePassword2222->",result);
+                    UserStay = userVO;
+                    if (result) {
+                        loginSuccess = true;
+
+                        if(req.session.user){
+                            console.log(`세션이 이미 존재합니다.`);
+                        }else{
+                            req.session.user = {
+                                "User" : userVO.username,
+                                "id" : id,
+                                "login" : "user",
+                                "Auth" : userVO.userpass,
+                                "pass" : pass,
+                                "mypage" : "mypageuser",
+                            }
+                            console.log(`세션 저장 완료! `);
+                        }
+                        res.redirect('/customer');
+                    }
+                    else{
+                        console.log("comparePassword4444->",result);
+                        error = "passnotequal";
+                        res.render("user/tourlandLoginForm", {Auth,login, Manager,searchkeyword, registerSuccess, UserStay, EmpStay, error});
+
+                    }
+                })
+
+            }
+            else{
+                error = "usernotfind";
+            }
+
+        }
+
+    })
+
 });
 
 
+router.get("/logout", (req, res, next)=>{
+
+    req.session.destroy();
+    console.log(`session을 삭제하였습니다.`);
+    res.redirect("/customer");
+})
+
 module.exports = router;
+
