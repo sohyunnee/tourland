@@ -233,7 +233,6 @@ const fecthData = async (req) => {
     }
 
     let userVO;
-
     try {
         if( id !== null && pass !=null) {
             // ID,PASS가 입력된 경우
