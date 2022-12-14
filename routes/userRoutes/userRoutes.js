@@ -329,5 +329,9 @@ router.get("/logout", (req, res, next)=>{
     res.redirect("/customer");
 })
 
+
+
+
+
 module.exports = router;
 

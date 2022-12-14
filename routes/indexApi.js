@@ -28,14 +28,15 @@ router.get('/api/airplane/:id', async function (req, res, next) {
 
 
 
-router.get('/client/userMngList/:usersecess', async (req,res,next)=>{
+router.get('/client/list', async (req,res,next)=>{
     //usersecess 정상회원, 탈퇴회원 구분
 
-    const usersecess = req.params.usersecess;
+    // const usersecess = req.params.usersecess;
+    const usersecess = 0;
     let { searchType, keyword } = req.query;
 
     const contentSize = Number(process.env.CONTENTSIZE); // 한페이지에 나올 개수
-    const currentPage = Number(req.query.currentPage) || 1; //현재페이
+    const currentPage = Number(req.query.page) || 1; //현재페이
     const { limit, offset } = getPagination(currentPage, contentSize);
 
     keyword = keyword ? keyword : "";
@@ -85,12 +86,27 @@ router.get('/client/userMngList/:usersecess', async (req,res,next)=>{
 
     let btnName = (Boolean(Number(usersecess)) ? "회원 리스트" : "탈퇴회원 조회");
 
-    console.log("usersecbtt->", btnName)
+    console.log("usersecbtt->", pagingData)
     let Manager = {};
     let Auth ={};
-    let list = dataAll;
+    let list;
 
-    res.send({cri, list, btnName, pagingData, Manager, usersecess, Auth});
+    if ( dataCountAll != null){
+        res.status(200).json({
+            success : true,
+            result: dataAll,
+            pagination: { page:pagingData.currentPage, pages:pagingData.totalPages, count:pagingData.totalItems},
+            message : "데이터 요청 성공!",
+        });
+    }else{
+        res.status(203).json({
+            success : false,
+            result: [],
+            pagination: { page:pagingData.currentPage, pages:pagingData.totalPages, count:pagingData.totalItems},
+            message : "데이터 요청 실패!",
+        });
+    }
+
 })
 
 
