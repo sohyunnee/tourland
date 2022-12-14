@@ -46,6 +46,7 @@ module.exports = function(sequelize, DataTypes) {
     usersecess: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
+      defaultValue : '1',
       comment: "탈퇴여부"
     }
   }, {

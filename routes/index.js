@@ -55,8 +55,9 @@ router.get('/displayFile/:whichOne', async  (req, res, next) => {
 
 router.get("/logout", (req, res, next)=>{
 
-    session
+    req.session.destroy();
+    console.log(`session을 삭제하였습니다.`);
+    res.redirect("/customer");
 })
-
 
 module.exports = router;
