@@ -7,6 +7,15 @@
 const app = require('../app');
 const debug = require('debug')('tourland:server');
 const http = require('http');
+
+const https = require('https');
+const fs = require("fs");
+const options = {
+  key: fs.readFileSync('./keys/private.pem'),
+  cert: fs.readFileSync('./keys/public.pem')
+};
+
+
 require('dotenv').config({ path: '.env' });
 /**
  * Get port from environment and store in Express.
@@ -16,19 +25,25 @@ const port = normalizePort(process.env.PORT);
 console.log("port start : ", process.env.PORT);
 app.set('port', port);
 
+
+const server = https.createServer(options, app);
+server.listen(app.get('port'), () => {
+  console.log("HTTPS server listening on port " + app.get('port'));
+});
+
 /**
  * Create HTTP server.
  */
 
-const server = http.createServer(app);
+// const server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+// server.listen(port);
+// server.on('error', onError);
+// server.on('listening', onListening);
 
 /**
  * Normalize a port into a number, string, or false.
