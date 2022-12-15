@@ -5,6 +5,96 @@ const models = require("../models");
 const fs = require('fs');
 const {getPagination, getPagingData} = require("../controller/pagination");
 const {Op} = require("sequelize");
+const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
+const { stubFalse } = require('lodash');
+
+
+router.post('/login', async (req,res,next)=> {
+    try {
+        const { userid, password, remember } = req.body;
+
+        // validate
+        if (!userid || !password)
+            return res.status(400).json({
+                success: false,
+                result: null,
+                message: 'Not all fields have been entered.',
+            });
+
+        const user = await models.user.findOne({
+            where : {userid: userid}
+        });
+        // console.log(admin);
+        if (!user)
+            return res.status(400).json({
+                success: false,
+                result: null,
+                message: 'No account with this email has been registered.',
+            });
+
+        console.log("1111111->",userid, password, user.userid, user.userpass);
+        const isMatch = await bcrypt.compare(password, user.userpass);
+        if (!isMatch)
+            return res.status(400).json({
+                success: false,
+                result: null,
+                message: 'Invalid credentials.',
+            });
+
+        console.log("22222->",isMatch);
+
+        const token = jwt.sign(
+            {
+                id: user.userid,
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: '72h' }
+        );
+        console.log("333333->",token);
+        // const result = await models.user.update(
+        //     { where : {userid: user.userid} },
+        //     { isLoggedIn: true },
+        //     {
+        //         new: true,
+        //     }
+        // ).exec();
+
+        // console.log("44444444->",result);
+        res.cookie('token', token, {
+            maxAge: req.body.remember ? 72 * 60 * 60 * 1000 : 60 * 60 * 1000, // Cookie expires after 30 days
+            sameSite: true,
+            // httpOnly: true,
+            secure: true,
+        });
+
+        res.json({
+            success: true,
+            result: {
+                token,
+                admin: {
+                    id: user.userid,
+                    name: user.username,
+                    // isLoggedIn: user.isLoggedIn,
+                },
+            },
+            message: 'Successfully login user',
+        });
+    } catch (err) {
+        res.status(500).json({ success: false, result: null, message: err.message, error: err });
+    }
+
+});
+
+
+router.get("/logout", (req, res, next)=>{
+
+    req.session.destroy();
+    console.log(`session을 삭제하였습니다.`);
+    res.redirect("/customer");
+})
+
+
 
 
 router.get('/api/airplane/:id', async function (req, res, next) {
@@ -108,6 +198,74 @@ router.get('/client/list', async (req,res,next)=>{
     }
 
 })
+
+
+
+router.get('/list/:usersecess', async (req,res,next)=>{
+    //usersecess 정상회원, 탈퇴회원 구분
+
+    const usersecess = req.params.usersecess;
+    let { searchType, keyword } = req.query;
+
+    const contentSize = Number(process.env.CONTENTSIZE); // 한페이지에 나올 개수
+    const currentPage = Number(req.query.currentPage) || 1; //현재페이
+    const { limit, offset } = getPagination(currentPage, contentSize);
+
+    keyword = keyword ? keyword : "";
+
+    let dataAll = await models.user.findAll({
+        where: {
+            [Op.and] : [
+                {
+                    usersecess: usersecess
+                }
+            ],
+            [Op.or]: [
+                {
+                    userid: { [Op.like]: "%" +keyword+ "%" }
+                },
+                {
+                    username: { [Op.like]: "%" + keyword + "%" }
+                }
+            ]
+
+        },
+        limit, offset
+    })
+
+    let dataCountAll = await models.user.findAndCountAll({
+        where: {
+            [Op.and] : [
+                {
+                    usersecess: usersecess
+                }
+            ],
+            [Op.or]: [
+                {
+                    userid: { [Op.like]: "%" +keyword+ "%" }
+                },
+                {
+                    username: { [Op.like]: "%" + keyword + "%" }
+                }
+            ]
+        },
+        limit, offset
+    })
+
+    const pagingData = getPagingData(dataCountAll, currentPage, limit);
+
+    let cri = {searchType,keyword};
+
+    let btnName = (Boolean(Number(usersecess)) ? "회원 리스트" : "탈퇴회원 조회");
+
+    console.log("usersecbtt->", btnName)
+    let Manager = {};
+    let Auth ={};
+    let list = dataAll;
+
+    res.render("manager/user/userMngList",{cri, list, btnName, pagingData, Manager, usersecess, Auth});
+})
+
 
 
 module.exports = router;

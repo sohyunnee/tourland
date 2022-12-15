@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="022f6912-a924-4b38-9214-54f3b4c729bd" name="변경" comment="user데이트블 usersecess 기본값 1로 수">
+    <list default="true" id="022f6912-a924-4b38-9214-54f3b4c729bd" name="변경" comment="indexApi수">
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/indexApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/indexApi.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/userRoutes/userRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/userRoutes/userRoutes.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/manager/user/userRegister.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/user/userRegister.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -90,7 +92,7 @@
       <workItem from="1670548310314" duration="32875000" />
       <workItem from="1670820979621" duration="12056000" />
       <workItem from="1670849831206" duration="13000" />
-      <workItem from="1670891032381" duration="29490000" />
+      <workItem from="1670891032381" duration="37322000" />
     </task>
     <task id="LOCAL-00001" summary="변경">
       <created>1670416532650</created>
@@ -176,7 +178,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670989426807</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="indexApi수">
+      <created>1671008630187</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1671008630187</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -215,7 +224,8 @@
     <MESSAGE value="로그인 회원가입 헤드파일 수" />
     <MESSAGE value="로그인 폼 회원가입폼 Auth값 지" />
     <MESSAGE value="user데이트블 usersecess 기본값 1로 수" />
-    <option name="LAST_COMMIT_MESSAGE" value="user데이트블 usersecess 기본값 1로 수" />
+    <MESSAGE value="indexApi수" />
+    <option name="LAST_COMMIT_MESSAGE" value="indexApi수" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

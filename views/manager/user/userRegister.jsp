@@ -1,4 +1,6 @@
-
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ include file="../../include/header.jsp"%>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <style>
   label {
@@ -14,7 +16,7 @@
 </style>
 <script>
 
-	var userno = ${userVO.userno };
+	var userno = <%=userVO.userno%> };
 //	var searchType = "${cri.searchType}";
 //	var keyword = "${cri.keyword}";
 
