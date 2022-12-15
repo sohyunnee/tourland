@@ -4,13 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="022f6912-a924-4b38-9214-54f3b4c729bd" name="변경" comment="indexApi수">
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+    <list default="true" id="022f6912-a924-4b38-9214-54f3b4c729bd" name="변경" comment="indexApi jwt로그인 구">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/user.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/indexApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/indexApi.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/user/userRegister.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/user/userRegister.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,7 +89,7 @@
       <workItem from="1670548310314" duration="32875000" />
       <workItem from="1670820979621" duration="12056000" />
       <workItem from="1670849831206" duration="13000" />
-      <workItem from="1670891032381" duration="37322000" />
+      <workItem from="1670891032381" duration="42782000" />
     </task>
     <task id="LOCAL-00001" summary="변경">
       <created>1670416532650</created>
@@ -185,7 +182,14 @@
       <option name="project" value="LOCAL" />
       <updated>1671008630187</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="indexApi jwt로그인 구">
+      <created>1671083510139</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1671083510139</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -225,7 +229,8 @@
     <MESSAGE value="로그인 폼 회원가입폼 Auth값 지" />
     <MESSAGE value="user데이트블 usersecess 기본값 1로 수" />
     <MESSAGE value="indexApi수" />
-    <option name="LAST_COMMIT_MESSAGE" value="indexApi수" />
+    <MESSAGE value="indexApi jwt로그인 구" />
+    <option name="LAST_COMMIT_MESSAGE" value="indexApi jwt로그인 구" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

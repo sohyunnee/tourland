@@ -8,6 +8,11 @@ const {Op} = require("sequelize");
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const { stubFalse } = require('lodash');
+const querystring = require("querystring");
+
+
+
+
 
 
 router.post('/login', async (req,res,next)=> {
@@ -33,7 +38,6 @@ router.post('/login', async (req,res,next)=> {
                 message: 'No account with this email has been registered.',
             });
 
-        console.log("1111111->",userid, password, user.userid, user.userpass);
         const isMatch = await bcrypt.compare(password, user.userpass);
         if (!isMatch)
             return res.status(400).json({
@@ -42,8 +46,6 @@ router.post('/login', async (req,res,next)=> {
                 message: 'Invalid credentials.',
             });
 
-        console.log("22222->",isMatch);
-
         const token = jwt.sign(
             {
                 id: user.userid,
@@ -51,7 +53,6 @@ router.post('/login', async (req,res,next)=> {
             process.env.JWT_SECRET,
             { expiresIn: '72h' }
         );
-        console.log("333333->",token);
         // const result = await models.user.update(
         //     { where : {userid: user.userid} },
         //     { isLoggedIn: true },
@@ -60,7 +61,6 @@ router.post('/login', async (req,res,next)=> {
         //     }
         // ).exec();
 
-        // console.log("44444444->",result);
         res.cookie('token', token, {
             maxAge: req.body.remember ? 72 * 60 * 60 * 1000 : 60 * 60 * 1000, // Cookie expires after 30 days
             sameSite: true,
@@ -201,7 +201,7 @@ router.get('/client/list', async (req,res,next)=>{
 
 
 
-router.get('/list/:usersecess', async (req,res,next)=>{
+router.get('/client/list/:usersecess', async (req,res,next)=>{
     //usersecess 정상회원, 탈퇴회원 구분
 
     const usersecess = req.params.usersecess;
@@ -266,6 +266,49 @@ router.get('/list/:usersecess', async (req,res,next)=>{
     res.render("manager/user/userMngList",{cri, list, btnName, pagingData, Manager, usersecess, Auth});
 })
 
+router.post('/client/create', async (req,res,next)=> {
+    let query;
+    console.log("/client/create->", req.body);
+
+    // Check if the email is already in use
+    models.user.findOne({
+        raw: true,
+        where : {
+            userid: req.body.userid
+        }
+    }).then((result) => {
+        if(result) {
+            res.status(401).json({ message: "ID is already in use." });
+            return;
+        }else{
+            // Define salt rounds
+            const saltRounds = 10;
+            // Hash password
+            let userpass;
+            if(req.body.userpass == null){
+                userpass = req.body.userid;
+            }else{
+                userpass = req.body.userpass;
+            }
+            //비밀번호 비교 구문 추가 필요
+            bcrypt.hash(userpass, saltRounds, (err, hash) => {
+                if (err) throw new Error("Internal Server Error");
+
+                req.body.userpass = hash;
+                const user = models.user.create(req.body);
+                query = querystring.stringify({
+                    "registerSuccess": true,
+                    "id": user.userid
+                });
+                res.status(202).json({message : '가입성공',query : query});
+            });
+
+        }
+
+    });
+
+
+});
 
 
 module.exports = router;
