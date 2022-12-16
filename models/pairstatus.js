@@ -1,6 +1,13 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('pairstatus', {
+    id: {
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      comment: "번호"
+    },
     pno: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -44,4 +51,13 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
+
+  pairstatus.associate = models => {
+    models.pairstatus.belongsTo(models.product, {
+      foreignKey: 'pno', sourceKey: "pno"
+    });
+    models.pairstatus.belongsTo(models.airplane, {
+      foreignKey: 'id', sourceKey: "pno"
+    });
+  };
 };

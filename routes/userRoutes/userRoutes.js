@@ -330,6 +330,38 @@ router.get("/logout", (req, res, next)=>{
 })
 
 
+router.get("/tourlandProductKRList", async (req, res, next)=>{
+
+
+    const userid = req.params.userid;
+
+    try{
+        let data = await models.pairstatus.findAll({
+            raw: true,
+            attributes : ['userid'],
+            include : [
+                {
+                    model : models.airplane, as : "a2"
+                }
+            ]
+
+        })
+
+        if( data != null)
+        {
+                res.status(200).send("exist");
+        }
+        else{
+            res.status(202).send("notexist");
+        }
+    }
+    catch (e){
+        console.error(e);
+        next(e);
+    }
+
+})
+
 
 
 
