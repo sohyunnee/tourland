@@ -72,4 +72,7 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
+  airplane.associate = models => {
+    models.airplane.belongsToMany(models.product, { through: "pairstatus", foreignKey: "pno", sourceKey: "id"})
+  };
 };
