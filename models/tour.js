@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('tour', {
-    no: {
+module.exports = (sequelize, DataTypes) => {
+  const tour =  sequelize.define('tour', {
+    id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
@@ -67,9 +67,15 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "no" },
+          { name: "id" },
         ]
       },
     ]
   });
+
+  tour.associate = models => {
+    models.tour.belongsToMany(models.product, { through: "ptourstatus", foreignKey: "tno", sourceKey:'id'})
+  };
+
+  return tour;
 };

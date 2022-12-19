@@ -1,14 +1,14 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('photelstatus', {
-    pno: {
+module.exports = (sequelize, DataTypes) => {
+  const photelstatus = sequelize.define('photelstatus', {
+    id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       comment: "상품번호",
       references: {
         model: 'product',
-        key: 'pno'
+        key: 'id'
       }
     },
     hno: {
@@ -31,7 +31,7 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "pno" },
+          { name: "id" },
           { name: "hno" },
         ]
       },
@@ -44,4 +44,15 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
+
+  // photelstatus.associate = models => {
+  //   models.product.belongsToMany(models.hotel, {through:photelstatus,
+  //     foreignKey: 'id'
+  //   });
+  //   models.hotel.belongsToMany(models.product, {through:photelstatus,
+  //     foreignKey: 'hno'
+  //   });
+  // }
+
+  return photelstatus;
 };

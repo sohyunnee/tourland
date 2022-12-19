@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('airplane', {
+module.exports = (sequelize, DataTypes) => {
+  const airplane =  sequelize.define('airplane', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -73,6 +73,9 @@ module.exports = function(sequelize, DataTypes) {
     ]
   });
   airplane.associate = models => {
-    models.airplane.belongsToMany(models.product, { through: "pairstatus", foreignKey: "pno", sourceKey: "id"})
+    models.airplane.belongsToMany(models.product, { through: "pairstatus", foreignKey: "ano"})
+    // models.airplane.belongsToMany(models.hotel, { through: "photelstatus", foreignKey: "id"})
   };
+
+  return airplane;
 };

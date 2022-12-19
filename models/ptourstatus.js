@@ -1,14 +1,14 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('ptourstatus', {
-    pno: {
+module.exports = (sequelize, DataTypes)=> {
+  const ptourstatus = sequelize.define('ptourstatus', {
+    id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       comment: "상품번호",
       references: {
         model: 'product',
-        key: 'pno'
+        key: 'id'
       }
     },
     tno: {
@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
       comment: "번호",
       references: {
         model: 'tour',
-        key: 'no'
+        key: 'id'
       }
     }
   }, {
@@ -31,7 +31,7 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "pno" },
+          { name: "id" },
           { name: "tno" },
         ]
       },
@@ -44,4 +44,15 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
+
+  // ptourstatus.associate = models => {
+  //   models.ptourstatus.belongsToMany(models.product, {through :'ptourstatus',
+  //     foreignKey: 'id',sourceKey:'id'
+  //   });
+  //   models.ptourstatus.belongsToMany(models.tour, {through: 'ptourstatus',
+  //     foreignKey: 'tno', sourceKey:'id'
+  //   });
+  // };
+
+  return ptourstatus;
 };

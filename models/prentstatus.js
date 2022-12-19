@@ -1,14 +1,14 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('prentstatus', {
-    pno: {
+module.exports = (sequelize, DataTypes) => {
+  const prentstatus= sequelize.define('prentstatus', {
+    id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       comment: "상품번호",
       references: {
         model: 'product',
-        key: 'pno'
+        key: 'id'
       }
     },
     rno: {
@@ -31,7 +31,7 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "pno" },
+          { name: "id" },
           { name: "rno" },
         ]
       },
@@ -44,4 +44,14 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
+  // prentstatus.associate = models => {
+  //   models.prentstatus.belongsTo(models.product, {through :'prentstatus',
+  //     foreignKey: 'id'
+  //   });
+  //   models.prentstatus.belongsTo(models.rentcar, {through: 'prentstatus',
+  //     foreignKey: 'rno'
+  //   });
+  // };
+
+  return prentstatus;
 };
