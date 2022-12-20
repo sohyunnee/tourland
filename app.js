@@ -28,13 +28,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({}));
 
-sequelize.sync({ force: false }) // 서버 실행시마다 테이블을 재생성할건지에 대한 여부
-    .then(() => {
-      console.log('데이터베이스 연결 성공');
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+// sequelize.sync({ force: false }) // 서버 실행시마다 테이블을 재생성할건지에 대한 여부
+//     .then(() => {
+//       console.log('데이터베이스 연결 성공');
+//     })
+//     .catch((err) => {
+//       console.error(err);
+//     });
 
 //Route 등록
 app.use('/', indexRouter);

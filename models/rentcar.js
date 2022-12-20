@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  const rentcar = sequelize.define('rentcar', {
+module.exports = function(sequelize, DataTypes) {
+  return sequelize.define('rentcar', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -77,10 +77,4 @@ module.exports = (sequelize, DataTypes) => {
       },
     ]
   });
-
-  rentcar.associate = models => {
-    models.rentcar.belongsToMany(models.product, { through: "prentstatus", foreignKey: "id"})
-  };
-
-  return rentcar;
 };

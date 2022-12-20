@@ -46,6 +46,7 @@ router.get('/displayFile/:whichOne', async  (req, res, next) => {
     }
     if ( choice === "product" || (choice === "productSmall")){
         path = base_dir + "/product" + query;
+        console.log("10000000000000000000");
     }
     if ( choice === "practice"){
         path = base_dir + "/practice" + query;

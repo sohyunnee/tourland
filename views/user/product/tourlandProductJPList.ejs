@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Insert title here</title>
-</head>
 <%- include("../../include/userHeader.ejs") %>
-<link rel="stylesheet" type="text/css" href="./stylesheets/tourlandProductJPList.css"/>
+<link rel="stylesheet" type="text/css" href="/stylesheets/tourlandProductJPList.css"/>
 <%- include("tourlandProductList_script.ejs") %>
 <script>
     $(function () {
@@ -130,31 +124,35 @@
                 <input type="hidden" value="<%= product.pno %>" id="pno">
                 <div class="pkgInfoBox">
                     <div class="pkgImg">
-                        <img src="displayFile/product?filename=<%= product.pic %>">
+                        <img src="/displayFile/product?filename=<%= product.ppic %>">
                     </div>
                     <p class="pkgTitle"><%= product.pname %></p>
-                    <!-- 1인 기준 default 가격 계산(항공 : economy, 호텔 : normal, 투어 : 1번째, 렌터가 : 없음) -->
                     <%
                         let airPrice = 0;
                         let hotelPrice = 0;
                         let tourPrice = 0;
-                        for (let f = product.air.length - 2; f < product.air.length - 1; f++) {
-                            let airPrice = airPrice + f.price;
+                        let f = product.airplaneId_airplanes;
+                        for (let i =f.length - 2; i <= f.length - 1; i++) {
+                            airPrice = airPrice + f[i].price;
+                            console.log(airPrice,"----", f[i].price);
                         }
-                        for (let h = product.hotel.length - 1; h < product.hotel.length - 1; h++) {
-                            let checkin = h.checkin;
-                            let checkout = h.checkout;
+                        let h = product.hotelId_hotels;
+                        for (let i = h.length - 1; i <= h.length - 1; i++) {
+                            let checkin = h[i].checkin;
+                            let checkout = h[i].checkout;
                             let checkinDate = checkin;
                             let checkoutDate = checkout;
                             let checkinTime = checkinDate.time / (1000 * 60 * 60 * 24);
                             let checkoutTime = checkoutDate.time / (1000 * 60 * 60 * 24);
                             let dateDiff = checkoutTime - checkinTime;
-                            let hotelPrice = h.price * dateDiff;
+                            let hotelPrice = h[i].price * dateDiff;
+                        }
+                        let t = product.tourId_tours;
+                        for (let i =t.length - 2; i <= t.length - 1; i++) {
+                            tourPrice = tourPrice + t[i].tprice;
+                            console.log(airPrice,"----", t[i].tprice);
                         }
 
-                        product.tour.forEach(t => {
-                            let tourPrice = tourPrice + t.tprice;
-                        })
                         let N = airPrice + hotelPrice + tourPrice;
                         let price = N + (1 - (N % 1)) % 1;
                         let expire = product.pexpire;
@@ -175,11 +173,7 @@
                         <% if (pagingData.totalPages != 0) { %>
                         <div class="" style="text-align:center;">
                             <ul class="pagination">
-                                <li
-                                <% if(pagingData.currentPage == 1){ %> class="disabled"
-                                                                       <% }else{ %>class="waves-effect"
-                                        <% } %>
-                                >
+                                <li <%if(pagingData.currentPage == 1){ %> class="disabled" <% }else{ %> class="waves-effect" <% } %> >
                                     <a
                                             <% if(pagingData.currentPage > 1){ %>
                                             href="?currentPage=<%= pagingData.currentPage-1 %>"
@@ -218,6 +212,3 @@
     </div>
 </section>
 <%- include("../../include/userFooter.ejs") %>
-</body>
-
-</html>

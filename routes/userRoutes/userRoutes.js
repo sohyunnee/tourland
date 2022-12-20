@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const sequelize = require("sequelize");
+const Serializer = require('sequelize-to-json')
 const Op = sequelize.Op;
 const cookieParser = require("cookie-parser");
 const bcrypt = require('bcrypt');
@@ -9,6 +10,8 @@ const MemoryStore = require('memorystore')(session);
 const {QueryTypes} = require("sequelize");
 
 const models = require("../../models");
+const { product, airplane, tour, hotel, rentcar, pairstatus, ptourstatus, photelstatus, prentstatus } = require('../../models/index');
+
 const fs = require('fs');
 const querystring = require('querystring');
 const crypto = require('crypto'); //추가됐음
@@ -375,43 +378,23 @@ router.get("/tourlandProductJPList", async (req, res, next) => {
 
     try {
 
-        let list = await models.product.findAll({
-            raw: true,
-            where: {
-                id : '13',
-                // pname: {
-                //     [Op.like]: "%" + "제주 3일" + "%"
-                // }
-            },
-            include: [
-                {
-                    model: models.airplane,
-                    required: true
-                },
-                // {
-                //     model : models.hotel
-                // },
-                // {
-                //     model : models.tour
-                // },
-                // {
-                //     model: models.rentcar
-                // },
+          const list = await product.findAll({
+            // raw : true,
+            nest: true, attributes: ['id','pname','pcontent', 'pexpire', 'pprice','ppic'],
+            include :[
+                {model : models.airplane,attributes:['price'],as : 'airplaneId_airplanes',nest: true, paranoid: true, required: false, nest: true,},
+                {model : models.hotel,attributes:['checkin', 'checkout','price'],as : 'hotelId_hotels',nest: true, paranoid: true, required: false, nest: true,},
+                {model : models.tour,attributes:['tprice'], as : 'tourId_tours',nest: true, paranoid: true, required: false, nest: true,},
+                {model : models.rentcar,as : 'rentcarId_rentcars',nest: true, paranoid: true, required: false, nest: true,},
             ],
-
-        })
-
-        var tmp = list.reduce(function(topics, obj) {
-            topics[obj.topic] = topics[obj.topic] || {topic: obj.topic, content: []};
-            topics[obj.topic].content.push(obj);
-            return topics;
-        }, {});
-        var output = Object.keys(tmp).map(function(key) {
-            return tmp[key];
+            where : {
+                pname  : {
+                    [Op.like] : "%" + '제주 3일' + "%"
+                }
+            },
         });
-        console.log(output);
 
-        // console.dir(list[1], { depth: 5 });
+        console.log(list[0].dataValues);
 
         // let list = [];
         let Auth = {};
@@ -427,16 +410,14 @@ router.get("/tourlandProductJPList", async (req, res, next) => {
         let date = '';
         let capa = '';
         let count = '';
-        // list = JSON.stringify(list, null, 2);
-        // console.log("3333333333->", list);
 
-        // if( list != null)
-        // {
-        //     res.render("user/product/tourlandProductJPList", {tourDays, date,capa,count, list, Auth,login, Manager,searchkeyword, error,pageMaker,pagingData,cri, idx});
-        // }
-        // else{
-        //     res.status(202).send("notexist");
-        // }
+        if( list != null)
+        {
+            res.render("user/product/tourlandProductJPList", {tourDays, date,capa,count, list, Auth,login, Manager,searchkeyword, error,pageMaker,pagingData,cri, idx});
+        }
+        else{
+            res.status(202).send("notexist");
+        }
     } catch (e) {
         console.error(e);
         next(e);
@@ -476,7 +457,7 @@ router.get("/tourlandProductJPList2", async (req, res, next) => {
     }
 
     try {
-        const query = `select p.pno,
+        const query = `select p.id,
                               p.pname,
                               p.pcontent,
                               p.pexpire,
@@ -494,7 +475,7 @@ router.get("/tourlandProductJPList2", async (req, res, next) => {
                               a2.seat,
                               a2.price    as a2price,
                               a2.pdiv,
-                              h2.no       as h2no,
+                              h2.id       as h2no,
                               h2.hname,
                               h2.haddr,
                               h2.checkin,
@@ -507,7 +488,7 @@ router.get("/tourlandProductJPList2", async (req, res, next) => {
                               h2.bookedup,
                               h2.totalcapacity,
                               h2.pdiv,
-                              t2.no       as t2no,
+                              t2.id       as t2no,
                               t2.tname,
                               t2.tlocation,
                               t2.startdate,
@@ -518,7 +499,7 @@ router.get("/tourlandProductJPList2", async (req, res, next) => {
                               t2.tprice   as t2tprice,
                               t2.ldiv,
                               t2.pdiv,
-                              r2.no       as r2no,
+                              r2.id       as r2no,
                               r2.cdiv,
                               r2.cno,
                               r2.rentddate,
@@ -530,20 +511,20 @@ router.get("/tourlandProductJPList2", async (req, res, next) => {
                               r2.insurance,
                               r2.ldiv,
                               r2.pdiv
-                       from (select * from product where substring(pname, 2, 3) = '도쿄' ` + searchQuery + ` order by pno desc limit ${currentPage}, 
+                       from (select * from product where substring(pname, 2, 3) = '도쿄' ` + searchQuery + ` order by id desc limit ${currentPage}, 
 ${contentSize}) p 
-join pairstatus a on p.pno = a.pno 
+join pairstatus a on p.id = a.id 
 join airplane a2 on a.ano = a2.id
-join photelstatus h on p.pno = h.pno 
-join hotel h2 on h.hno = h2.no
-join ptourstatus t on p.pno = t.pno 
-join tour t2 on t.tno = t2.no
-join prentstatus r on p.pno = r.pno 
-join rentcar r2 on r.rno = r2.no
+join photelstatus h on p.id = h.id 
+join hotel h2 on h.hno = h2.id
+join ptourstatus t on p.id = t.id 
+join tour t2 on t.tno = t2.id
+join prentstatus r on p.id = r.id 
+join rentcar r2 on r.rno = r2.id
 where p.pdiv = 0`;
 
 
-        let list = await models.sequelize.query(query, {type: QueryTypes.SELECT})
+        let list = await models.sequelize.query(query, {type: QueryTypes.SELECT,nest: true,raw: true})
 
 
         // let list = [];
@@ -589,6 +570,106 @@ where p.pdiv = 0`;
     }
 
 })
+
+
+
+router.get("/tourlandProductJPList3", async (req, res, next) => {
+
+    const userid = req.params.userid;
+    let {searchType, keyword} = req.query;
+    const contentSize = Number(process.env.CONTENTSIZE); // 한페이지에 나올 개수
+    const currentPage = Number(req.query.currentPage) || 1; //현재페이
+    const {limit, offset} = getPagination(currentPage, contentSize);
+    let searchQuery = "";
+
+    if (searchType == "name") {
+        searchQuery = `and pname like concat('%',${keyword},'%')`;
+    }
+    if (searchType == "expire") {
+        searchQuery = `and pexpire like concat('%',${keyword},'%')`;
+    }
+    if (searchType == "userCart") {
+        searchQuery = `and pname like concat('%',${keyword},'%')`;
+    }
+    if (searchType == "location") {
+        if (keyword === "한국") {
+            searchQuery = `and pname like '%제주%'`;
+        }
+        if (keyword === "일본") {
+            searchQuery = `and pname like '%도쿄%'`;
+        }
+        if (keyword === "중국") {
+            searchQuery = `and pname like '%베이징%'`;
+        }
+    }
+
+    try {
+        const query = `select p.*,
+                              ((a2.price * 2) + (h2.price * datediff(h2.checkout, h2.checkin)) + tsum) as 'defaultPrice'
+                       from (select p2.*, sum(t2.tprice) as 'tsum'
+                             from product p2
+                                      join ptourstatus t on p2.pno = t.pno
+                                      join tour t2 on t.tno = t2.no
+                             group by p2.pno) p
+                                join pairstatus a on p.pno = a.pno
+                                join airplane a2 on a.ano = a2.no and a2.seat = 'E'
+                                join photelstatus h on p.pno = h.pno
+                                join hotel h2 on h.hno = h2.no and h2.roomtype = 'N' and h2.checkin = date (a2.ddate)
+                           join ptourstatus t
+                       on p.pno = t.pno join tour t2 on t.tno = t2.no
+                           join prentstatus r on p.pno = r.pno join rentcar r2 on r.rno = r2.no
+                       where p.pdiv = 0 and substring (p.pname, 2, 3) = '제주'
+                       group by p.pno
+                       order by defaultPrice;`;
+
+
+        let list = await models.sequelize.query(query, {type: QueryTypes.SELECT,nest: true,raw: true})
+
+
+        // let list = [];
+        let Auth = {};
+        let login = "";
+        let Manager = {};
+        let searchkeyword = "";
+        let error = "";
+        let pageMaker = {};
+        let cri = {};
+        let idx = '';
+        let pagingData = {};
+        let tourDays = '';
+        let date = '';
+        let capa = '';
+        let count = '';
+        list = JSON.stringify(list, null, 2);
+        console.log("3333333333->", list);
+
+        if (list != null) {
+            res.render("user/product/tourlandProductJPList", {
+                tourDays,
+                date,
+                capa,
+                count,
+                list,
+                Auth,
+                login,
+                Manager,
+                searchkeyword,
+                error,
+                pageMaker,
+                pagingData,
+                cri,
+                idx
+            });
+        } else {
+            res.status(202).send("notexist");
+        }
+    } catch (e) {
+        console.error(e);
+        next(e);
+    }
+
+})
+
 
 
 module.exports = router;

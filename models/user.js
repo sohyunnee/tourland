@@ -2,10 +2,10 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('user', {
     id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true,
       comment: "유저번호"
     },
     username: {
@@ -46,8 +46,12 @@ module.exports = function(sequelize, DataTypes) {
     usersecess: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
-      defaultValue : '1',
+      defaultValue: 1,
       comment: "탈퇴여부"
+    },
+    useremail: {
+      type: DataTypes.STRING(100),
+      allowNull: true
     }
   }, {
     sequelize,
@@ -60,7 +64,7 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "userno" },
+          { name: "id" },
         ]
       },
     ]

@@ -13,13 +13,13 @@ module.exports = function(sequelize, DataTypes) {
       comment: "유저번호",
       references: {
         model: 'user',
-        key: 'userno'
+        key: 'id'
       }
     },
     rdate: {
       type: DataTypes.DATE,
       allowNull: true,
-      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
+      defaultValue: Sequelize.Sequelize.fn('current_timestamp'),
       comment: "예약날짜"
     },
     rstatus: {
