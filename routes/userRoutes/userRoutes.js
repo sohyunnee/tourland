@@ -8,14 +8,27 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const MemoryStore = require('memorystore')(session);
 const {QueryTypes} = require("sequelize");
+const moment = require("moment");
 
-const models = require("../../models");
-const { product, airplane, tour, hotel, rentcar, pairstatus, ptourstatus, photelstatus, prentstatus } = require('../../models/index');
+global.Auth = {};
+
+const models = require("../../models/index");
+const {
+    product,
+    airplane,
+    tour,
+    hotel,
+    rentcar,
+    pairstatus,
+    ptourstatus,
+    photelstatus,
+    prentstatus
+} = require('../../models/index');
 
 const fs = require('fs');
 const querystring = require('querystring');
 const crypto = require('crypto'); //추가됐음
-const {getPagingData, getPagination} = require('../../controller/pagination');
+const {getPagingData, getPagingDataCount, getPagination} = require('../../controller/pagination');
 const {makePassword, comparePassword} = require('../../controller/passwordCheckUtil');
 
 
@@ -77,17 +90,27 @@ router.get('/', async (req, res, next) => {
         }
     });
 
-    let Auth = null;
     let login = "";
 
     let msg = `세션이 존재하지 않습니다.`
+    // "User": userVO.username,
+    //     "id": id,
+    //     "login": "user",
+    //     "Auth": userVO.userpass,
+    //     "pass": pass,
+    //     "mypage": "mypageuser",
+
     if (req.session.user) {
         msg = `${req.session.user.User}`;
-        Auth = {username: req.session.user.User};
+        Auth = {
+            username: req.session.user.User,
+            userid: req.session.user.Auth.userid,
+            userpass: req.session.user.Auth.userpass
+        };
         login = req.session.user.login;
     }
 
-    console.log("Auth->", Auth, msg);
+    console.log("Auth============->", Auth, msg);
 
     let Manager = {};
     let {searchType, keyword, keyword2} = req.query;
@@ -119,7 +142,6 @@ router.get('/tourlandRegister', function (req, res, next) {
     let userVO = {};
 
 
-    let Auth = null;
     let login = "";
 
     let msg = `세션이 존재하지 않습니다.`
@@ -204,6 +226,76 @@ router.get('/idCheck/:userid', async (req, res, next) => {
 });
 
 
+router.post('/EditPasswordCheck', async (req, res, next) => {
+
+        const {userid, checkPass} = req.body;
+
+        try {
+            let checkUserid = await models.user.findOne({
+                raw: true,
+                attributes: ['userid', 'userpass'],
+                where: {
+                    userid: userid
+                }
+            });
+
+            if (checkUserid) {
+                bcrypt.compare(checkPass, checkUserid.userpass, (err, result) => {
+
+                    res.status(201).json("Pass");
+
+                });
+            }
+            else {
+                res.status(301).json("NoPass");
+
+            }
+        } catch
+            (e) {
+            console.error(e);
+            next(e);
+        }
+
+    }
+)
+;
+
+
+router.post('/EditPasswordCheck1', async (req, res, next) => {
+
+        const {empid, checkPass} = req.body;
+
+        try {
+            let checkEmpid = await models.employee.findOne({
+                raw: true,
+                attributes: ['empid', 'emppass'],
+                where: {
+                    empid: empid
+                }
+            });
+
+            if (checkEmpid) {
+                bcrypt.compare(checkPass, checkEmpid.emppass, (err, result) => {
+
+                    res.status(201).json("Pass");
+
+                });
+            }
+            else {
+                res.status(301).json("NoPass");
+
+            }
+        } catch
+            (e) {
+            console.error(e);
+            next(e);
+        }
+
+    }
+)
+;
+
+
 router.get('/loginForm', async (req, res, next) => {
     let {registerSuccess, id} = req.query;
 
@@ -212,7 +304,7 @@ router.get('/loginForm', async (req, res, next) => {
     let EmpStay = {};
     let error = "";
     let Auth = {};
-    let login = "";
+    let login = "user";
     let Manager = {};
     let searchkeyword = "";
 
@@ -224,6 +316,30 @@ router.get('/loginForm', async (req, res, next) => {
         searchkeyword,
         registerSuccess,
         UserStay,
+        EmpStay,
+        error
+    });
+});
+
+router.get('/loginManagerForm', async (req, res, next) => {
+    let {registerSuccess, id} = req.query;
+
+    let EmpStay = {empid: id};
+    let UserStay = {};
+    let error = "";
+    let Auth = {};
+    let login = "";
+    let Manager = {};
+    let searchkeyword = "";
+
+
+    res.render("user/tourlandLoginManagerForm", {
+        Auth,
+        login,
+        Manager,
+        searchkeyword,
+        UserStay,
+        registerSuccess,
         EmpStay,
         error
     });
@@ -263,6 +379,38 @@ const fecthData = async (req) => {
 }
 
 
+const fecthEmpData = async (req) => {
+    let {id, pass} = req.body;
+    let error = "";
+
+    if (id == null) {
+        error = 'idempty';
+    }
+    if (pass == null) {
+        error = 'passempty';
+    }
+
+    let empVO;
+    try {
+        if (id !== null && pass != null) {
+            // ID,PASS가 입력된 경우
+            empVO = await models.employee.findOne({
+                raw: true,
+                // attributes: ['userid', 'userpass','usersecess'],
+                where: {
+                    empid: id
+                }
+            })
+        }
+
+    } catch (e) {
+        console.log(e);
+    }
+
+    return empVO;
+
+}
+
 router.post('/loginForm', (req, res, next) => {
     let {id, pass} = req.body;
 
@@ -290,6 +438,9 @@ router.post('/loginForm', (req, res, next) => {
             if (userVO.usersecess === 1) {
                 error = "retiredcustomer";
             } else if (userVO.usersecess === 0) {
+
+                console.log("comparePassword2222->", userVO.userid);
+
                 bcrypt.compare(req.body.pass, userVO.userpass, (err, result) => {
                     console.log("comparePassword2222->", result);
                     UserStay = userVO;
@@ -301,12 +452,14 @@ router.post('/loginForm', (req, res, next) => {
                         } else {
                             req.session.user = {
                                 "User": userVO.username,
-                                "id": id,
                                 "login": "user",
-                                "Auth": userVO.userpass,
+                                "Auth": userVO,
                                 "pass": pass,
                                 "mypage": "mypageuser",
+                                "userid": id,
                             }
+                            req.session.save();
+                            Auth = userVO;
                             console.log(`세션 저장 완료! `);
                         }
                         res.redirect('/customer');
@@ -335,27 +488,108 @@ router.post('/loginForm', (req, res, next) => {
 
     })
 
+
+});
+
+
+router.post('/loginManagerForm', (req, res, next) => {
+    let {id, pass} = req.body;
+
+    let session = {};
+
+    let registerSuccess = {};
+    let UserStay = {};
+    let EmpStay;
+    let error = "";
+    let Auth = {};
+    let login = "";
+    let Manager = {};
+    let searchkeyword = "";
+    let loginSuccess = false;
+
+    fecthEmpData(req).then((empVO) => {
+
+        // 직원 ID가 없는 경우
+        if (empVO.empid == null) {
+            error = "idnoneexist";
+        } else {
+
+            // 직원 ID가 있고 탈퇴한 회원
+            if (empVO.empretired === 1) {
+                error = "retiredcustomer";
+            } else if (empVO.empretired === 0) {
+                console.log("111111111111111111111->", req.body.pass);
+                bcrypt.compare(req.body.pass, empVO.emppass, (err, result) => {
+                    console.log("comparePassword2222->", result);
+                    EmpStay = empVO;
+                    if (result) {
+                        loginSuccess = true;
+
+                        if (req.session.user) {
+                            console.log(`세션이 이미 존재합니다.`);
+                        } else {
+                            req.session.user = {
+                                "User": empVO.empname,
+                                "empid": id,
+                                "login": "manager",
+                                "Auth": empVO.emppass,
+                                "pass": pass,
+                                "mypage": "mypageemp",
+                            }
+                            req.session.save();
+                            console.log(`세션 저장 완료! `);
+                        }
+                        res.redirect('/customer');
+                    } else {
+                        console.log("comparePassword4444->", result);
+                        error = "passnotequal";
+                        res.render("user/tourlandLoginManagerForm", {
+                            Auth,
+                            login,
+                            Manager,
+                            searchkeyword,
+                            registerSuccess,
+                            UserStay,
+                            EmpStay,
+                            error
+                        });
+
+                    }
+                })
+
+            } else {
+                error = "usernotfind";
+            }
+
+        }
+
+    })
+
+
 });
 
 
 router.get("/logout", (req, res, next) => {
 
     req.session.destroy();
+    Auth = {};
     console.log(`session을 삭제하였습니다.`);
     res.redirect("/customer");
 })
 
 
-router.get("/tourlandProductJPList", async (req, res, next) => {
+router.get("/tourlandProductKRList", async (req, res, next) => {
 
     const userid = req.params.userid;
-    let {searchType, keyword} = req.query;
+    let {ddate, rdate, cnt, searchType, keyword} = req.query;
     const contentSize = Number(process.env.CONTENTSIZE); // 한페이지에 나올 개수
     const currentPage = Number(req.query.currentPage) || 1; //현재페이
     const {limit, offset} = getPagination(currentPage, contentSize);
+
+
     let searchQuery = "";
 
-    if (searchType == "name") {
+    if (ddate == "name") {
         searchQuery = `and pname like concat('%',${keyword},'%')`;
     }
     if (searchType == "expire") {
@@ -378,153 +612,65 @@ router.get("/tourlandProductJPList", async (req, res, next) => {
 
     try {
 
-          const list = await product.findAll({
+        const list = await product.findAll({
             // raw : true,
-            nest: true, attributes: ['id','pname','pcontent', 'pexpire', 'pprice','ppic'],
-            include :[
-                {model : models.airplane,attributes:['price'],as : 'airplaneId_airplanes',nest: true, paranoid: true, required: false, nest: true,},
-                {model : models.hotel,attributes:['checkin', 'checkout','price'],as : 'hotelId_hotels',nest: true, paranoid: true, required: false, nest: true,},
-                {model : models.tour,attributes:['tprice'], as : 'tourId_tours',nest: true, paranoid: true, required: false, nest: true,},
-                {model : models.rentcar,as : 'rentcarId_rentcars',nest: true, paranoid: true, required: false, nest: true,},
+            nest: true, attributes: ['id', 'pname', 'pcontent', 'pexpire', 'pprice', 'ppic'],
+            include: [
+                {
+                    model: models.airplane,
+                    attributes: ['price'],
+                    as: 'airplaneId_airplanes',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+                {
+                    model: models.hotel,
+                    attributes: ['checkin', 'checkout', 'price'],
+                    as: 'hotelId_hotels',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+                {
+                    model: models.tour,
+                    attributes: ['tprice'],
+                    as: 'tourId_tours',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+                {
+                    model: models.rentcar,
+                    as: 'rentcarId_rentcars',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
             ],
-            where : {
-                pname  : {
-                    [Op.like] : "%" + '제주 3일' + "%"
+            where: {
+                pname: {
+                    [Op.like]: "%" + '제주' + "%"
                 }
+                // id : 13
+
             },
+            limit, offset
         });
 
-        console.log(list[0].dataValues);
+        const countlist = await product.findAndCountAll({
+            nest: true, attributes: ['id', 'pname', 'pcontent', 'pexpire', 'pprice', 'ppic'],
+            where: {
+                pname: {
+                    [Op.like]: "%" + '제주' + "%"
+                }
+                // id : 13
 
-        // let list = [];
-        let Auth = {};
-        let login = "";
-        let Manager = {};
-        let searchkeyword = "";
-        let error = "";
-        let pageMaker = {};
-        let cri = {};
-        let idx = '';
-        let pagingData = {};
-        let tourDays = '';
-        let date = '';
-        let capa = '';
-        let count = '';
-
-        if( list != null)
-        {
-            res.render("user/product/tourlandProductJPList", {tourDays, date,capa,count, list, Auth,login, Manager,searchkeyword, error,pageMaker,pagingData,cri, idx});
-        }
-        else{
-            res.status(202).send("notexist");
-        }
-    } catch (e) {
-        console.error(e);
-        next(e);
-    }
-
-})
-
-
-router.get("/tourlandProductJPList2", async (req, res, next) => {
-
-    const userid = req.params.userid;
-    let {searchType, keyword} = req.query;
-    const contentSize = Number(process.env.CONTENTSIZE); // 한페이지에 나올 개수
-    const currentPage = Number(req.query.currentPage) || 1; //현재페이
-    const {limit, offset} = getPagination(currentPage, contentSize);
-    let searchQuery = "";
-
-    if (searchType == "name") {
-        searchQuery = `and pname like concat('%',${keyword},'%')`;
-    }
-    if (searchType == "expire") {
-        searchQuery = `and pexpire like concat('%',${keyword},'%')`;
-    }
-    if (searchType == "userCart") {
-        searchQuery = `and pname like concat('%',${keyword},'%')`;
-    }
-    if (searchType == "location") {
-        if (keyword === "한국") {
-            searchQuery = `and pname like '%제주%'`;
-        }
-        if (keyword === "일본") {
-            searchQuery = `and pname like '%도쿄%'`;
-        }
-        if (keyword === "중국") {
-            searchQuery = `and pname like '%베이징%'`;
-        }
-    }
-
-    try {
-        const query = `select p.id,
-                              p.pname,
-                              p.pcontent,
-                              p.pexpire,
-                              p.pprice,
-                              p.ppic,
-                              p.pdiv,
-                              a2.id       as a2no,
-                              a2.ano,
-                              a2.dlocation,
-                              a2.rlocation,
-                              a2.ddate,
-                              a2.rdate,
-                              a2.ldiv,
-                              a2.capacity as a2capacity,
-                              a2.seat,
-                              a2.price    as a2price,
-                              a2.pdiv,
-                              h2.id       as h2no,
-                              h2.hname,
-                              h2.haddr,
-                              h2.checkin,
-                              h2.checkout,
-                              h2.capacity as h2capacity,
-                              h2.price    as h2price,
-                              h2.roomcapacity,
-                              h2.roomtype,
-                              h2.ldiv,
-                              h2.bookedup,
-                              h2.totalcapacity,
-                              h2.pdiv,
-                              t2.id       as t2no,
-                              t2.tname,
-                              t2.tlocation,
-                              t2.startdate,
-                              t2.enddate,
-                              t2.taddr,
-                              t2.etime,
-                              t2.capacity as t2capacity,
-                              t2.tprice   as t2tprice,
-                              t2.ldiv,
-                              t2.pdiv,
-                              r2.id       as r2no,
-                              r2.cdiv,
-                              r2.cno,
-                              r2.rentddate,
-                              r2.returndate,
-                              r2.rentaddr,
-                              r2.returnaddr,
-                              r2.price    as r2price,
-                              r2.capacity as r2capacity,
-                              r2.insurance,
-                              r2.ldiv,
-                              r2.pdiv
-                       from (select * from product where substring(pname, 2, 3) = '도쿄' ` + searchQuery + ` order by id desc limit ${currentPage}, 
-${contentSize}) p 
-join pairstatus a on p.id = a.id 
-join airplane a2 on a.ano = a2.id
-join photelstatus h on p.id = h.id 
-join hotel h2 on h.hno = h2.id
-join ptourstatus t on p.id = t.id 
-join tour t2 on t.tno = t2.id
-join prentstatus r on p.id = r.id 
-join rentcar r2 on r.rno = r2.id
-where p.pdiv = 0`;
-
-
-        let list = await models.sequelize.query(query, {type: QueryTypes.SELECT,nest: true,raw: true})
+            },
+            limit, offset
+        });
+        const {count: totalItems, rows: tutorials} = countlist;
+        const pagingData = getPagingDataCount(totalItems, currentPage, limit);
 
 
         // let list = [];
@@ -533,16 +679,13 @@ where p.pdiv = 0`;
         let Manager = {};
         let searchkeyword = "";
         let error = "";
-        let pageMaker = {};
         let cri = {};
         let idx = '';
-        let pagingData = {};
         let tourDays = '';
         let date = '';
         let capa = '';
         let count = '';
-        // list = JSON.stringify(list, null, 2);
-        console.log("3333333333->", list);
+
 
         if (list != null) {
             res.render("user/product/tourlandProductJPList", {
@@ -556,7 +699,6 @@ where p.pdiv = 0`;
                 Manager,
                 searchkeyword,
                 error,
-                pageMaker,
                 pagingData,
                 cri,
                 idx
@@ -572,93 +714,87 @@ where p.pdiv = 0`;
 })
 
 
+router.get("/tourlandProductDetail/:pno", async (req, res, next) => {
 
-router.get("/tourlandProductJPList3", async (req, res, next) => {
+    const pno = req.params.pno;
+    let {price, rdate, cnt, searchType, keyword} = req.query;
 
-    const userid = req.params.userid;
-    let {searchType, keyword} = req.query;
-    const contentSize = Number(process.env.CONTENTSIZE); // 한페이지에 나올 개수
-    const currentPage = Number(req.query.currentPage) || 1; //현재페이
-    const {limit, offset} = getPagination(currentPage, contentSize);
-    let searchQuery = "";
-
-    if (searchType == "name") {
-        searchQuery = `and pname like concat('%',${keyword},'%')`;
-    }
-    if (searchType == "expire") {
-        searchQuery = `and pexpire like concat('%',${keyword},'%')`;
-    }
-    if (searchType == "userCart") {
-        searchQuery = `and pname like concat('%',${keyword},'%')`;
-    }
-    if (searchType == "location") {
-        if (keyword === "한국") {
-            searchQuery = `and pname like '%제주%'`;
-        }
-        if (keyword === "일본") {
-            searchQuery = `and pname like '%도쿄%'`;
-        }
-        if (keyword === "중국") {
-            searchQuery = `and pname like '%베이징%'`;
-        }
-    }
 
     try {
-        const query = `select p.*,
-                              ((a2.price * 2) + (h2.price * datediff(h2.checkout, h2.checkin)) + tsum) as 'defaultPrice'
-                       from (select p2.*, sum(t2.tprice) as 'tsum'
-                             from product p2
-                                      join ptourstatus t on p2.pno = t.pno
-                                      join tour t2 on t.tno = t2.no
-                             group by p2.pno) p
-                                join pairstatus a on p.pno = a.pno
-                                join airplane a2 on a.ano = a2.no and a2.seat = 'E'
-                                join photelstatus h on p.pno = h.pno
-                                join hotel h2 on h.hno = h2.no and h2.roomtype = 'N' and h2.checkin = date (a2.ddate)
-                           join ptourstatus t
-                       on p.pno = t.pno join tour t2 on t.tno = t2.no
-                           join prentstatus r on p.pno = r.pno join rentcar r2 on r.rno = r2.no
-                       where p.pdiv = 0 and substring (p.pname, 2, 3) = '제주'
-                       group by p.pno
-                       order by defaultPrice;`;
 
-
-        let list = await models.sequelize.query(query, {type: QueryTypes.SELECT,nest: true,raw: true})
+        const vo = await product.findOne({
+            // raw : true,
+            nest: true,
+            attributes: ['id', 'pname', 'pcontent', 'pexpire', 'pprice', 'ppic', 'pcapacity'],
+            include: [
+                {
+                    model: models.airplane,
+                    attributes: ['price', 'ddate', 'id'],
+                    as: 'airplaneId_airplanes',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+                {
+                    model: models.hotel,
+                    attributes: ['checkin', 'checkout', 'price', 'id', 'capacity', 'roomcapacity'],
+                    as: 'hotelId_hotels',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+                {
+                    model: models.tour,
+                    attributes: ['tprice', 'id', 'tname', 'capacity'],
+                    as: 'tourId_tours',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+                {
+                    model: models.rentcar,
+                    attributes: ['id'],
+                    as: 'rentcarId_rentcars',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+            ],
+            where: {
+                id: pno
+            }
+        });
 
 
         // let list = [];
-        let Auth = {};
+        let Auth = {userno: 6, username: "테스트"};
         let login = "";
-        let Manager = {};
+        let Manager = {name: "테스트"};
         let searchkeyword = "";
         let error = "";
-        let pageMaker = {};
         let cri = {};
         let idx = '';
-        let pagingData = {};
         let tourDays = '';
         let date = '';
         let capa = '';
         let count = '';
-        list = JSON.stringify(list, null, 2);
-        console.log("3333333333->", list);
 
-        if (list != null) {
-            res.render("user/product/tourlandProductJPList", {
-                tourDays,
-                date,
-                capa,
-                count,
-                list,
+
+        if (vo != null) {
+            res.render("user/product/tourlandProductDetail", {
                 Auth,
                 login,
                 Manager,
                 searchkeyword,
+                tourDays,
+                date,
+                capa,
+                count,
+                vo,
                 error,
-                pageMaker,
-                pagingData,
                 cri,
-                idx
+                idx,
+                moment
             });
         } else {
             res.status(202).send("notexist");
@@ -668,9 +804,554 @@ router.get("/tourlandProductJPList3", async (req, res, next) => {
         next(e);
     }
 
-})
+});
 
 
+router.get("/tourlandProductDetail/tourlandProductReview/:pno", async (req, res, next) => {
+
+    const pno = req.params.pno;
+    let {price, rdate, cnt, searchType, keyword} = req.query;
+
+
+    try {
+
+        const vo = await product.findOne({
+            // raw : true,
+            nest: true,
+            attributes: ['id', 'pname', 'pcontent', 'pexpire', 'pprice', 'ppic'],
+            include: [
+                {
+                    model: models.airplane,
+                    attributes: ['price'],
+                    as: 'airplaneId_airplanes',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+                {
+                    model: models.hotel,
+                    attributes: ['checkin', 'checkout', 'price'],
+                    as: 'hotelId_hotels',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+                {
+                    model: models.tour,
+                    attributes: ['tprice'],
+                    as: 'tourId_tours',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+                {
+                    model: models.rentcar,
+                    as: 'rentcarId_rentcars',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+            ],
+            where: {
+                id: pno
+            }
+        });
+        // console.log(vo.pprice);
+        const list = await models.review.findAll({
+            // raw : true,
+            nest: true,
+            attributes: ["no", "rno", "pno", "userno", "regdate", "starpoint", "reviewTitle", "reviewContent"],
+            include: [
+                {
+                    model: models.user,
+                    as: 'userno_user',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+            ],
+            where: {
+                pno: pno
+            }
+        });
+
+        console.log("000000-", list);
+
+        let Auth = {userno: 6, username: "테스트"};
+        let login = "manager";
+        let Manager = {name: "테스트"};
+        let searchkeyword = "";
+        let error = "";
+        let cri = {};
+        let idx = '';
+        let tourDays = '';
+        let date = '';
+        let capa = '';
+        let count = '';
+
+        console.log("333333->", vo.pprice);
+
+
+        if (vo != null) {
+            res.render("user/product/tourlandProductReview", {
+                Auth,
+                login,
+                Manager,
+                searchkeyword,
+                tourDays,
+                date,
+                capa,
+                count,
+                vo,
+                list,
+                error,
+                cri,
+                idx,
+                moment,
+            });
+        } else {
+            res.status(202).send("notexist");
+        }
+    } catch (e) {
+        console.error(e);
+        next(e);
+    }
+
+});
+
+
+router.get("/tourlandMyWishes", async (req, res, next) => {
+
+    const pno = req.params.pno;
+    let {price, rdate, cnt, searchType, keyword} = req.query;
+
+
+    try {
+
+        const vo = await product.findOne({
+            // raw : true,
+            nest: true,
+            attributes: ['id', 'pname', 'pcontent', 'pexpire', 'pprice', 'ppic'],
+            include: [
+                {
+                    model: models.airplane,
+                    attributes: ['price', 'ddate', 'id'],
+                    as: 'airplaneId_airplanes',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+                {
+                    model: models.hotel,
+                    attributes: ['checkin', 'checkout', 'price', 'id', 'capacity', 'roomcapacity'],
+                    as: 'hotelId_hotels',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+                {
+                    model: models.tour,
+                    attributes: ['tprice', 'id', 'tname', 'capacity'],
+                    as: 'tourId_tours',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+                {
+                    model: models.rentcar,
+                    attributes: ['id'],
+                    as: 'rentcarId_rentcars',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+            ],
+            where: {
+                id: pno
+            }
+        });
+
+
+        // let list = [];
+        let Auth = {userno: 6, username: "테스트"};
+        let login = "";
+        let Manager = {name: "테스트"};
+        let searchkeyword = "";
+        let error = "";
+        let cri = {};
+        let idx = '';
+        let tourDays = '';
+        let date = '';
+        let capa = '';
+        let count = '';
+
+
+        if (vo != null) {
+            res.render("user/mypage/tourlandMyWishes", {
+                Auth,
+                login,
+                Manager,
+                searchkeyword,
+                tourDays,
+                date,
+                capa,
+                count,
+                vo,
+                error,
+                cri,
+                idx,
+                moment
+            });
+        } else {
+            res.status(202).send("notexist");
+        }
+    } catch (e) {
+        console.error(e);
+        next(e);
+    }
+
+});
+
+
+router.get("/tourlandMyReserv:rno", async (req, res, next) => {
+
+    const rno = req.params.rno;
+    let {price, rdate, cnt, searchType, keyword} = req.query;
+
+    try {
+
+        const list = await reservation.findAll({
+            // raw : true,
+            nest: true, attributes: ['no', 'userno', 'rdate', 'rstatus'],
+            include: [
+                {
+                    model: models.airplane,
+                    attributes: ['price'],
+                    as: 'airplaneId_airplanes',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+                {
+                    model: models.hotel,
+                    attributes: ['checkin', 'checkout', 'price'],
+                    as: 'hotelId_hotels',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+                {
+                    model: models.tour,
+                    attributes: ['tprice'],
+                    as: 'tourId_tours',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+                {
+                    model: models.rentcar,
+                    as: 'rentcarId_rentcars',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+            ],
+            where: {
+                pname: {
+                    [Op.like]: "%" + '제주' + "%"
+                }
+                // id : 13
+
+            },
+            limit, offset
+        });
+
+
+        let Auth = {userno: 6, username: "테스트"};
+        let login = "";
+        let Manager = {name: "테스트"};
+        let searchkeyword = "";
+        let error = "";
+        let cri = {};
+        let idx = '';
+        let tourDays = '';
+        let date = '';
+        let capa = '';
+        let count = '';
+
+
+        if (vo != null) {
+            res.render("user/mypage/tourlandMyReserv", {
+                Auth,
+                login,
+                Manager,
+                searchkeyword,
+                tourDays,
+                date,
+                capa,
+                count,
+                vo,
+                error,
+                cri,
+                idx,
+                moment
+            });
+        } else {
+            res.status(202).send("notexist");
+        }
+    } catch (e) {
+        console.error(e);
+        next(e);
+    }
+
+});
+
+
+router.get("/tourlandProductDetail/reserv", async (req, res, next) => {
+
+    let {uno, pno, price, ano, acapacity, hno, hcapacity, tno, tcapacity, rno, rcapacity} = req.query;
+    console.log(uno, tno);
+
+
+});
+
+router.post("/tourlandProductDetail/reserv", (req, res, next) => {
+
+
+    let {uno, pno, price, ano, acapacity, hno, hcapacity, tno, tcapacity, rno, rcapacity} = req.body;
+    console.log("aaaa11111111111->", req.body);
+    ano.map(no => {
+        console.log("aaaa->", no[i]);
+    })
+
+
+});
+
+
+router.get("/tourlandMyCoupon", async (req, res, next) => {
+
+    const pno = req.params.pno;
+    let {price, rdate, cnt, searchType, keyword} = req.query;
+
+
+    try {
+
+        const c = await product.findOne({
+            // raw : true,
+            nest: true,
+            attributes: ['id', 'pname', 'pcontent', 'pexpire', 'pprice', 'ppic', 'pcapacity'],
+            include: [
+                {
+                    model: models.airplane,
+                    attributes: ['price', 'ddate', 'id'],
+                    as: 'airplaneId_airplanes',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+                {
+                    model: models.hotel,
+                    attributes: ['checkin', 'checkout', 'price', 'id', 'capacity', 'roomcapacity'],
+                    as: 'hotelId_hotels',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+                {
+                    model: models.tour,
+                    attributes: ['tprice', 'id', 'tname', 'capacity'],
+                    as: 'tourId_tours',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+                {
+                    model: models.rentcar,
+                    attributes: ['id'],
+                    as: 'rentcarId_rentcars',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+            ],
+            where: {
+                id: pno
+            }
+        });
+
+
+        // let list = [];
+        let Auth = {userno: 6, username: "테스트"};
+        let login = "user";
+        let Manager = {name: "테스트"};
+        let searchkeyword = "";
+        let error = "";
+        let cri = {};
+        let idx = '';
+        let tourDays = '';
+        let date = '';
+        let capa = '';
+        let count = '';
+
+
+        if (vo != null) {
+            res.render("user/mypage/tourlandMyCoupon", {
+                Auth,
+                login,
+                Manager,
+                searchkeyword,
+                tourDays,
+                date,
+                capa,
+                count,
+                vo,
+                error,
+                cri,
+                idx,
+                moment
+            });
+        } else {
+            res.status(202).send("notexist");
+        }
+    } catch (e) {
+        console.error(e);
+        next(e);
+    }
+
+});
+
+
+router.get("/EditPassword", (req, res, next) => {
+
+    let {empid, checkPass, userid} = req.body;
+    let {searchType, keyword, searchkeyword} = req.query;
+
+    console.log(req.session.user);
+    try {
+        if (req.session.user) {
+            Auth = {
+                userid: req.session.user.Auth.userid,
+                empid: req.session.user.Auth.empid
+            };
+            mypage = req.session.user.mypage;
+            login = req.session.user.login;
+        }
+        if (req.session.user) {
+            res.render("user/mypage/tourlandMyInfoEditPassword", {
+                Auth,
+                login,
+                mypage,
+                searchType,
+                searchkeyword,
+                keyword
+            });
+        } else {
+            res.status(202).send("notexist");
+        }
+    } catch (e) {
+        console.error(e);
+        next(e);
+    }
+
+});
+
+
+router.get("/tourlandMyInfoEdit", (req, res, next) => {
+
+    let {
+        userid,
+        userno,
+        userpass,
+        username,
+        userbirth,
+        useraddr,
+        usertel,
+        userpassport,
+        empno,
+        empid,
+        emppass,
+        empname,
+        empbirth,
+        empaddr,
+        emptel
+    } = req.body;
+    let {searchType, keyword, searchkeyword} = req.query;
+
+    console.log(req.session.user);
+    try {
+        let success = {};
+        if (req.session.user) {
+            Auth = {
+                userid: req.session.user.Auth.userid,
+                empid: req.session.user.Auth.empid,
+                userno: req.session.user.Auth.userno,
+                empno: req.session.user.Auth.empno,
+                username: req.session.user.Auth.username,
+                empname: req.session.user.Auth.empname,
+                userbirth: req.session.user.Auth.userbirth,
+                empbirth: req.session.user.Auth.empbirth,
+                useraddr: req.session.user.Auth.useraddr,
+                empaddr: req.session.user.Auth.empaddr,
+                usertel: req.session.user.Auth.usertel,
+                emptel: req.session.user.Auth.emptel
+            };
+            mypage = req.session.user.mypage;
+            login = req.session.user.login;
+            pass = req.session.user.pass;
+        }
+        if (req.session.user) {
+            res.render("user/mypage/tourlandMyInfoEdit", {
+                Auth,
+                login,
+                mypage,
+                searchType,
+                searchkeyword,
+                keyword,
+                pass,
+                success
+            });
+        } else {
+            res.status(202).send("notexist");
+        }
+    } catch (e) {
+        console.error(e);
+        next(e);
+    }
+
+
+});
+
+
+
+router.post("/editProfile", (req, res, next) => {
+
+    let {
+        userid,
+        userno,
+        userpass,
+        username,
+        userbirth,
+        useraddr,
+        usertel,
+        userpassport,
+        empno,
+        empid,
+        emppass,
+        empname,
+        empbirth,
+        empaddr,
+        emptel
+    } = req.body;
+
+
+
+    res.status(200).json("success");
+
+
+
+});
+
+
+router.get("/logoutWithdrawal?no=")
 
 module.exports = router;
-

@@ -27,13 +27,13 @@ module.exports = function(sequelize, DataTypes) {
       comment: "유저번호",
       references: {
         model: 'user',
-        key: 'id'
+        key: 'userno'
       }
     },
     regdate: {
       type: DataTypes.DATE,
       allowNull: true,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp'),
+      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
       comment: "등록일"
     },
     starpoint: {

@@ -14,6 +14,7 @@ const indexRouter = require('./routes/index');
 const apiRouter = require('./routes/indexApi');
 const userRoutes = require('./routes/userRoutes/userRoutes');
 const managerRoutes = require('./routes/managerRoutes/managerRoutes');
+const bodyParser = require("express");
 const app = express();
 
 // view engine setup
@@ -22,6 +23,8 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser("1234"));
 app.use(express.static(path.join(__dirname, 'public')));

@@ -36,6 +36,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.BOOLEAN,
       allowNull: true,
       comment: "상품구분"
+    },
+    pcapacity: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      comment: "상품인원"
     }
   }, {
     sequelize,

@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const sequelize = require("sequelize");
 const Op = sequelize.Op;
-const use = require('abrequire');
+
 
 const cookieParser = require("cookie-parser");
-const models = use('models');
+const models = require('../models/index');
 
 const fs = require('fs');
 const querystring = require('querystring');
@@ -32,7 +32,7 @@ router.get('/', async function (req, res, next) {
 router.get('/displayFile/:whichOne', async  (req, res, next) => {
     const choice = req.params.whichOne;
     const query = req.query.filename;
-    const base_dir = "/home/work/IdeaProjects/tourland/public/displayFile";
+    const base_dir = "/home/edu07/IdeaProjects/tourland/public/displayFile";
 
     let path;
     if( choice === "popup"){
@@ -59,6 +59,7 @@ router.get("/logout", (req, res, next)=>{
     req.session.destroy();
     console.log(`session을 삭제하였습니다.`);
     res.redirect("/customer");
-})
+});
+
 
 module.exports = router;

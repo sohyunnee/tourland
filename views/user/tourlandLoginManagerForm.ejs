@@ -10,11 +10,11 @@
 <%- include("../include/userHeader.ejs") %>
 <section>
     <div id="loginHead">
-        <h1>로그인</h1>
-        <p>새로운 세상, 투어랜드</p>
+        <h1>관리자 로그인 페이지 입니다.</h1>
+        <p>관계자외 로그인 불가합니다.</p>
     </div>
     <div id="loginBox">
-        <form action="/customer/loginForm" method="post">
+        <form action="loginManagerForm" method="post">
             <% if (registerSuccess != null) { %>
                 <h2>가입 완료 되었습니다. 로그인 수행하여 주십시오.</h2>
             <% } %>
@@ -23,10 +23,9 @@
             <% } %>
             <div id="loginInnerBox">
                 <div id="inputBox">
-                    <% if( UserStay != null) { %>
-                    <input type="text" name="id" id="id" placeholder="아이디" value="<%= UserStay.userid %>">
-                    <input type="password" name="pass" id="pass" placeholder="비밀번호"
-                           value="<%= UserStay.userpass %>">
+                    <% if(EmpStay != null) { %>
+                    <input type="text" name="id" id="id" placeholder="아이디" value="<%= EmpStay.empid %>">
+                    <input type="password" name="pass" id="pass" placeholder="비밀번호" value="<%= EmpStay.empass %>">
                     <% } else  { %>
                         <input type="text" name="id" id="id" placeholder="아이디">
                         <input type="password" name="pass" id="pass" placeholder="비밀번호">

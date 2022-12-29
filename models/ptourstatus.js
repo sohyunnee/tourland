@@ -1,45 +1,43 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('usercoupon', {
-    userno: {
+  return sequelize.define('ptourstatus', {
+    productId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      comment: "유저번호",
       references: {
-        model: 'user',
-        key: 'userno'
+        model: 'product',
+        key: 'id'
       }
     },
-    cno: {
+    tourId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      comment: "쿠폰번호",
       references: {
-        model: 'coupon',
-        key: 'cno'
+        model: 'tour',
+        key: 'id'
       }
     }
   }, {
     sequelize,
-    tableName: 'usercoupon',
-    timestamps: false,
+    tableName: 'ptourstatus',
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "userno" },
-          { name: "cno" },
+          { name: "tourId" },
+          { name: "productId" },
         ]
       },
       {
-        name: "FK_coupon_TO_usercoupon",
+        name: "productId",
         using: "BTREE",
         fields: [
-          { name: "cno" },
+          { name: "productId" },
         ]
       },
     ]

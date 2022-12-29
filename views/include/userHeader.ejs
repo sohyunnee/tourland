@@ -116,7 +116,7 @@
     }
 
 
-    //날씨 박스 setInteval
+    //날씨 박스 setInterval
     setInterval(function () {
         $('#weatherBoxWrap .box2:first').animate({
             marginTop: -50
@@ -140,10 +140,13 @@
 <header>
     <nav id="nav1">
         <ul>
-            <% if (Auth == null) { %>
+            <% if (
+                    Auth == "" || Auth == null || Auth == undefined || ( Auth != null && typeof Auth == "object" && !Object.keys(Auth).length )
+            ) { %>
                 <li><a href="/customer/tourlandBoardNotice">고객센터</a></li>
                 <li><a href="/customer/tourlandRegister">회원가입</a></li>
                 <li><a href="/customer/loginForm" class="balance">로그인</a></li>
+                <li><a href="/customer/loginManagerForm" class="balance">관리자로그인</a></li>
             <% } else { %>
                 <li><a href="/customer/logout" class="balance">로그아웃</a></li>
                 <li><a href="/customer/tourlandBoardNotice">고객센터</a></li>

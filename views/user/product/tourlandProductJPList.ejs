@@ -1,7 +1,11 @@
 <%- include("../../include/userHeader.ejs") %>
 <link rel="stylesheet" type="text/css" href="/stylesheets/tourlandProductJPList.css"/>
-<%- include("tourlandProductList_script.ejs") %>
+
 <script>
+    function replaceAll(str, searchStr, replaceStr) {
+        return str.split(searchStr).join(replaceStr);
+    }
+
     $(function () {
         /* 페이지 좌측 검색 박스 검색 버튼 클릭  */
         $("#pkgSearchBtn").click(function () {
@@ -11,6 +15,21 @@
         $("#listAll").click(function () {
             getList(1, "Japan");
         })
+        /* 리스트 우측 전체 리스트 보기 버튼을 클릭했을 때 모든 데이터를 불러오는 Ajax  */
+        function getList(page,locale){
+            $.ajax({
+                url : "tourlandProduct"+locale+"ListAll/"+page,
+                type : "get",
+                dataType : "json",
+                success : function(rs){
+                    $("#pkgListBoxWrap").empty();
+                    $(".pagination").empty();
+                    $("#totalCount").html(rs.count);
+                    appendAjaxData(rs,"tourlandProduct"+locale+"ListAll","listAll");
+                }
+            })
+        }
+
         /* 낮은 가격 순 정렬 */
         $("#byPrice").click(function () {
             getLowPriceList(1, "JP");
@@ -44,7 +63,9 @@
                 $.cookie("currentProduct", pno, {expires: 1, path: "/"});
                 $.cookie("currentProductPrice", price, {expires: 1, path: "/"});
             }
-            location.href = "/customer/tourlandProductDetail?pno=" + pno + "&price=" + price;
+
+            location.href = "/customer/tourlandProductDetail/" + pno + "?price=" + price;
+
         })
     })
 </script>
@@ -132,9 +153,9 @@
                         let hotelPrice = 0;
                         let tourPrice = 0;
                         let f = product.airplaneId_airplanes;
-                        for (let i =f.length - 2; i <= f.length - 1; i++) {
+                        for (let i =f.length-2; i < f.length-1; i++) {
                             airPrice = airPrice + f[i].price;
-                            console.log(airPrice,"----", f[i].price);
+                            // console.log(airPrice,"----", f[i].price);
                         }
                         let h = product.hotelId_hotels;
                         for (let i = h.length - 1; i <= h.length - 1; i++) {
@@ -150,7 +171,7 @@
                         let t = product.tourId_tours;
                         for (let i =t.length - 2; i <= t.length - 1; i++) {
                             tourPrice = tourPrice + t[i].tprice;
-                            console.log(airPrice,"----", t[i].tprice);
+                            // console.log(airPrice,"----", t[i].tprice);
                         }
 
                         let N = airPrice + hotelPrice + tourPrice;
@@ -160,7 +181,7 @@
                     <p class="pkgPrice"><%= price %>원 부터~</p>
                     <p class="pkgDate">~ <%= expire %>까지 예약 가능</p>
                     <p class="pkgReserv">
-                        <button class="pkgReservBtn" data-price="<%= price %>" data-pno="<%= product.pno %>">지금 바로 예약
+                        <button class="pkgReservBtn" data-price="<%= price %>" data-pno="<%= product.id %>">지금 바로 예약
                         </button>
                     </p>
                 </div>
