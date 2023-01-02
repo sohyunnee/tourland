@@ -291,27 +291,25 @@
                                     <td><%=f.ano%></td>
                                     <td><%=f.dlocation%></td>
                                     <td><%=f.rlocation%></td>
-                                    <td><fmt:formatDate value="${f.ddate }"
-                                                        pattern="yyyy-MM-dd" /></td>
-                                    <td><fmt:formatDate value="${f.rdate }"
-                                                        pattern="yyyy-MM-dd" /></td>
-                                    <c:if test="${f.ldiv==0 }">
+                                    <td><%=f.ddate%> pattern="yyyy-MM-dd"</td>
+                                    <td><%=f.rdate%> pattern="yyyy-MM-dd"</td>
+                                    <% if (f.ldiv==0) { %>
                                         <td>해외</td>
-                                    </c:if>
-                                    <c:if test="${f.ldiv==1 }">
+                                    <% } %>
+                                    <% if (f.ldiv==1) { %>
                                         <td>국내</td>
-                                    </c:if>
-                                    <td>${f.capacity }</td>
-                                    <c:if test="${f.seat =='F'}">
+                                    <% } %>
+                                    <td><%=f.capacity%></td>
+                                    <% if (f.seat =='F') { %>
                                         <td id="first">First-Class</td>
-                                    </c:if>
-                                    <c:if test="${f.seat =='B'}">
+                                    <% } %>
+                                    <% if (f.seat =='B') { %>
                                         <td id="bus">Business-Class</td>
-                                    </c:if>
-                                    <c:if test="${f.seat =='E'}">
+                                    <% } %>
+                                    <% if (f.seat =='E') { %>
                                         <td id="eco">Economy-Class</td>
-                                    </c:if>
-                                    <td>${f.price }</td>
+                                    <% } %>
+                                    <td><%=f.price%></td>
                                 </tr>
                             <% }) %>
                         </table>
@@ -319,15 +317,14 @@
                     <div class="box-footer">
                         <div class="text-center">
                             <ul class="pagination">
-                                <c:if test="${pageMakerByFlightDepature.prev == true }">
+                                <% if (pageMakerByFlightDepature.prev == true) { %>
                                     <li><a id="prev">&laquo;</a></li>
-                                </c:if>
-                                <c:forEach begin="${pageMakerByFlightDepature.startPage }"
-                                           end="${pageMakerByFlightDepature.endPage }" var="idx">
+                                <% } %>
+                                    <% for(idx=pageMakerByFlightDepature.startPage; idx<=pageMakerByFlightDepature.endPage; idx++){%>
                                     <li
-                                            class="${pageMakerByFlightDepature.cri.page == idx ?'active':''}"><a
-                                                class="index" data-index="${idx }">${idx }</a></li>
-                                </c:forEach>
+                                            class="<%=pageMakerByFlightDepature.cri.page == idx ?'active':''%>"><a
+                                                class="index" data-index="<%=idx%>"><%=idx%></a></li>
+                                <% } %>
                                 <c:if test="${pageMakerByFlightDepature.next == true }">
                                     <li><a id="next">&raquo;</a></li>
                                 </c:if>
