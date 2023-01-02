@@ -5,7 +5,7 @@
 <script>
     var uno = 0;
     var price = 0;
-    var bookCapacity = 0;
+    var bookCapacity = 30;
 
     function calDateDiff(checkin, checkout) {
         checkinArr = checkin.split(" ");
@@ -196,8 +196,9 @@
         $(".selHotel").eq(0).change();
         $(".selTour").prop("checked", true);
         $(".selTour").change();
+
         $("#doReserv").click(function () {
-            if (Auth==null) {
+            if (<%=Auth.userno%>==null) {
                 alert("로그인부터 먼저해주세요");
                 location.href = "/loginForm";
                 return false;
@@ -269,7 +270,7 @@
             })
         });
         $("#doWish").click(function () {
-            if ( Auth==null ) {
+            if ( <%=Auth.userno%>==null ) {
                 alert("로그인부터 먼저해주세요");
                 location.href = "/loginForm";
                 return false;

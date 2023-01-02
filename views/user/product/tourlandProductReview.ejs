@@ -7,7 +7,8 @@
             $(this).find("img").attr("src", $("#content img").eq(i).attr("src"));
         })
         $("#detail").click(function () {
-            location.href = "/customer/tourlandProductDetail/" + vo.id + "?price=" + vo.pprice;
+            location.href = "/customer/tourlandProductDetail/<%=vo.id%>?price=<%=vo.pprice%>";
+
         })
     })
 </script>
@@ -20,10 +21,10 @@
             </div>
             <div id="smallImgBox">
                 <ul>
-                    <li><img src="/resources/images/dokyo1.jpg"></li>
-                    <li><img src="/resources/images/dokyo1.jpg"></li>
-                    <li><img src="/resources/images/dokyo1.jpg"></li>
-                    <li><img src="/resources/images/dokyo1.jpg"></li>
+                    <li><img src="/images/jeju.jpg"></li>
+                    <li><img src="/images/jeju1.jpg"></li>
+                    <li><img src="/images/hotel.jpg"></li>
+                    <li><img src="/images/happyDragon.jpg"></li>
                 </ul>
             </div>
         </div>
@@ -127,9 +128,7 @@
             </ul>
         </div>
     </div>
-    <div style="display : none;" id="content">
-        <%- vo.pcontent %>
-    </div>
+
 </section>
 <%- include("../../include/userFooter.ejs") %>
 </body>
