@@ -4,54 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="022f6912-a924-4b38-9214-54f3b4c729bd" name="변경" comment="indexApi jwt로그인 구">
-      <change afterPath="$PROJECT_DIR$/public/stylesheets/tourlandProductDetail.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/stylesheets/tourlandProductReview.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/include/userMyPageMenu.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/employee/employeeDetailForm.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/employee/employeeMngList.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/employee/employeeRegister.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/product/flightMngList.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/product/hotelMngList.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/product/productMngList.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/product/rentcarMngList.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/product/tourMngList.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/mypage/tourlandCartDetail.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/mypage/tourlandMyCoupon.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/mypage/tourlandMyInfoEdit.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/mypage/tourlandMyInfoEditPassword.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/mypage/tourlandMyReserv.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/mypage/tourlandMyReview.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/mypage/tourlandMyWishes.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/mypage/tourlandReadMyReview.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/product/tourlandProductReview.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/tourlandLoginManagerForm.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/22__12__12___10_26__________.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/pagination.js" beforeDir="false" afterPath="$PROJECT_DIR$/controller/pagination.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/cart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/custboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/custboard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/employee.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/employee.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/notice.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/notice.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/planboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/planboard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/product.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/product.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/reservation.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/reservation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/review.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/review.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/usercoupon.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/usercoupon.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/userpstatus.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/userpstatus.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/managerRoutes/managerRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/managerRoutes/managerRoutes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/userRoutes/userRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/userRoutes/userRoutes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/include/header.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/include/header.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/include/userHeader.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/include/userHeader.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/user/product/tourlandProductDetail.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/user/product/tourlandProductDetail.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/user/product/tourlandProductJPList.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/user/product/tourlandProductJPList.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/user/tourlandLoginForm.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/user/tourlandLoginForm.ejs" afterDir="false" />
-    </list>
+    <list default="true" id="022f6912-a924-4b38-9214-54f3b4c729bd" name="변경" comment="indexApi jwt로그인 구" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -143,7 +96,7 @@
       <workItem from="1672013347912" duration="26760000" />
       <workItem from="1672099784114" duration="26071000" />
       <workItem from="1672193794836" duration="18768000" />
-      <workItem from="1672274079120" duration="23822000" />
+      <workItem from="1672274079120" duration="24296000" />
     </task>
     <task id="LOCAL-00001" summary="변경">
       <created>1670416532650</created>
