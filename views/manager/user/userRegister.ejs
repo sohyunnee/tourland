@@ -1,6 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ include file="../../include/header.jsp"%>
+<%- include ("../../include/header.ejs")%>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <style>
   label {
@@ -16,7 +14,7 @@
 </style>
 <script>
 
-	var userno = <%=userVO.userno%> };
+	var userno = <%=userVO.userno%> ;
 //	var searchType = "${cri.searchType}";
 //	var keyword = "${cri.keyword}";
 
@@ -119,7 +117,7 @@
 
 		 //리스트로 버튼 눌렀을 때 리스트로 돌아가기
 		$("#btnReturnToList").click(function(){
-			location.href="${pageContext.request.contextPath}/manager/userMngList/0";
+			location.href="/manager/userMngList/0";
 		})
 
 		//아이디 입력값이 달라질 때 마다 아이디 체크 여부를 초기화
@@ -143,7 +141,7 @@
 					    <input type="hidden" value="" id="forSubmit">
 						<div class="form-group">
 							<label>고객 번호</label>
-							<input type="text" name="userno"  readonly="readonly" style="background:lavender;" value=" ${autoNo }" >
+							<input type="text" name="userno"  readonly="readonly" style="background:lavender;" value="<%=autoNo%>" >
 						</div>
 						<div class="form-group">
 							<label>고객 이름</label>
@@ -198,4 +196,4 @@
 	</div>
 </div>
 
-<%@ include file="../../include/footer.jsp"%>
+<%- include ("../../include/footer.ejs") %>

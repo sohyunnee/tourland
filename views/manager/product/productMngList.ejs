@@ -31,10 +31,10 @@
                 </div>
                 <div class="box-body">
                     <select name="searchType" id="searchType">
-                        <option value="N" <%= cri.searchType=='N'?'selected':'' %>>----------</option>
-                        <option value="name" <%= cri.searchType=='name'?'selected':'' %>>상품제목</option>
-                        <option value="expire" <%= cri.searchType=='expire'?'selected':'' %>>유효기간</option>
-                        <option value="location" <%= cri.searchType=='location'?'selected':'' %>>지역</option>
+                        <option value="N" <%= (cri.searchType=='N')?'selected':'' %>>----------</option>
+                        <option value="name" <%= (cri.searchType=='name')?'selected':'' %>>상품제목</option>
+                        <option value="expire" <%= (cri.searchType=='expire')?'selected':'' %>>유효기간</option>
+                        <option value="location" <%= (cri.searchType=='location')?'selected':'' %>>지역</option>
                     </select>
                     <input type="text" name="keyword" id="keywordInput" value="<%= cri.keyword %>">
                     <button id="btnSearch">Search</button>
@@ -55,33 +55,33 @@
                             <th>가격</th>
                         </tr>
                         <% list.forEach(product => { %>
-                        <tr class="productList" data-no="<%= product.pno %>">
-                            <td><%= product.pno %></td>
+                        <tr class="productList" data-no="<%= product.id %>">
+                            <td><%= product.id %></td>
                             <td><%= product.pname %></td>
                             <td>
-                                <% product.air.forEach( air => { %>
+                                <% product.airplaneId_airplanes.forEach( air => { %>
                                     <%= air.ano %>
                                 <% }) %>
                             </td>
                             <td>
-                                <% product.hotel.forEach( hotel => { %>
+                                <% product.hotelId_hotels.forEach( hotel => { %>
                                     <p>
                                         <%= hotel.hname %>
                                     </p>
                                 <% }) %>
                             </td>
                             <td>
-                                <% product.tour.forEach( tour => { %>
+                                <% product.tourId_tours.forEach( tour => { %>
                                     <p>
                                         <%= tour.tname %>
                                     </p>
                                 <% }) %>
                             </td>
                             <td>
-                                <% product.rentcar.forEach( rentcar => { %>
+                                <% product.rentcarId_rentcars.forEach( rentcar => { %>
                                     <p>
-                                        <% rentcar.cdiv eq 'L'?'경차':rentcar.cdiv eq 'S'?'세단':rentcar.cdiv eq 'U'?'SUV':
-                                        rentcar.cdiv eq 'V'?'밴':'버스'%>
+                                        <% rentcar.cdiv === 'L'?'경차':rentcar.cdiv === 'S'?'세단':rentcar.cdiv === 'U'?'SUV':
+                                        rentcar.cdiv === 'V'?'밴':'버스'%>
                                     </p>
                                 <% }) %>
                             </td>
@@ -98,31 +98,37 @@
                     </table>
                 </div>
                 <div class="box-footer">
-                    <ul class="pagination">
-                        <% if (pageMaker.prev == true) { %>
-                            <li>
-                                <a href="/manager/productMngList?page=<%=pageMaker.startPage-1%>&searchType=<%=cri.searchType%>&keyword=<%=cri.keyword%>">&laquo;</a>
-                            </li>
-                        <% } %>
-                        <% for(let idx=pageMaker.startPage; idx<=pageMaker.endPage; idx++){ %>
-                        <li class=<%=cri.page==idx?'active':''%>><a
-                                href="/manager/productMngList?page=<%=idx%>&searchType=<%=cri.searchType%>&keyword=<%=cri.keyword%>"><%=idx%></a>
-                        </li>
-                        <% } %>
+                    <!--  부트 스트랩으로 사용  -->
+                    <div class='text-center'>
+                        <ul class="pagination">
+                            <% if (pagingData.totalPages != 0) { %>
+                            <div class="" style="text-align:center;">
+                                <ul class="pagination">
+                                    <li <%if(pagingData.currentPage == 1){%> class="disabled" <%}else{%>class="waves-effect" <%}%> >
+                                        <a <%if(pagingData.currentPage > 1){%> href="?currentPage=<%=pagingData.currentPage-1%>" <%}%>>
+                                            <i class="material-icons">prev</i>
+                                        </a>
+                                    </li>
+                                    <% for(var i=pagingData.pnStart; i<=pagingData.pnEnd; i++){ %> <li <%if(i===pagingData.currentPage){%> class="active"
+                                            <%}%>><a href="?currentPage=<%=i%>"><%=i%></a></li>
+                                    <% } %>
+                                    <li <%if(pagingData.currentPage == pagingData.totalPages){%> class="disabled" <%}else{%> class="waves-effect" <%}%>>
+                                        <a <%if(pagingData.currentPage < pagingData.totalPages){%> href="?currentPage=<%=pagingData.currentPage+1%>" <%}%> class="waves-effect">
+                                            <i class="material-icons">next</i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <% } %>
 
-                        <% if (pageMaker.next == true) { %>
-                            <li>
-                                <a href="/manager/productMngList?page=<%=pageMaker.endPage+1%>&searchType=<%=cri.searchType%>&keyword=<%=cri.keyword%>">&raquo;</a>
-                            </li>
-                        <% } %>
-                    </ul>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <script>
-    var curPage = <%=pageMaker.cri.page%>;
     var fixSearchTypeAndKeyword = function () {
         var searchType = "<%=cri.searchType%>";
         var keyword = "<%=cri.keyword%>";
@@ -139,36 +145,19 @@
         var no = $(this).attr("data-no");
         var searchType = "<%=cri.searchType%>";
         var keyword = "<%=cri.keyword%>";
-        location.href = "productDetail?no=" + no + "&page=" + curPage + "&searchType=" + searchType + "&keyword=" + keyword;
+        location.href = "/manager/productDetail/"+no+"&page=<%=pagingData.currentPage %>&searchType="+searchType+"&keyword="+keyword;
     })
     $("#btnSearch").click(function () {
         var searchType = $("#searchType option:selected").val();
         var keyword = $("#keywordInput").val();
-        location.href = "productMngList?searchType=" + searchType + "&keyword=" + keyword;
+        location.href = "/manager/productMngList?searchType=" + searchType + "&keyword=" + keyword;
         //searchBoardController의 listPage GET 으로 받음
     })
     $("#btnRegister").click(function () {
-        location.href = "addProductForm";
+        location.href = "/manager/addProductForm";
     })
     fixSearchTypeAndKeyword();
-    $(document).on("click", ".pagination li", function () {
-        curPage = $(this).text();
-        var searchType = $("#searchType option:selected").val();
-        var keyword = $("#keywordInput").val();
-        location.href = "productMngList?page=" + curPage + "&searchType=" + searchType + "&keyword=" + keyword;
-    })
-    $(document).on("click", "#prev", function () {
-        curPage = <%=pageMaker.startPage-1%>;
-        var searchType = $("#searchType option:selected").val();
-        var keyword = $("#keywordInput").val();
-        location.href = "productMngList?page=" + curPage + "&searchType=" + searchType + "&keyword=" + keyword;
-    })
-    $(document).on("click", "#next", function () {
-        curPage = <%=pageMaker.endPage+1%>;
-        var searchType = $("#searchType option:selected").val();
-        var keyword = $("#keywordInput").val();
-        location.href = "productMngList?page=" + curPage + "&searchType=" + searchType + "&keyword=" + keyword;
-    })
+
 </script>
 
-<%- include (../../include/footer.ejs) %>
+<%- include ("../../include/footer.ejs") %>

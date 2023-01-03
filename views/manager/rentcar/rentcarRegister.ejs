@@ -1,6 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%>
-<%@ include file="../../include/header.jsp"%>
+<%- include (../../include/header.ejs) %>
 <style>
     label{
         padding-bottom:6px;
@@ -92,7 +90,7 @@ pageEncoding="UTF-8"%>
 
         //리스트로 버튼 눌렀을 때 리스트로 돌아가기
         $("#btnReturnToList").click(function(){
-            location.href="${pageContext.request.contextPath}/manager/rentcarMngList";
+            location.href="/manager/rentcarMngList";
         })
     })
 </script>
@@ -107,7 +105,7 @@ pageEncoding="UTF-8"%>
                     <div class="box-body">
                         <div class="noNameAddr">
                             <label><span class="red">*</span>번호</label>
-                            <input type="text" name="no" class="form-control" value="${autoNo}" readonly>
+                            <input type="text" name="no" class="form-control" value="<%=autoNo%>" readonly>
                         </div>
                         <div class="noNameAddr">
                             <label><span class="red">*</span>차 종류</label>
@@ -178,4 +176,4 @@ pageEncoding="UTF-8"%>
         </div>
     </div>
 </div>
-<%@ include file="../../include/footer.jsp"%>
+<%- include (../../include/footer.ejs) %>
