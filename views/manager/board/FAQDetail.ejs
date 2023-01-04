@@ -1,0 +1,55 @@
+<%- include("../../include/header.ejs")%>
+<div class="content">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="box box-primary">
+				<div class="box-header">
+					<h3 class="box-title">FAQ 등록</h3>
+				</div>
+				<div class="box-body">
+					<div class="form-group">
+						<label>제목</label>
+						<input type="text" name="title" class="form-control" value="<%=faq.title%>" readonly="readonly">
+					</div>
+					<div class="form-group">
+						<label>내용</label>
+						<textarea rows="15" cols="30" placeholder="내용을 입력하세요" name="content" class="form-control" readonly="readonly"><%=faq.content%></textarea>
+					</div>
+				</div>
+				<div class="box-footer">
+					<button class="btn btn-warning" id="mod">수정</button>
+					<button class="btn btn-danger" id="del">삭제</button>
+					<button class="btn btn-primary" id="return">돌아가기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$(function(){
+		$("#mod").click(function(){
+			var no = "<%=faq.no%>";
+			var page =	"<%=cri.page%>";
+			location.href = "FAQModify?no="+no+"&page="+page;
+		})
+		$("#del").click(function(){
+			if(!confirm("정말 삭제하시겠습니까?")) {
+				alert("삭제가 취소되었습니다");
+				return false;
+			}
+			fetch("removeFAQ?no=<%=faq.no%>&page=<%=cri.page%>", {method : "delete"})
+					.then((res) => {
+						alert('삭제되었습니다.');
+						location.href = "FAQMngList";
+					}).catch((err) => {
+				console.log('삭제 실패!!', err);
+			})
+		})
+
+		$("#return").click(function() {
+			var page =	"<%=cri.page%>";
+			location.href = "FAQMngList?page="+page;
+		})
+	})
+</script>
+<%- include("../../include/footer.ejs")%>

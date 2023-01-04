@@ -5,38 +5,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="022f6912-a924-4b38-9214-54f3b4c729bd" name="변경" comment="indexApi jwt로그인 구">
-      <change afterPath="$PROJECT_DIR$/controller/fileupload.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/stylesheets/boardStyle.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/stylesheets/eventDetailPage.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/stylesheets/eventList.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/stylesheets/paging.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/include/userBoardMenu.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/board/tourlandBoardFAQ.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/board/tourlandBoardNotice.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/board/tourlandBoardNoticeDetail.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/board/tourlandCustBoard.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/board/tourlandCustBoardDetail.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/board/tourlandCustBoardRegister.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/board/tourlandCustBoardRegisterEdit.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/board/tourlandPlanBoard.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/board/tourlandPlanBoardDetail.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/board/tourlandPlanBoardRegister.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/event/eventDetailPage.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/event/tourEventEndList.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/event/tourEventList.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/manager/board/FAQDetail.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/manager/board/FAQMngList.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/manager/board/FAQModify.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/manager/board/FAQRegister.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/manager/board/custBoardDetail.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/manager/board/custBoardList.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/manager/board/planBoardDetail.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/manager/board/planBoardList.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/manager/board/planBoardModify.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/manager/coupon/couponMngList.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/manager/event/eventDetailForm.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/manager/event/eventMngList.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/manager/event/eventRegister.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/manager/notice/addNoticeForm.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/manager/notice/editNotice.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/manager/notice/noticeDetail.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/manager/notice/noticeMngList.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/manager/payment/paymentList.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/manager/reservation/reservationMngList.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/custboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/custboard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/stylesheets/tourlandLoginForm.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/stylesheets/tourlandLoginForm.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/stylesheets/tourlandProductJPList.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/stylesheets/tourlandProductKRList.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/userRoutes/userRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/userRoutes/userRoutes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/include/userHeader.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/include/userHeader.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/product/addProductForm.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/product/addProductForm.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/user/mypage/tourlandMyCoupon.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/user/mypage/tourlandMyCoupon.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/user/mypage/tourlandMyInfoEdit.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/user/mypage/tourlandMyInfoEdit.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/user/product/tourlandProductJPList.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/user/product/tourlandProductKRList.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/user/tourlandLoginForm.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/user/tourlandLoginForm.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/event.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/event.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/planboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/planboard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/managerRoutes/managerRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/managerRoutes/managerRoutes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/include/header.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/include/header.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/manager/flight/flightMngList2.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/flight/flightMngList2.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/manager/hotel/hotelMngList.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/hotel/hotelMngList.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/manager/hotel/hotelModify.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/hotel/hotelModify.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/manager/hotel/hotelRegister.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/hotel/hotelRegister.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +72,7 @@
     "WebServerToolWindowFactoryState": "false",
     "javascript.nodejs.core.library.configured.version": "16.17.1",
     "javascript.nodejs.core.library.typings.version": "16.18.10",
-    "last_opened_file_path": "/home/edu07/IdeaProjects/tourland/public/stylesheets",
+    "last_opened_file_path": "/home/edu07/IdeaProjects/tourland/views/manager/reservation",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -90,11 +86,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/public/stylesheets" />
-      <recent name="$PROJECT_DIR$/views/user/event" />
-      <recent name="$PROJECT_DIR$/views/user/board" />
-      <recent name="$PROJECT_DIR$/views/user" />
-      <recent name="$PROJECT_DIR$/views/manager/user/product" />
+      <recent name="$PROJECT_DIR$/views/manager/reservation" />
+      <recent name="$PROJECT_DIR$/views/manager/payment" />
+      <recent name="$PROJECT_DIR$/views/manager/notice" />
+      <recent name="$PROJECT_DIR$/views/manager/event" />
+      <recent name="$PROJECT_DIR$/views/manager/coupon" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/views/manager/flight" />
@@ -134,7 +130,7 @@
       <workItem from="1672274079120" duration="24296000" />
       <workItem from="1672615540803" duration="10295000" />
       <workItem from="1672701678496" duration="29405000" />
-      <workItem from="1672790556418" duration="12999000" />
+      <workItem from="1672790556418" duration="24149000" />
     </task>
     <task id="LOCAL-00001" summary="변경">
       <created>1670416532650</created>

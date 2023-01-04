@@ -1,0 +1,252 @@
+<%- include("../../include/header.ejs")%>
+<script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/super-build/ckeditor.js"></script>
+
+<style>
+  #previewDiv{
+    height: 350px;
+  }
+  .previewImg{
+    width: 300px;
+    height: 300px;
+  }
+    [type="date"] {
+	background: #fff
+		url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)
+		97% 50% no-repeat;
+	}
+  	[type="date"]::-webkit-inner-spin-button {
+		display: none;
+	}
+
+	[type="date"]::-webkit-calendar-picker-indicator {
+		opacity: 0;
+	}
+  #container {
+	  width: 1080px;
+  }
+  .ck-editor__editable[role="textbox"] {
+	  /* editing area */
+	  min-height: 500px;
+  }
+  .ck-content .image {
+	  /* block images */
+	  max-width: 80%;
+	  margin: 20px auto;
+  }
+</style>
+<div class="content">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="box box-primary">
+				<div class="box-header">
+					<h3 class="box-title">이벤트 등록</h3>
+				</div>
+				<form role="form" action="eventRegister" method="post" enctype="multipart/form-data" id="popupForm">
+					<div class="box-body">
+						<div class="form-group">
+							<label>이벤트 타이틀</label>
+							<input type="text" name="title" class="form-control" style="width:1080px;">
+						</div>
+						<div id="container" class="form-group">
+							<label>이벤트 내용</label>
+							<textarea name="content" id="editor">
+							</textarea>
+						</div>
+						<div class="form-group">
+							<label>시작 날짜</label>
+							<input type="date" name="startdate" class="form-control" style="width:200px;" required="required">
+						</div>
+						<div class="form-group">
+							<label>종료 날짜</label>
+							<input type="date" name="enddate" class="form-control" style="width:200px;" required="required">
+						</div>
+						<div class="form-group">
+							<label>메인 사진</label>
+							<input type="file" name="eventPic" id="file" required="required">
+						</div>
+						<div class="form-group" id="previewDiv">
+							
+						</div>
+						<div class="box-footer">
+							<button type="submit" class="btn btn-primary" id="submit">등록</button>
+						    <button type="button" class="btn btn-primary" id="btnReturnToList">목록으로</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+      $("#file").change(function(){
+    	 // var file = $(this)[0]; //$(this)[0] : javascript객체를 의미  제이쿼리의 0번째 정보는 자바스크립트가 가지고 있음
+    	 
+  
+    	  console.log(file); 
+    	  //파일 정보를 끄집어 내자 
+    	  var file = $(this)[0].files[0]; //files가 배열이라 0을 넣어줌 배너 등록 페이지에서 필요한 건 단일 파일이기 때문 
+    	  console.log(file); 
+    	
+    	  var reader = new FileReader();
+    	  reader.readAsDataURL(file);
+    	  reader.onload = function(e){ //.addEventListener("load",function(){}) - 여러개 이벤트를 넣을 수 있음 
+    		  var $img = $("<img class='previewImg'>").attr("src",e.target.result); // == reader.result 같은 값이 넘어온다 
+    		  $("#previewDiv").html($img);
+    	  }
+      })
+      
+        //리스트로 버튼 눌렀을 때 리스트로 돌아가기 
+		$("#btnReturnToList").click(function(){
+			location.href="/manager/eventMngList";
+		})
+
+	let editor;
+
+	// This sample still does not showcase all CKEditor 5 features (!)
+	// Visit https://ckeditor.com/docs/ckeditor5/latest/features/index.html to browse all the features.
+	CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
+		// https://ckeditor.com/docs/ckeditor5/latest/features/toolbar/toolbar.html#extended-toolbar-configuration-format
+		toolbar: {
+			items: [
+				'heading', '|',
+				'bold', 'italic', 'strikethrough', 'underline',
+				'bulletedList', 'numberedList', 'todoList', '|',
+				'undo', 'redo',
+				'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|',
+				'alignment', '|',
+				'link', 'insertImage', 'blockQuote', 'insertTable', 'mediaEmbed','|',
+				'sourceEditing'
+			],
+			shouldNotGroupWhenFull: true
+		},
+		// Changing the language of the interface requires loading the language file using the <script> tag.
+		// language: 'es',
+		list: {
+			properties: {
+				styles: true,
+				startIndex: true,
+				reversed: true
+			}
+		},
+		// https://ckeditor.com/docs/ckeditor5/latest/features/headings.html#configuration
+		heading: {
+			options: [
+				{ model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+				{ model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+				{ model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+				{ model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+				{ model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+				{ model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
+				{ model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
+			]
+		},
+		// https://ckeditor.com/docs/ckeditor5/latest/features/editor-placeholder.html#using-the-editor-configuration
+		placeholder: '내용을 입력하세요!',
+		// https://ckeditor.com/docs/ckeditor5/latest/features/font.html#configuring-the-font-family-feature
+		fontFamily: {
+			options: [
+				'default',
+				'Arial, Helvetica, sans-serif',
+				'Courier New, Courier, monospace',
+				'Georgia, serif',
+				'Lucida Sans Unicode, Lucida Grande, sans-serif',
+				'Tahoma, Geneva, sans-serif',
+				'Times New Roman, Times, serif',
+				'Trebuchet MS, Helvetica, sans-serif',
+				'Verdana, Geneva, sans-serif'
+			],
+			supportAllValues: true
+		},
+		// https://ckeditor.com/docs/ckeditor5/latest/features/font.html#configuring-the-font-size-feature
+		fontSize: {
+			options: [ 10, 12, 14, 'default', 18, 20, 22 ],
+			supportAllValues: true
+		},
+		// Be careful with the setting below. It instructs CKEditor to accept ALL HTML markup.
+		// https://ckeditor.com/docs/ckeditor5/latest/features/general-html-support.html#enabling-all-html-features
+		htmlSupport: {
+			allow: [
+				{
+					name: /.*/,
+					attributes: true,
+					classes: true,
+					styles: true
+				}
+			]
+		},
+		// Be careful with enabling previews
+		// https://ckeditor.com/docs/ckeditor5/latest/features/html-embed.html#content-previews
+		htmlEmbed: {
+			showPreviews: true
+		},
+		// https://ckeditor.com/docs/ckeditor5/latest/features/link.html#custom-link-attributes-decorators
+		link: {
+			decorators: {
+				addTargetToExternalLinks: true,
+				defaultProtocol: 'https://',
+				toggleDownloadable: {
+					mode: 'manual',
+					label: 'Downloadable',
+					attributes: {
+						download: 'file'
+					}
+				}
+			}
+		},
+		// https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html#configuration
+		mention: {
+			feeds: [
+				{
+					marker: '@',
+					feed: [
+						'@apple', '@bears', '@brownie', '@cake', '@cake', '@candy', '@canes', '@chocolate', '@cookie', '@cotton', '@cream',
+						'@cupcake', '@danish', '@donut', '@dragée', '@fruitcake', '@gingerbread', '@gummi', '@ice', '@jelly-o',
+						'@liquorice', '@macaroon', '@marzipan', '@oat', '@pie', '@plum', '@pudding', '@sesame', '@snaps', '@soufflé',
+						'@sugar', '@sweet', '@topping', '@wafer'
+					],
+					minimumCharacters: 1
+				}
+			]
+		},
+		// The "super-build" contains more premium features that require additional configuration, disable them below.
+		// Do not turn them on unless you read the documentation and know how to configure them and setup the editor.
+		removePlugins: [
+			// These two are commercial, but you can try them out without registering to a trial.
+			// 'ExportPdf',
+			// 'ExportWord',
+			'CKBox',
+			'CKFinder',
+			'EasyImage',
+			// This sample uses the Base64UploadAdapter to handle image uploads as it requires no configuration.
+			// https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/base64-upload-adapter.html
+			// Storing images as Base64 is usually a very bad idea.
+			// Replace it on production website with other solutions:
+			// https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/image-upload.html
+			// 'Base64UploadAdapter',
+			'RealTimeCollaborativeComments',
+			'RealTimeCollaborativeTrackChanges',
+			'RealTimeCollaborativeRevisionHistory',
+			'PresenceList',
+			'Comments',
+			'TrackChanges',
+			'TrackChangesData',
+			'RevisionHistory',
+			'Pagination',
+			'WProofreader',
+			// Careful, with the Mathtype plugin CKEditor will not load when loading this sample
+			// from a local file system (file://) - load this site via HTTP server if you enable MathType
+			'MathType'
+		]
+	}).then(newEditor => {
+		editor = newEditor;
+	}).catch( err => {
+		console.err( err );
+	});
+	  document.querySelector( '#submit' ).addEventListener( 'click', () => {
+		  const editorData = editor.getData();
+		  console.log('---------editorData----', editorData)
+	  });
+
+</script>
+
+<%- include("../../include/footer.ejs")%>

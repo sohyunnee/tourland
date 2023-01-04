@@ -1,0 +1,110 @@
+<%- include("../../include/header.ejs")%>
+<style>
+	/* #opa { width: 100%; height: 100%; background: gray; opacity: 0.2; } */
+	
+	table .table table-bordered th,td,th{
+       text-align: center;
+    }
+    .eventList:hover {
+    	background-color : lightgrey;
+    }
+
+    #formTable td{
+       height: 95px;
+       vertical-align: middle;
+    }
+
+    #previewPopup1{
+    width:400px;
+    box-shadow: 0 0 8px black;
+    position: absolute;
+    left:85px;
+    top:50px;
+  }
+
+</style>
+<!-- <div id="opa">dummy</div> -->
+<div class="content">	
+	<div class="row">
+		<div class="col-sm-12" style="heigth:800px;">    
+			<div class="box box-primary">      
+				<div class="box-header">
+					<h2 class="box-title">이벤트  관리</h2>
+				</div>
+				<div class="box-body">
+					<button id="btnRegister">추가</button>
+				</div>
+				<div class="box-body">
+					<table class="table table-bordered" id="formTable">
+						<tr>
+							<th style="width:100px;">이벤트 번호</th>
+							<th>썸네일</th>
+							<th style="width:15%">이벤트명</th>
+							<th style="width:35%">이벤트설명</th>
+							<th style="width:8%">시작 날짜</th>
+							<th style="width:8%">종료 날짜</th>
+					        <th>상세보기</th>
+						</tr>
+						<!-- 반복 돌면서 list가져오기 -->
+						<% list.forEach( eventList => { %>
+						<tr data-click="<%=eventList.id%>" class="eventList">
+							<td><%=eventList.id%></td>
+							<td><img src="/displayFile/event?filename=<%=eventList.pic%>" style="width:95px; height:95px;" ></td>
+							<td><%=eventList.title%></td>
+							<td>상세보기에서 확인하세요</td>
+							<td><%=eventList.startdate%></td>
+							<td><%=eventList.enddate%></td>
+							<td><button style="background:lightskyblue; border:none;" class="toEventDetail" data-click="<%=eventList.id%>">상세보기</button></td>
+						</tr>
+						<% }) %>
+					</table>      
+				</div>
+		        <div class="box-footer">
+	              <!--  부트 스트랩으로 사용  -->
+					<div class='text-center'>
+						<ul class="pagination">
+							<% if (pagingData.totalPages != 0) { %>
+							<div class="" style="text-align:center;">
+								<ul class="pagination">
+									<li <%if(pagingData.currentPage == 1){%> class="disabled" <%}else{%>class="waves-effect" <%}%> >
+										<a <%if(pagingData.currentPage > 1){%> href="?currentPage=<%=pagingData.currentPage-1%>" <%}%>>
+											<i class="material-icons">prev</i>
+										</a>
+									</li>
+									<% for(var i=pagingData.pnStart; i<=pagingData.pnEnd; i++){ %>
+									<li <%if(i===pagingData.currentPage){%> class="active"
+											<%}%>>
+										<a href="?currentPage=<%=i%>"><%=i%></a>
+									</li>
+									<% } %>
+									<li <%if(pagingData.currentPage == pagingData.totalPages){%> class="disabled" <%}else{%> class="waves-effect" <%}%>>
+										<a <%if(pagingData.currentPage < pagingData.totalPages){%> href="?currentPage=<%=pagingData.currentPage+1%>" <%}%> class="waves-effect">
+											<i class="material-icons">next</i>
+										</a>
+									</li>
+								</ul>
+							</div>
+							<% } %>
+						</ul>
+					</div>
+	      
+	           </div>
+			</div>         
+		</div>
+	</div>
+</div>
+
+<script>
+	$("#btnRegister").click(function(){
+		location.href = "/manager/eventRegister";
+	})
+
+	
+	$(".toEventDetail").click(function(){
+		var id = $(this).attr("data-click");
+		location.href = "/manager/eventDetailForm?id="+id;
+	})
+	
+</script>
+
+<%- include("../../include/footer.ejs")%>

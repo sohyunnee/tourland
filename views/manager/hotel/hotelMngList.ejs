@@ -68,8 +68,8 @@
                                 <td class="firstNo"><%= hotel.id %></td>
                                 <td><%= hotel.hname %></td>
                                 <td><%= hotel.haddr %></td>
-                                <td><%= hotel.checkin %> pattern="yyyy-MM-dd"</td>
-                                <td><%= hotel.checkout %> pattern="yyyy-MM-dd"</td>
+                                <td><%= moment(hotel.checkin).format('YYYY-MM-DD') %></td>
+                                <td><%= moment(hotel.checkout).format('YYYY-MM-DD') %></td>
                                 <td><%= hotel.capacity %><span>인</span></td>
                                 <td><%= hotel.price %></td>
                                 <td><%= hotel.roomcapacity %><span>실</span></td>
@@ -172,12 +172,12 @@ $("#btnRegister").click(function () {
 })
 
 $(".btnModify").click(function(){
-    var no = $(this).attr("data-no");
+    var id = $(this).attr("data-no");
 var page =    "<%=pagingData.currentPage%>";
 var searchType = "<%=cri.searchType%>";
 var keyword = "<%=cri.keyword%>";
 
-    location.href = "hotelModify?no=" + no + "&page=" + page + "&searchType=" + searchType + "&keyword=" + keyword;
+    location.href = "hotelModify?no=" + id + "&page=" + page + "&searchType=" + searchType + "&keyword=" + keyword;
 })
 
 $(".btnDelete").click(function(){

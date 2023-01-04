@@ -1,4 +1,4 @@
-<%- include (../../include/header.ejs) %>
+<%- include ('../../include/header.ejs') %>
 <style>
     label{
         padding-bottom:6px;
@@ -125,7 +125,7 @@
                     <div class="box-body">
                         <div class="noNameAddr">
                             <label><span class="red">*</span>번호</label>
-                            <input type="text" name="no" class="form-control" value="<%=hotelVo.no%>" readonly data-no="">
+                            <input type="text" name="no" class="form-control" value="<%=hotelVo.id%>" readonly data-no="">
                         </div>
                         <div class="noNameAddr">
                             <label><span class="red">*</span>호텔이름</label>
@@ -159,7 +159,7 @@
                         </div>
                         <div class="form-group">
                             <label><span class="red">*</span>허용객실수</label>
-                            <input type="text" name="roomcapacity" class="form-control" value="<%=hotelVo.roomcapacity%>">
+                            <input type="text" name="room-capacity" class="form-control" value="<%=hotelVo.roomcapacity%>">
                             <span class="error">허용객실수에는 4자리이하의 숫자만 적어주세요.</span>
                         </div>
                         <div class="form-group">
@@ -194,4 +194,4 @@
         </div>
     </div>
 </div>
-<%- include (../../include/footer.ejs) %>
+<%- include ('../../include/footer.ejs') %>
