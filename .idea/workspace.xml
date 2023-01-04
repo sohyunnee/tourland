@@ -7,28 +7,7 @@
     <list default="true" id="022f6912-a924-4b38-9214-54f3b4c729bd" name="변경" comment="indexApi jwt로그인 구">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/managerRoutes/managerRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/managerRoutes/managerRoutes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/flight/addFlightForm2.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/flight/addFlightForm2.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/flight/editFlight.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/flight/editFlight.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/flight/flightDetail.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/flight/flightDetail.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/flight/flightMngList.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/flight/flightMngList.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/flight/flightMngList2.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/flight/flightMngList2.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/hotel/hotelMngList.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/hotel/hotelMngList.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/hotel/hotelModify.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/hotel/hotelModify.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/hotel/hotelRegister.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/hotel/hotelRegister.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/product/addProductForm.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/product/addProductForm.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/product/addProductForm_script.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/product/addProductForm_script.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/product/productDetail.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/product/productDetail.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/product/productMngList.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/product/productMngList.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/product/productModify.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/product/productModify.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/product/productModifyForm_script.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/product/productModifyForm_script.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/rentcar/rentcarDetailForm.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/rentcar/rentcarDetailForm.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/manager/rentcar/rentcarMngList.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/rentcar/rentcarMngList.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/rentcar/rentcarRegister.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/rentcar/rentcarRegister.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/tour/tourDetail.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/tour/tourDetail.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/tour/tourMngList.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/tour/tourMngList.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/tour/tourModify.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/tour/tourModify.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/tour/tourRegister.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/tour/tourRegister.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/user/userRegister.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/user/userRegister.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,6 +105,7 @@
       <workItem from="1672274079120" duration="24296000" />
       <workItem from="1672615540803" duration="10295000" />
       <workItem from="1672701678496" duration="29405000" />
+      <workItem from="1672790556418" duration="876000" />
     </task>
     <task id="LOCAL-00001" summary="변경">
       <created>1670416532650</created>

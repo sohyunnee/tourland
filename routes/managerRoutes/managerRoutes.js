@@ -501,10 +501,6 @@ router.get('/hotelMngList', async (req, res, next) => {
         nest: true,
         attributes: ['id', 'hname', 'haddr', 'checkin', 'checkout', 'capacity', 'price', 'roomcapacity', 'roomtype', 'ldiv','bookedup','totalcapacity','pdiv'],
         where: {
-            // pname: {
-            //     [Op.like]: "%" + '제주' + "%"
-            // }
-            // id : 13
 
         },
         limit, offset
@@ -512,14 +508,6 @@ router.get('/hotelMngList', async (req, res, next) => {
     let dataCountAll = await models.hotel.findAndCountAll({
         where: {
 
-            // [Op.or]: [
-            //     {
-            //         userid: { [Op.like]: "%" +keyword+ "%" }
-            //     },
-            //     {
-            //         username: { [Op.like]: "%" + keyword + "%" }
-            //     }
-            // ]
         },
         limit, offset
     });
@@ -532,7 +520,6 @@ router.get('/hotelMngList', async (req, res, next) => {
 
     let Manager = {};
     let Auth = {};
-    // res.send("ddddddddddddddd"+list);
 
     res.render("manager/hotel/hotelMngList", {cri, list, pagingData, Manager, Auth});
 })
@@ -553,10 +540,7 @@ router.get('/tourMngList', async (req, res, next) => {
         nest: true,
         attributes: ['id', 'tname', 'tlocation', 'startDate', 'endDate', 'taddr', 'etime', 'capacity', 'tprice', 'ldiv'],
         where: {
-            // pname: {
-            //     [Op.like]: "%" + '제주' + "%"
-            // }
-            // id : 13
+
 
         },
         limit, offset
@@ -564,14 +548,6 @@ router.get('/tourMngList', async (req, res, next) => {
     let dataCountAll = await models.tour.findAndCountAll({
         where: {
 
-            // [Op.or]: [
-            //     {
-            //         userid: { [Op.like]: "%" +keyword+ "%" }
-            //     },
-            //     {
-            //         username: { [Op.like]: "%" + keyword + "%" }
-            //     }
-            // ]
         },
         limit, offset
     });
@@ -584,12 +560,49 @@ router.get('/tourMngList', async (req, res, next) => {
 
     let Manager = {};
     let Auth = {};
-    // res.send("ddddddddddddddd"+list);
 
     res.render("manager/tour/tourMngList", {cri, list, pagingData, Manager, Auth});
 })
 // 🚗 렌트카 관리-----------------
+router.get('/rentcarMngList', async (req, res, next) => {
 
+
+    let {searchType, keyword} = req.query;
+
+    const contentSize = Number(process.env.CONTENTSIZE); // 한페이지에 나올 개수
+    const currentPage = Number(req.query.currentPage) || 1; //현재페이지
+    const {limit, offset} = getPagination(currentPage, contentSize);
+
+    keyword = keyword ? keyword : "";
+
+    const list = await models.rentcar.findAll({
+        // raw : true,
+        nest: true,
+        attributes: ['id','cdiv','cno','rentddate','returndate','rentaddr','returnaddr','price','capacity','insurance','ldiv'],
+        where: {
+
+
+        },
+        limit, offset
+    });
+    let dataCountAll = await models.tour.findAndCountAll({
+        where: {
+
+        },
+        limit, offset
+    });
+
+
+    const pagingData = getPagingData(dataCountAll, currentPage, limit);
+
+    let cri = {searchType, keyword};
+
+
+    let Manager = {};
+    let Auth = {};
+
+    res.render("manager/rentcar/rentcarMngList", {cri, list, pagingData, Manager, Auth});
+})
 
 router.get('/loginForm', async (req, res, next) => {
     let {registerSuccess, id} = req.query;

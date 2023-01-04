@@ -1,4 +1,4 @@
-<%- include (../../include/header.ejs) %>
+<%- include ("../../include/header.ejs") %>
 
 <style>
     table .table table-bordered th,td,th{
@@ -58,8 +58,8 @@
 
                         </tr>
                         <% list.forEach( rentcarList => { %>
-                            <tr class="rentcarList" data-click="<%=rentcarList.no%>">
-                                <td><%=rentcarList.no%></td>
+                            <tr class="rentcarList" data-click="<%=rentcarList.id%>">
+                                <td><%=rentcarList.id%></td>
                                 <td><%=rentcarList.cdiv%></td>
                                 <td><%=rentcarList.cno%></td>
                                 <td><%=rentcarList.rentddate%> pattern="yyyy-MM-dd"</td>
@@ -70,25 +70,36 @@
                                 <td><%=rentcarList.capacity%></td>
                                 <td><%=rentcarList.insurance%></td>
                                 <td><%=rentcarList.ldiv == 0?'해외':'국내'%></td>
-                                <td><button style="background:steelblue; border:none;" class="toRentcarDetail" data-click="<%=rentcarList.no%>">상세보기</button>
-                                    <button style="background:tomato; border:none;" class="delRentcar" data-click="<%=rentcarList.no%>">삭제</button></td>
+                                <td><button style="background:steelblue; border:none;" class="toRentcarDetail" data-click="<%=rentcarList.id%>">상세보기</button>
+                                    <button style="background:tomato; border:none;" class="delRentcar" data-click="<%=rentcarList.id%>">삭제</button></td>
                             </tr>
                         <% }) %>
                     </table>
                 </div>
                 <div class="box-footer">
+                    <!--  부트 스트랩으로 사용  -->
                     <div class='text-center'>
                         <ul class="pagination">
-                            <% if(pageMaker.prev == true) { %>
-                                <li><a href="/manager/rentcarMngList?page=<%=pageMaker.startPage -1%>&searchType=<%=cri.searchType%>&keyword=<%=cri.keyword%>&keyword2=<%=cri.keyword2%>">&laquo;</a></li>
+                            <% if (pagingData.totalPages != 0) { %>
+                            <div class="" style="text-align:center;">
+                                <ul class="pagination">
+                                    <li <%if(pagingData.currentPage == 1){%> class="disabled" <%}else{%>class="waves-effect" <%}%> >
+                                        <a <%if(pagingData.currentPage > 1){%> href="?currentPage=<%=pagingData.currentPage-1%>" <%}%>>
+                                            <i class="material-icons">prev</i>
+                                        </a>
+                                    </li>
+                                    <% for(var i=pagingData.pnStart; i<=pagingData.pnEnd; i++){ %> <li <%if(i===pagingData.currentPage){%> class="active"
+                                            <%}%>><a href="?currentPage=<%=i%>"><%=i%></a></li>
+                                    <% } %>
+                                    <li <%if(pagingData.currentPage == pagingData.totalPages){%> class="disabled" <%}else{%> class="waves-effect" <%}%>>
+                                        <a <%if(pagingData.currentPage < pagingData.totalPages){%> href="?currentPage=<%=pagingData.currentPage+1%>" <%}%> class="waves-effect">
+                                            <i class="material-icons">next</i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                             <% } %>
-                            <% for(idx=pageMaker.startPage; idx<=pageMaker.endPage; idx++){ %>
-                                <li class="<%=pageMaker.cri.page == idx?'active':''%>"><a href="/manager/rentcarMngList?page=<%=idx%>&searchType=<%=cri.searchType%>&keyword=<%=cri.keyword%>&keyword2=<%=cri.keyword2%>"> <%=idx%></a></li>
-                            <% } %>
-                            <!--  언제나 나오는 게 아니니까  -->
-                            <% if(pageMaker.next == true) { %>
-                                <li><a href="/manager/rentcarMngList?page=<%=pageMaker.endPage +1%>&searchType=<%=cri.searchType%>&keyword=<%=cri.keyword%>&keyword2=<%=cri.keyword2%>">&raquo;</a></li>
-                            <% } %>
+
                         </ul>
                     </div>
                 </div>
@@ -123,7 +134,7 @@
         var no = $(this).attr("data-click");
         var searchType = "<%=cri.searchType%>";
         var keyword = "<%=cri.keyword%>";
-        location.href = "/manager/rentcarDetailForm?no="+no+"&page=<%=pageMaker.cri.page%>&searchType="+searchType+"&keyword="+keyword;
+        location.href = "/manager/rentcarDetailForm?no="+id+"&page=<%=pagingData.currentPage%>&searchType="+searchType+"&keyword="+keyword;
     })
     $(".delRentcar").click(function(){
         var cc = confirm("렌트카 상품을 삭제하시겠습니까?");
@@ -131,10 +142,10 @@
             var no = $(this).attr("data-click");
             var searchType = "<%=cri.searchType%>";
             var keyword = "<%=cri.keyword%>";
-            location.href = "/manager/delRentcar?no="+no+"&page=<%=pageMaker.cri.page%>&searchType="+searchType+"&keyword="+keyword;
+            location.href = "/manager/delRentcar?no="+id+"&page=<%=pagingData.currentPage%>&searchType="+searchType+"&keyword="+keyword;
         }
     })
 
 </script>
 
-<%- include (../../include/footer.ejs) %>
+<%- include ("../../include/footer.ejs") %>
