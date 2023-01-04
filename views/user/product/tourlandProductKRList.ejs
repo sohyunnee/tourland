@@ -1,5 +1,5 @@
 <%- include("../../include/userHeader.ejs") %>
-<link rel="stylesheet" type="text/css" href="/stylesheets/tourlandProductJPList.css"/>
+<link rel="stylesheet" type="text/css" href="/stylesheets/tourlandProductKRList.css"/>
 
 <script>
     function replaceAll(str, searchStr, replaceStr) {
@@ -9,11 +9,11 @@
     $(function () {
         /* 페이지 좌측 검색 박스 검색 버튼 클릭  */
         $("#pkgSearchBtn").click(function () {
-            getSearchResult("Japan");
+            getSearchResult("KR");
         })
         /* 리스트 우측 전체 리스트 보기 버튼 클릭 */
         $("#listAll").click(function () {
-            getList(1, "Japan");
+            getList(1, "KR");
         })
         /* 리스트 우측 전체 리스트 보기 버튼을 클릭했을 때 모든 데이터를 불러오는 Ajax  */
         function getList(page,locale){
@@ -32,20 +32,20 @@
 
         /* 낮은 가격 순 정렬 */
         $("#byPrice").click(function () {
-            getLowPriceList(1, "JP");
+            getLowPriceList(1, "KR");
         })
         /* AJAX 페이징 */
         /* 낮은 가격순 리스트 페이지 번호 클릭 시 페이지 번호가 넘어가고 해당 번호의 리스트 출력 */
         $(document).on("click", ".lowPriceListPage", function () {
             $('html, body').animate({scrollTop: 0}, 200);
             var page = $(this).html();
-            getLowPriceList(page, "JP");
+            getLowPriceList(page, "KR");
         })
         /* 전체 리스트 페이지 번호 클릭 시 페이지 번호가 넘어가고 해당 페이지 번호의 리스트 출력 */
         $(document).on("click", ".listAll", function () {
             $('html, body').animate({scrollTop: 0}, 200);
             var page = $(this).html();
-            getList(page, "Japan");
+            getList(page, "KR");
         })
 
         /* AJAX 리스트에 동적으로 생성된 '지금 바로 예약하기' 버튼  */
@@ -84,12 +84,13 @@
 <% } %>
 <section>
     <div id="pkgTitleBox">
-        <h1>도쿄</h1>
+        <h1>제주</h1>
         <div id="pkgInfo">
-            <p>일본은 최첨단 전자제품 매장과 로봇 레스토랑 바로 옆에 신사를 찾아볼 수 있을 만큼 옛 전통과 현대 문화가
-                절묘한 조화를 이루는 인기 여행지입니다. 벚꽃이 만발하는 봄을 비롯해 사계절 내내 즐길 거리로 가득한 일본은 언제
-                방문해도 만족스러운 여행 경험을 선사합니다. 일본 전역에서 사용 가능한 JR 패스만 있으면 다양한 도시를 자유롭게 여행할 수 있어요.
-                하루나 이틀 정도는 도쿄를 대표하는 최고의 관광 명소, 도쿄 디즈니랜드에서 어트랙션을 즐기고, 일본 최고층 전망대도 방문해보세요.</p>
+            <p>식을 줄 모르는 한류 열풍으로 전 세계 소녀팬들의 성지가 된 대한민국! 유구한 5천 년 역사와 찬란한
+                문화유산이 살아 숨 쉬는 동방예의지국은 이제 볼거리와 먹거리가 넘쳐나는 최고의 여행지로 거듭나 많은 사랑을 받고 있어요.
+                익숙한 얼굴이지만 문득 발견한 옆모습에서 설렘을 느끼듯, 잘 알고 있다는 이유로 자세히 들여다보지 않았던 한국의 팔색조
+                매력을 발견해보세요. 길거리 음식부터 이름난 맛집까지 두루 순회하는 먹방 투어도 요즘 떠오르는 여행 트렌드랍니다. 전통과 현대가 절묘하게
+                교차하는 우리나라의 숨은 매력을 투어랜드와 함께 하나하나 만나보세요!</p>
         </div>
         <div id="pkgMap"></div>
 
@@ -134,7 +135,7 @@
 
         <div id="pkgListWrap">
             <p id="totalCnt">
-                도쿄 : 검색된 상품 <span id="totalCount"><%= count %></span>건
+                제주 : 검색된 상품 <span id="totalCount"><%= countlist.count %></span>건
             </p>
             <div id="pkgOrderBy">
                 <button id="byPrice">낮은 가격 순</button>

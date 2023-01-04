@@ -30,6 +30,11 @@ const querystring = require('querystring');
 const crypto = require('crypto'); //추가됐음
 const {getPagingData, getPagingDataCount, getPagination} = require('../../controller/pagination');
 const {makePassword, comparePassword} = require('../../controller/passwordCheckUtil');
+const {fixed} = require("lodash/fp/_falseOptions");
+const path = require("path");
+const bodyParser = require('body-parser');
+const parser = bodyParser.urlencoded({extended : false});
+const {upload} = require("../../controller/fileupload");
 
 
 router.get('/', async (req, res, next) => {
@@ -91,14 +96,9 @@ router.get('/', async (req, res, next) => {
     });
 
     let login = "";
+    let Auth = null;
 
     let msg = `세션이 존재하지 않습니다.`
-    // "User": userVO.username,
-    //     "id": id,
-    //     "login": "user",
-    //     "Auth": userVO.userpass,
-    //     "pass": pass,
-    //     "mypage": "mypageuser",
 
     if (req.session.user) {
         msg = `${req.session.user.User}`;
@@ -141,7 +141,7 @@ router.get('/tourlandRegister', function (req, res, next) {
 
     let userVO = {};
 
-
+    let Auth = null;
     let login = "";
 
     let msg = `세션이 존재하지 않습니다.`
@@ -346,7 +346,7 @@ router.get('/loginManagerForm', async (req, res, next) => {
 });
 
 
-const fecthData = async (req) => {
+const fetchData = async (req) => {
     let {id, pass} = req.body;
     let error = "";
 
@@ -379,7 +379,7 @@ const fecthData = async (req) => {
 }
 
 
-const fecthEmpData = async (req) => {
+const fetchEmpData = async (req) => {
     let {id, pass} = req.body;
     let error = "";
 
@@ -427,7 +427,7 @@ router.post('/loginForm', (req, res, next) => {
     let searchkeyword = "";
     let loginSuccess = false;
 
-    fecthData(req).then((userVO) => {
+    fetchData(req).then((userVO) => {
 
         // 직원 ID가 없는 경우
         if (userVO.userid == null) {
@@ -507,7 +507,7 @@ router.post('/loginManagerForm', (req, res, next) => {
     let searchkeyword = "";
     let loginSuccess = false;
 
-    fecthEmpData(req).then((empVO) => {
+    fetchEmpData(req).then((empVO) => {
 
         // 직원 ID가 없는 경우
         if (empVO.empid == null) {
@@ -590,13 +590,13 @@ router.get("/tourlandProductKRList", async (req, res, next) => {
     let searchQuery = "";
 
     if (ddate == "name") {
-        searchQuery = `and pname like concat('%',${keyword},'%')`;
+        searchQuery = `and pname like concat('%',<%=keyword%>,'%')`;
     }
     if (searchType == "expire") {
-        searchQuery = `and pexpire like concat('%',${keyword},'%')`;
+        searchQuery = `and pexpire like concat('%',<%=keyword%>,'%')`;
     }
     if (searchType == "userCart") {
-        searchQuery = `and pname like concat('%',${keyword},'%')`;
+        searchQuery = `and pname like concat('%',<%=keyword%>,'%')`;
     }
     if (searchType == "location") {
         if (keyword === "한국") {
@@ -684,15 +684,14 @@ router.get("/tourlandProductKRList", async (req, res, next) => {
         let tourDays = '';
         let date = '';
         let capa = '';
-        let count = '';
 
 
         if (list != null) {
-            res.render("user/product/tourlandProductJPList", {
+            res.render("user/product/tourlandProductKRList", {
                 tourDays,
                 date,
                 capa,
-                count,
+                countlist,
                 list,
                 Auth,
                 login,
@@ -920,307 +919,6 @@ router.get("/tourlandProductDetail/tourlandProductReview/:pno", async (req, res,
 });
 
 
-router.get("/tourlandMyWishes", async (req, res, next) => {
-
-    const pno = req.params.pno;
-    let {price, rdate, cnt, searchType, keyword} = req.query;
-
-
-    try {
-
-        const vo = await product.findOne({
-            // raw : true,
-            nest: true,
-            attributes: ['id', 'pname', 'pcontent', 'pexpire', 'pprice', 'ppic'],
-            include: [
-                {
-                    model: models.airplane,
-                    attributes: ['price', 'ddate', 'id'],
-                    as: 'airplaneId_airplanes',
-                    nest: true,
-                    paranoid: true,
-                    required: false,
-                },
-                {
-                    model: models.hotel,
-                    attributes: ['checkin', 'checkout', 'price', 'id', 'capacity', 'roomcapacity'],
-                    as: 'hotelId_hotels',
-                    nest: true,
-                    paranoid: true,
-                    required: false,
-                },
-                {
-                    model: models.tour,
-                    attributes: ['tprice', 'id', 'tname', 'capacity'],
-                    as: 'tourId_tours',
-                    nest: true,
-                    paranoid: true,
-                    required: false,
-                },
-                {
-                    model: models.rentcar,
-                    attributes: ['id'],
-                    as: 'rentcarId_rentcars',
-                    nest: true,
-                    paranoid: true,
-                    required: false,
-                },
-            ],
-            where: {
-                id: pno
-            }
-        });
-
-
-        // let list = [];
-        let Auth = {userno: 6, username: "테스트"};
-        let login = "";
-        let Manager = {name: "테스트"};
-        let searchkeyword = "";
-        let error = "";
-        let cri = {};
-        let idx = '';
-        let tourDays = '';
-        let date = '';
-        let capa = '';
-        let count = '';
-
-
-        if (vo != null) {
-            res.render("user/mypage/tourlandMyWishes", {
-                Auth,
-                login,
-                Manager,
-                searchkeyword,
-                tourDays,
-                date,
-                capa,
-                count,
-                vo,
-                error,
-                cri,
-                idx,
-                moment
-            });
-        } else {
-            res.status(202).send("notexist");
-        }
-    } catch (e) {
-        console.error(e);
-        next(e);
-    }
-
-});
-
-
-router.get("/tourlandMyReserv:rno", async (req, res, next) => {
-
-    const rno = req.params.rno;
-    let {price, rdate, cnt, searchType, keyword} = req.query;
-
-    try {
-
-        const list = await reservation.findAll({
-            // raw : true,
-            nest: true, attributes: ['no', 'userno', 'rdate', 'rstatus'],
-            include: [
-                {
-                    model: models.airplane,
-                    attributes: ['price'],
-                    as: 'airplaneId_airplanes',
-                    nest: true,
-                    paranoid: true,
-                    required: false,
-                },
-                {
-                    model: models.hotel,
-                    attributes: ['checkin', 'checkout', 'price'],
-                    as: 'hotelId_hotels',
-                    nest: true,
-                    paranoid: true,
-                    required: false,
-                },
-                {
-                    model: models.tour,
-                    attributes: ['tprice'],
-                    as: 'tourId_tours',
-                    nest: true,
-                    paranoid: true,
-                    required: false,
-                },
-                {
-                    model: models.rentcar,
-                    as: 'rentcarId_rentcars',
-                    nest: true,
-                    paranoid: true,
-                    required: false,
-                },
-            ],
-            where: {
-                pname: {
-                    [Op.like]: "%" + '제주' + "%"
-                }
-                // id : 13
-
-            },
-            limit, offset
-        });
-
-
-        let Auth = {userno: 6, username: "테스트"};
-        let login = "";
-        let Manager = {name: "테스트"};
-        let searchkeyword = "";
-        let error = "";
-        let cri = {};
-        let idx = '';
-        let tourDays = '';
-        let date = '';
-        let capa = '';
-        let count = '';
-
-
-        if (vo != null) {
-            res.render("user/mypage/tourlandMyReserv", {
-                Auth,
-                login,
-                Manager,
-                searchkeyword,
-                tourDays,
-                date,
-                capa,
-                count,
-                vo,
-                error,
-                cri,
-                idx,
-                moment
-            });
-        } else {
-            res.status(202).send("notexist");
-        }
-    } catch (e) {
-        console.error(e);
-        next(e);
-    }
-
-});
-
-
-router.get("/tourlandProductDetail/reserv", async (req, res, next) => {
-
-    let {uno, pno, price, ano, acapacity, hno, hcapacity, tno, tcapacity, rno, rcapacity} = req.query;
-    console.log(uno, tno);
-
-
-});
-
-router.post("/tourlandProductDetail/reserv", (req, res, next) => {
-
-
-    let {uno, pno, price, ano, acapacity, hno, hcapacity, tno, tcapacity, rno, rcapacity} = req.body;
-    console.log("aaaa11111111111->", req.body);
-    ano.map(no => {
-        console.log("aaaa->", no[i]);
-    })
-
-
-});
-
-
-router.get("/tourlandMyCoupon", async (req, res, next) => {
-
-    const pno = req.params.pno;
-    let {price, rdate, cnt, searchType, keyword} = req.query;
-
-
-    try {
-
-        const c = await product.findOne({
-            // raw : true,
-            nest: true,
-            attributes: ['id', 'pname', 'pcontent', 'pexpire', 'pprice', 'ppic', 'pcapacity'],
-            include: [
-                {
-                    model: models.airplane,
-                    attributes: ['price', 'ddate', 'id'],
-                    as: 'airplaneId_airplanes',
-                    nest: true,
-                    paranoid: true,
-                    required: false,
-                },
-                {
-                    model: models.hotel,
-                    attributes: ['checkin', 'checkout', 'price', 'id', 'capacity', 'roomcapacity'],
-                    as: 'hotelId_hotels',
-                    nest: true,
-                    paranoid: true,
-                    required: false,
-                },
-                {
-                    model: models.tour,
-                    attributes: ['tprice', 'id', 'tname', 'capacity'],
-                    as: 'tourId_tours',
-                    nest: true,
-                    paranoid: true,
-                    required: false,
-                },
-                {
-                    model: models.rentcar,
-                    attributes: ['id'],
-                    as: 'rentcarId_rentcars',
-                    nest: true,
-                    paranoid: true,
-                    required: false,
-                },
-            ],
-            where: {
-                id: pno
-            }
-        });
-
-
-        // let list = [];
-        let Auth = {userno: 6, username: "테스트"};
-        let login = "user";
-        let Manager = {name: "테스트"};
-        let searchkeyword = "";
-        let error = "";
-        let cri = {};
-        let idx = '';
-        let tourDays = '';
-        let date = '';
-        let capa = '';
-        let count = '';
-
-
-        if (vo != null) {
-            res.render("user/mypage/tourlandMyCoupon", {
-                Auth,
-                login,
-                Manager,
-                searchkeyword,
-                tourDays,
-                date,
-                capa,
-                count,
-                vo,
-                error,
-                cri,
-                idx,
-                moment
-            });
-        } else {
-            res.status(202).send("notexist");
-        }
-    } catch (e) {
-        console.error(e);
-        next(e);
-    }
-
-});
-
-
 router.get("/EditPassword", (req, res, next) => {
 
     let {empid, checkPass, userid} = req.body;
@@ -1343,8 +1041,6 @@ router.post("/editProfile", (req, res, next) => {
         emptel
     } = req.body;
 
-
-
     res.status(200).json("success");
 
 
@@ -1352,6 +1048,660 @@ router.post("/editProfile", (req, res, next) => {
 });
 
 
-router.get("/logoutWithdrawal?no=")
+router.post("/logoutWithdrawal", async (req,res,next)=>{
+    let {no} = req.query;
+    console.log(req.session);
+    req.session.destroy();
+    Auth = {};
+    res.redirect("/customer");
+
+});
+
+
+router.get('/tourlandMyCoupon', async (req, res, next) => {
+
+    const available = await models.coupon.findAll({
+        // raw : true,
+        nest: true,
+        attributes: ['cno','cname','pdate','edate','ccontent','mrate'],
+        where: {
+
+        }
+    });
+    res.render("user/mypage/tourlandMyCoupon", {available});
+});
+
+
+
+// 공지사항 전체 목록
+router.get("/tourlandBoardNotice", async (req, res, next) => {
+
+    const usersecess = req.params.usersecess;
+    let { searchType, keyword } = req.query;
+
+    const contentSize = Number(process.env.CONTENTSIZE); // 한페이지에 나올 개수
+    const currentPage = Number(req.query.currentPage) || 1; //현재페이
+    const { limit, offset } = getPagination(currentPage, contentSize);
+
+    keyword = keyword ? keyword : "";
+
+
+    let cri = {currentPage};
+
+    let noticeFixedList =
+        await  models.notice.findAll({
+            raw : true,
+            where : {
+                fixed : 1
+            },
+            limit, offset
+        });
+    console.log('====',noticeFixedList);
+
+    let noticeNoFixedList =
+        await models.notice.findAll({
+            raw : true,
+            where : {
+                fixed: 0
+            },
+            order : [
+                ["regdate", "DESC"]
+            ],
+            limit, offset
+        });
+
+    let noticeNoFixedCountList =
+        await models.notice.findAndCountAll({
+            raw : true,
+            where : {
+                fixed: 0
+            },
+            order : [
+                ["regdate", "DESC"]
+            ],
+            limit, offset
+        });
+
+    const pagingData = getPagingData(noticeNoFixedCountList, currentPage, limit);
+    console.log('---------', noticeNoFixedList);
+
+    // userHeader에 들어갈거
+    let Auth = {};
+    let login = "";
+    let Manager = {};
+    let searchkeyword = "";
+
+    res.render("user/board/tourlandBoardNotice", {
+        noticeFixedList,
+        noticeNoFixedList,
+        cri,
+        Auth,
+        login,
+        Manager,
+        searchkeyword,
+        pagingData
+    });
+});
+
+// 공지사항 게시글 읽기
+router.get("/tourlandBoardNoticeDetail", async (req, res, next) => {
+
+    let notice =
+        await models.notice.findOne({
+            raw: true,
+            where: {
+                no : req.query.no
+            }
+        });
+    console.log(notice);
+    console.log(req.query);
+    // notice 테이블에 있는 자료중 1개만갖고오기
+
+
+    // userHeader에 들어갈거
+    let Auth = {};
+    let login = "";
+    let Manager = {};
+    let searchkeyword = "";
+
+    res.render("user/board/tourlandBoardNoticeDetail", {notice, Auth, login, Manager, searchkeyword});
+});
+
+// FAQ 전체 목록
+router.get('/tourlandBoardFAQ', async (req, res, next) => {
+
+    const usersecess = req.params.usersecess;
+    let { searchType, keyword } = req.query;
+
+    const contentSize = 8 // 한페이지에 나올 개수
+    const currentPage = Number(req.query.currentPage) || 1; //현재페이
+    const { limit, offset } = getPagination(currentPage, contentSize);
+
+    keyword = keyword ? keyword : "";
+
+    const list =
+        await  models.faq.findAll({
+            raw : true,
+            order: [
+                ["no", "DESC"]
+            ],
+            limit, offset
+        });
+    const listCount =
+        await models.faq.findAndCountAll({
+            raw : true,
+            order : [
+                ["no", "DESC"]
+            ],
+            limit, offset
+        });
+
+    console.log('======데이터 전체 count 수=======', listCount.count);
+    const pagingData = getPagingData(listCount, currentPage, limit);
+    console.log('--------한 페이지에 나오는 데이터-', listCount);
+
+    const cri = {};
+
+
+    // userHeader 에서 필요한 변수들
+    let Auth = {};
+    let login = "";
+    let Manager = {};
+    let searchkeyword = "";
+
+
+    res.render('user/board/tourlandBoardFAQ', {list, cri, pagingData, Auth, login, Manager, searchkeyword});
+})
+
+//-------------------------------------상품 문의 사항 상품 문의 사항 상품 문의 사항 상품 문의 사항 상품 문의 사항 상품 문의 사항 --------------------------------------------------
+// 상품 문의 사항
+router.get('/tourlandPlanBoard', async (req, res, next) => {
+
+    const contentSize = 8 // 한페이지에 나올 개수
+    const currentPage = Number(req.query.currentPage) || 1; //현재페이
+    const { limit, offset } = getPagination(currentPage, contentSize);
+
+
+    const list =
+        await  models.planboard.findAll({
+            raw : true,
+            order: [
+                ["id", "DESC"]
+            ],
+            limit, offset
+        });
+    const listCount =
+        await models.planboard.findAndCountAll({
+            raw : true,
+            order : [
+                ["id", "DESC"]
+            ],
+            limit, offset
+        });
+
+    console.log('======데이터 전체 count 수=======', listCount.count);
+    const pagingData = getPagingData(listCount, currentPage, limit);
+    console.log('--------한 페이지에 나오는 데이터-', listCount);
+
+    const cri = {};
+    const mypage = {};
+    const pageMaker = {};
+
+
+    // userHeader 에서 필요한 변수들
+    let Auth = {};
+    let login = "";
+    let Manager = {};
+    let searchkeyword = "";
+
+
+    res.render('user/board/tourlandPlanBoard', {list, cri, pagingData, Auth, login, Manager, searchkeyword, mypage, pageMaker});
+})
+
+// 상품 문의 사항 글 눌러서 보기
+router.get('/tourlandPlanBoardDetail', async (req, res, next) => {
+    console.log('=---쿼리추출---',req.query);
+
+    let plan =
+        await models.planboard.findOne({
+            raw: true,
+            where: {
+                id : req.query.id
+            }
+        });
+    console.log('----게시글보기====', plan);
+    let cri = {};
+
+    // userHeader 에서 필요한 변수들
+    let Auth = {};
+    let login = "";
+    let Manager = {};
+    let searchkeyword = "";
+
+    res.render('user/board/tourlandPlanBoardDetail',{plan, Auth, login, Manager, searchkeyword, cri});
+})
+
+// 상품 문의사항 글 등록하는 화면임
+router.get('/tourlandPlanBoardRegister', (req, res, next) => {
+
+    // userHeader 에서 필요한 변수들
+    let Auth = {username:"manager", empname:"테스트"};
+    let login = "";
+    let Manager = {};
+    let searchkeyword = "";
+    let mypage = "mypageuser";
+    console.log('------------------Auth누구------', Auth);
+
+
+    res.render('user/board/tourlandPlanBoardRegister', {mypage, Auth, login, Manager, searchkeyword});
+})
+
+// 상품 문의 사항 등록하기
+router.post('/tourlandPlanBoardRegister', async (req, res, next) => {
+// userHeader 에서 필요한 변수들
+    let Auth = {username:"manager", empname:"테스트"};
+    let login = "";
+    let Manager = {};
+    let searchkeyword = "";
+    let mypage = "mypageuser";
+
+    const PlanRegister = await models.planboard.create({
+        raw: true,
+        title : req.body.title,
+        content : req.body.content,
+        writer : req.body.writer,
+        regdate : req.body.regdate,
+        answer : 0,
+
+    });
+    console.log('------------------게시글 등록-----------------', PlanRegister);
+
+// ------------------상품 문의 등록하면 게시판 목록 보여줘야하므로 list값도 같이 전송해서 게시판 목록 다시 불러오기 -----------------------------------
+    const contentSize = 5 // 한페이지에 나올 개수
+    const currentPage = Number(req.query.currentPage) || 1; //현재페이
+    const { limit, offset } = getPagination(currentPage, contentSize);
+
+    const list =
+        await  models.planboard.findAll({
+            raw : true,
+            order: [
+                ["id", "DESC"]
+            ],
+            limit, offset
+        });
+    const listCount =
+        await models.planboard.findAndCountAll({
+            raw : true,
+            order : [
+                ["id", "DESC"]
+            ],
+            limit, offset
+        });
+    console.log('======데이터 전체 count 수=======', listCount.count);
+    const pagingData = getPagingData(listCount, currentPage, limit);
+    console.log('--------한 페이지에 나오는 데이터-', listCount);
+    let cri = currentPage;
+
+
+    res.render('user/board/tourlandPlanBoard', {PlanRegister, Auth, login, Manager, mypage, searchkeyword, list, pagingData, cri});
+});
+
+
+//-----------------------------------------여행후기여행후기여행후기여행후기여행후기여행후기여행후기여행후기여행후기----------------------------------------------------------------
+// 여행 후기 게시판 목록 보기
+router.get('/tourlandCustBoard', async (req, res, next) => {
+    // userHeader 에서 필요한 변수들
+    let Auth = {};
+    let login = "";
+    let Manager = {};
+    let searchkeyword = "";
+
+    const contentSize = 5 // 한페이지에 나올 개수
+    const currentPage = Number(req.query.currentPage) || 1; //현재페이
+    const { limit, offset } = getPagination(currentPage, contentSize);
+
+    const list =
+        await  models.custboard.findAll({
+            raw : true,
+            order: [
+                ["id", "DESC"]
+            ],
+            limit, offset
+        });
+    const listCount =
+        await models.custboard.findAndCountAll({
+            raw : true,
+            order : [
+                ["id", "DESC"]
+            ],
+            limit, offset
+        });
+    console.log('======데이터 전체 count 수=======', listCount.count);
+    const pagingData = getPagingData(listCount, currentPage, limit);
+    console.log('--------한 페이지에 나오는 데이터-', listCount);
+    let cri = currentPage;
+
+
+    res.render('user/board/tourlandCustBoard', {Auth, login, Manager, searchkeyword, cri, list, pagingData})
+})
+
+// 여행 후기 게시글 보기
+router.get('/tourlandCustBoardDetail', async (req, res, next) => {
+    // userHeader 에서 필요한 변수들
+    let Auth = {};
+    let login = "";
+    let Manager = {};
+    let searchkeyword = "";
+
+    console.log('=---쿼리에서 id 추출 ---',req.query.id);
+
+    let custBoardVO =
+        await models.custboard.findOne({
+            raw: true,
+            where: {
+                id : req.query.id
+            }
+        });
+    console.log('----게시글보기====', custBoardVO);
+    // custBoardVO 테이블에 있는 자료중 1개만갖고오기
+    let mypage = "mypageuser";
+    console.log('------작성자(현재사용자)명????----->>>>', mypage);
+
+
+
+    res.render('user/board/tourlandCustBoardDetail',{custBoardVO, Auth, login, Manager, searchkeyword, mypage});
+})
+
+
+// 여행 후기 등록하는 페이지 보기
+router.get('/tourlandCustBoardRegister', (req, res, next) => {
+
+    let custBoardVO = {};
+    let cri = {};
+
+    // userHeader 에서 필요한 변수들
+    let Auth = {username:"manager", empname:"테스트"};
+    let login = "";
+    let Manager = {};
+    let searchkeyword = "";
+    let mypage = "mypageuser";
+    console.log('------------------Auth누구------', Auth);
+
+    res.render('user/board/tourlandCustBoardRegister', {mypage, Auth, custBoardVO, login, Manager, searchkeyword, cri})
+})
+
+// 여행 후기 등록하기
+router.post('/tourlandCustBoardRegister', upload.single("image"), async (req, res, next) => {
+// userHeader 에서 필요한 변수들
+    let Auth = {username:"manager", empname:"테스트"};
+    let login = "";
+    let Manager = {};
+    let searchkeyword = "";
+    let mypage = "mypageuser";
+    console.log('--------------등록했따Auth누구------', Auth.username);
+
+    let body = {};
+    if( req.file !=null){
+        body = {
+            raw: true,
+            title : req.body.title,
+            content : req.body.content,
+            writer : req.body.writer,
+            regdate : req.body.regdate,
+            image : req.file.filename
+        }
+    }
+    else{
+        body = {
+            raw: true,
+            title : req.body.title,
+            content : req.body.content,
+            writer : req.body.writer,
+            regdate : req.body.regdate,
+        }
+    }
+
+    const custRegister = await models.custboard.create(body);
+
+    console.log('-------이미지 등록???----------', req.file);
+    console.log('------------------게시글 등록-----------------', custRegister);
+
+// ------------------게시글 등록하면 후기 게시판 목록 보여줘야하므 list값도 같이 전송해서 게시글 목록 다시 불러오기 -----------------------------------
+    const contentSize = 5 // 한페이지에 나올 개수
+    const currentPage = Number(req.query.currentPage) || 1; //현재페이
+    const { limit, offset } = getPagination(currentPage, contentSize);
+
+    const list =
+        await  models.custboard.findAll({
+            raw : true,
+            order: [
+                ["id", "DESC"]
+            ],
+            limit, offset
+        });
+    const listCount =
+        await models.custboard.findAndCountAll({
+            raw : true,
+            order : [
+                ["id", "DESC"]
+            ],
+            limit, offset
+        });
+    console.log('======데이터 전체 count 수=======', listCount.count);
+    const pagingData = getPagingData(listCount, currentPage, limit);
+    console.log('--------한 페이지에 나오는 데이터-', listCount);
+    let cri = currentPage;
+
+
+    res.render('user/board/tourlandCustBoard', {custRegister, Auth, login, Manager, mypage, searchkeyword, list, pagingData, cri});
+});
+
+
+// 여행후기 수정하기 화면 보이기
+router.get('/tourlandCustBoardRegisterEdit', upload.single("image"), async (req, res, next) => {
+
+    let custBoardVO = {};
+    let cri = {};
+
+    const toUpdate = await models.custboard.findOne({
+        raw : true,
+        where : {
+            id : req.query.id,
+        }
+    });
+    console.log('-----------쿼리정보-------', req.query);
+    console.log('----------수정화면입장----------', toUpdate);
+
+    // userHeader 에서 필요한 변수들
+    let Auth = {username: "manager", empname: "테스트"};
+    let login = "";
+    let Manager = {};
+    let searchkeyword = "";
+    let mypage = "mypageuser";
+
+
+    res.render('user/board/tourlandCustBoardRegisterEdit', {
+        mypage,
+        Auth,
+        custBoardVO,
+        login,
+        Manager,
+        searchkeyword,
+        cri,
+        toUpdate,
+    })
+});
+
+
+// 여행후기 수정하기 전송
+router.post('/tourlandCustBoardRegisterEdit', parser,upload.single("image"),   async (req, res, next) => {
+
+    console.log("444444444444->",req.body.id);
+    // userHeader 에서 필요한 변수들
+    let Auth = {username: "manager", empname: "테스트"};
+    let login = "";
+    let Manager = {};
+    let searchkeyword = "";
+    let mypage = "mypageuser";
+
+    let body = {};
+    if( req.file !=null){
+        body = {
+            raw : true,
+            content: req.body.content,
+            title: req.body.title,
+            image : req.file.fileName,
+        }
+    } else {
+        body = {
+            raw : true,
+            content: req.body.content,
+            title: req.body.title,
+        }
+    }
+
+    const update = await models.custboard.update(body, {
+        where : {
+            id : req.body.id,
+        }
+    });
+
+    console.log('-----------req.file---------', req.file);
+    // 수정하고 수정된 페이지 보여주기
+    // const custBoardVO = await models.custboard.findOne({
+    //     raw: true,
+    //     where: {
+    //         id : req.query.id
+    //     }
+    // });
+
+    console.log('----------수정----------', update);
+    // console.log('--------custBoardVo-----', custBoardVO);
+
+    res.redirect("/customer/tourlandCustBoard");
+    // res.render('user/board/tourlandCustBoardDetail', {
+    //     mypage,
+    //     Auth,
+    //     custBoardVO,
+    //     login,
+    //     Manager,
+    //     searchkeyword,
+    //     update,
+    // })
+
+});
+
+// 여행후기 삭제하기
+router.delete('/tourlandCustBoardDetail', async (req, res, next) => {
+
+    let custBoardVO = {};
+    let boardId = req.query.id
+
+    // const result = await models.custboard.destroy({
+    //     where : {
+    //         id : boardId,
+    //     }
+    // });
+    models.custboard.destroy({
+        where : {
+            id : boardId,
+        }
+    }).then( (result) => {
+        console.log(result);
+    }).catch( (err) => {
+        console.log(err);
+        next(err);
+    })
+
+    // console.log('=========삭제========', result);
+
+    // userHeader 에서 필요한 변수들
+    let Auth = {username: "manager", empname: "테스트"};
+    let login = "";
+    let Manager = {};
+    let searchkeyword = "";
+    let mypage = "mypageuser";
+
+
+    res.render('user/board/tourlandCustBoard', {
+        mypage,
+        Auth,
+        custBoardVO,
+        login,
+        Manager,
+        searchkeyword,
+    })
+
+});
+
+
+//-----------------------------------이벤트이벤트이벤트이벤트이벤트이벤트이벤트이벤트이벤트이벤트----------------------------------------
+// 이벤트 목록 (현재 진행중인 이벤트들 나옴)
+router.get("/tourlandEventList/ingEvent", async (req, res, next) => {
+
+    const eventList = await models.event.findAll({
+        raw : true,
+        where : {
+            enddate : {[Op.gt] : new Date()},
+        },
+    });
+    // console.log('-------------123123123--', eventList); 이거 주석처리 해하제면 콘솔에 이미지 주소 길게 나옴
+
+    let mistyrose = {};
+
+    // userHeader 에서 필요한 변수들
+    let Auth = {};
+    let login = "";
+    let Manager = {};
+    let searchkeyword = "";
+
+    res.render("user/event/tourEventList", {Auth, login, Manager, searchkeyword, eventList, mistyrose});
+});
+
+// 만료된 이벤트 목록
+router.get("/tourlandEventList/expiredEvent", async (req, res, next) => {
+
+    const eventList = await models.event.findAll({
+        raw : true,
+        where : {
+            enddate : {[Op.lt] : new Date()},
+        },
+    });
+    console.log('-----만료된이벤트목록--', eventList);
+
+    let mistyrose = {};
+
+    // userHeader 에서 필요한 변수들
+    let Auth = {};
+    let login = "";
+    let Manager = {};
+    let searchkeyword = "";
+
+    res.render("user/event/tourEventEndList", {Auth, login, Manager, searchkeyword, eventList, mistyrose});
+});
+
+// 이벤트 상세페이지
+router.get("/eventDetailPage", async(req, res, next) => {
+    console.log('---------', req.query);
+    let {no} = req.query;
+
+    const eventVO =
+        await models.event.findOne({
+            raw: true,
+            where: {
+                id : no
+            }
+        });
+    console.log(eventVO);
+
+    // userHeader 에서 필요한 변수들
+    let Auth = {};
+    let login = "";
+    let Manager = {};
+    let searchkeyword = "";
+
+
+    res.render('user/event/eventDetailPage', {Auth, login, Manager, searchkeyword, eventVO, no});
+});
 
 module.exports = router;
