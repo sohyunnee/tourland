@@ -5,34 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="022f6912-a924-4b38-9214-54f3b4c729bd" name="변경" comment="indexApi jwt로그인 구">
-      <change afterPath="$PROJECT_DIR$/views/manager/board/FAQDetail.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/board/FAQMngList.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/board/FAQModify.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/board/FAQRegister.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/board/custBoardDetail.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/board/custBoardList.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/board/planBoardDetail.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/board/planBoardList.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/board/planBoardModify.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/coupon/couponMngList.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/event/eventDetailForm.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/event/eventMngList.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/event/eventRegister.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/notice/addNoticeForm.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/notice/editNotice.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/notice/noticeDetail.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/notice/noticeMngList.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/payment/paymentList.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/manager/reservation/reservationMngList.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/event.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/event.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/planboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/planboard.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/managerRoutes/managerRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/managerRoutes/managerRoutes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/include/header.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/include/header.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/flight/flightMngList2.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/flight/flightMngList2.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/hotel/hotelMngList.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/hotel/hotelMngList.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/manager/hotel/hotelModify.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/hotel/hotelModify.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager/hotel/hotelRegister.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/hotel/hotelRegister.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/manager/rentcar/rentcarRegister.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/rentcar/rentcarRegister.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/manager/tour/tourMngList.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/tour/tourMngList.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/manager/tour/tourRegister.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/tour/tourRegister.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,7 +108,7 @@
       <workItem from="1672274079120" duration="24296000" />
       <workItem from="1672615540803" duration="10295000" />
       <workItem from="1672701678496" duration="29405000" />
-      <workItem from="1672790556418" duration="24149000" />
+      <workItem from="1672790556418" duration="26749000" />
     </task>
     <task id="LOCAL-00001" summary="변경">
       <created>1670416532650</created>

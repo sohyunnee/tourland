@@ -85,7 +85,7 @@
         })
 
         $("#goList").click(function() {
-            var page =	"<%=cri.page%>";
+            var page =	"<%=pagingData.currentPage%>";
             var searchType = "<%=cri.searchType%>";
             var keyword = "<%=cri.keyword%>";
             location.href = "hotelMngList?page="+page+"&searchType="+searchType+"&keyword="+keyword;
@@ -119,7 +119,7 @@
                     <h3 class="box-title">호텔 상품 등록</h3>
                 </div>
                 <form role="form" action="hotelModify" method="post">
-                    <input type="hidden" value="<%=cri.page%>" name="page">
+                    <input type="hidden" value="<%=pagingData.currentPage%>" name="page">
                     <input type="hidden" value="<%=cri.searchType%>" name="searchType">
                     <input type="hidden" value="<%=cri.keyword%>" name="keyword">
                     <div class="box-body">

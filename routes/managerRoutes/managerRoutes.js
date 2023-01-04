@@ -490,7 +490,7 @@ router.get('/hotelModify', async (req, res, next) => {
 
     keyword = keyword ? keyword : "";
 
-    const hotelVO = await models.hotel.findOne({
+    const hotelVo = await models.hotel.findOne({
         // raw : true,
         nest: true,
         attributes: ['id', 'hname', 'haddr', 'checkin', 'checkout', 'capacity', 'price', 'roomcapacity', 'roomtype', 'ldiv','bookedup','totalcapacity','pdiv'],
@@ -530,7 +530,6 @@ router.get('/tourMngList', async (req, res, next) => {
         attributes: ['id', 'tname', 'tlocation', 'startDate', 'endDate', 'taddr', 'etime', 'capacity', 'tprice', 'ldiv'],
         where: {
 
-
         },
         limit, offset
     });
@@ -550,8 +549,19 @@ router.get('/tourMngList', async (req, res, next) => {
     let Manager = {};
     let Auth = {};
 
-    res.render("manager/tour/tourMngList", {cri, list, pagingData, Manager, Auth});
-})
+    res.render("manager/tour/tourMngList", {cri, list, pagingData, Manager, Auth, moment});
+});
+
+router.get('/tourRegister', async (req, res, next) => {
+
+
+    let Manager = {};
+    let Auth = {};
+    let no = '';
+
+    res.render("manager/tour/tourRegister", {Manager, Auth, no});
+});
+
 // 🚗 렌트카 관리-----------------
 // 렌트카 관리 전체 목록
 router.get('/rentcarMngList', async (req, res, next) => {
@@ -592,7 +602,17 @@ router.get('/rentcarMngList', async (req, res, next) => {
     let Auth = {};
 
     res.render("manager/rentcar/rentcarMngList", {cri, list, pagingData, Manager, Auth});
-})
+});
+
+router.get('/rentcarRegister', async (req, res, next) => {
+
+
+    let Manager = {};
+    let Auth = {};
+    let autoNo = '';
+
+    res.render("manager/rentcar/rentcarRegister", {Manager, Auth, autoNo});
+});
 
 
 // --------------------------------------------------------------- 상품 관리 --------------------------------------------
