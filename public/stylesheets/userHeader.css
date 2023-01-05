@@ -61,7 +61,7 @@ div#nav2 ul li a { display: block;
     line-height: 50px;
     color: #fff;}
 div#nav2 ul li#orange { width: 50px; background: #ff7f00;}
-div#nav2 ul li.short { width: 50px; margin-left:20px; }
+div#nav2 ul li.short { width: 60px; margin-left:20px; }
 div#nav2 ul li.c { margin-left: 30px;}
 #userAuth, #managerAuth{
     width: 250px; line-height: 50px;
