@@ -5,7 +5,7 @@ const path = require("path");
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './displayFile/upload/')
+        cb(null, './upload/')
     },
     filename: function (req, file, cb) {
         const ext = path.extname(file.originalname);  // 파일 확장자
