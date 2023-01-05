@@ -32,7 +32,7 @@ require('dotenv').config({ path: '.env' });
 router.get('/displayFile/:whichOne', async  (req, res, next) => {
     const choice = req.params.whichOne;
     const query = req.query.filename;
-    const base_dir = "/home/edu01/IdeaProjects/tourland/public/displayFile";
+    const base_dir = "public/displayFile";
 
     let path;
     if( choice === "popup"){

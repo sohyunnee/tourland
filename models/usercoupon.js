@@ -8,14 +8,18 @@ module.exports = function(sequelize, DataTypes) {
       comment: "유저번호",
       references: {
         model: 'user',
-        key: 'id'
+        key: 'userno'
       }
     },
     cno: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      comment: "쿠폰번호"
+      comment: "쿠폰번호",
+      references: {
+        model: 'coupon',
+        key: 'cno'
+      }
     }
   }, {
     sequelize,

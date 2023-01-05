@@ -38,7 +38,7 @@ module.exports = function(sequelize, DataTypes) {
       comment: "아이디"
     },
     emppass: {
-      type: DataTypes.STRING(41),
+      type: DataTypes.STRING(100),
       allowNull: true,
       comment: "비밀번호"
     },
