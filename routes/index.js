@@ -32,7 +32,7 @@ router.get('/', async function (req, res, next) {
 router.get('/displayFile/:whichOne', async  (req, res, next) => {
     const choice = req.params.whichOne;
     const query = req.query.filename;
-    const base_dir = "/home/edu07/IdeaProjects/tourland/public/displayFile";
+    const base_dir = "/home/edu01/IdeaProjects/tourland/public/displayFile";
 
     let path;
     if( choice === "popup"){

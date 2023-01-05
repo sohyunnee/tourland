@@ -38,9 +38,8 @@ module.exports = function(sequelize, DataTypes) {
       comment: "상품구분"
     },
     pcapacity: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      comment: "상품인원"
+      type: DataTypes.BIGINT,
+      allowNull: true
     }
   }, {
     sequelize,

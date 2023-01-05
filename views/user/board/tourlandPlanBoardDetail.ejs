@@ -62,11 +62,11 @@
 <script>
 	$("#reply").click(function(){
 		var answer ="<%=plan.answer%>";
-		var no = "<%=plan.no%>";
+		var id = "<%=plan.id%>";
 		var respond = "<%=plan.respond%>";
 		var page = "<%=cri.page%>";
 		if(answer==0){
-			location.href = "/manager/planBoardDetail?no="+no;
+			location.href = "/manager/planBoardDetail?id="+id;
 		}else if(answer==1){
 			location.href = "/manager/planBoardModify?no="+no+"&respond="+respond;
 		}
