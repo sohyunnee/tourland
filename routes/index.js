@@ -15,18 +15,18 @@ const crypto = require('crypto');
 require('dotenv').config({ path: '.env' });
 
 /* GET home page. */
-router.get('/', async function (req, res, next) {
-    try {
-        const airplane = await models.airplane.findAll({});
-        console.log("1111->", airplane);
-        res.send(airplane);
-
-    } catch (err) {
-        console.error(err);
-        next(err);
-    }
-    res.render('index', {title: 'Express'});
-});
+// router.get('/', async function (req, res, next) {
+//     try {
+//         const airplane = await models.airplane.findAll({});
+//         console.log("1111->", airplane);
+//         res.send(airplane);
+//
+//     } catch (err) {
+//         console.error(err);
+//         next(err);
+//     }
+//     res.render('index', {title: 'Express'});
+// });
 
 
 router.get('/displayFile/:whichOne', async  (req, res, next) => {

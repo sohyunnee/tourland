@@ -1228,10 +1228,10 @@ router.get('/tourlandPlanBoard', async (req, res, next) => {
     const pagingData = getPagingData(listCount, currentPage, limit);
     console.log('--------한 페이지에 나오는 데이터-', listCount);
 
-    const cri = {};
+    const cri = {currentPage};
     const mypage = {};
     const pageMaker = {};
-
+    console.log('-----------현재페이지=------', currentPage);
 
     // userHeader 에서 필요한 변수들
     let Manager = {};
@@ -1268,7 +1268,12 @@ router.get('/tourlandPlanBoardRegister', (req, res, next) => {
     // userHeader 에서 필요한 변수들
     let Manager = {};
     let searchkeyword = "";
-    let mypage = "mypageuser";
+    let mypage = {};
+    if (login === 'user') {
+        mypage = "mypageuser"
+    } else if (login === 'Manager') {
+        mypage = "mypageemp"
+    }
     console.log('------------------Auth누구------', Auth);
 
 
@@ -1280,7 +1285,13 @@ router.post('/tourlandPlanBoardRegister', async (req, res, next) => {
 // userHeader 에서 필요한 변수들
     let Manager = {};
     let searchkeyword = "";
-    let mypage = "mypageuser";
+
+    let mypage = {};
+    if (login === 'user') {
+        mypage = "mypageuser"
+    } else if (login === 'Manager') {
+        mypage = "mypageemp"
+    }
 
     const PlanRegister = await models.planboard.create({
         raw: true,
@@ -1364,6 +1375,7 @@ router.get('/tourlandCustBoard', async (req, res, next) => {
 router.get('/tourlandCustBoardDetail', async (req, res, next) => {
     // userHeader 에서 필요한 변수들
     let Manager = {};
+    let mypage = {};
     let searchkeyword = "";
 
     console.log('=---쿼리에서 id 추출 ---',req.query.id);
@@ -1377,8 +1389,8 @@ router.get('/tourlandCustBoardDetail', async (req, res, next) => {
         });
     console.log('----게시글보기====', custBoardVO);
     // custBoardVO 테이블에 있는 자료중 1개만갖고오기
-    let mypage = "mypageuser";
-    console.log('------작성자(현재사용자)명????----->>>>', mypage);
+
+    console.log('------현재사용자????----->>>>', mypage);
 
 
 
@@ -1390,28 +1402,40 @@ router.get('/tourlandCustBoardDetail', async (req, res, next) => {
 router.get('/tourlandCustBoardRegister', (req, res, next) => {
 
     let custBoardVO = {};
-    let cri = {};
 
     // userHeader 에서 필요한 변수들
-    let Auth = {username:"manager", empname:"테스트"};
-    let login = "";
     let Manager = {};
     let searchkeyword = "";
-    let mypage = "mypageuser";
+
+    let mypage = {};
+    if (login === 'user') {
+        mypage = "mypageuser"
+    } else if (login === 'Manager') {
+        mypage = "mypageemp"
+    }
+
+    console.log('---------------mypage---------', mypage);
     console.log('------------------Auth누구------', Auth);
 
-    res.render('user/board/tourlandCustBoardRegister', {mypage, Auth, custBoardVO, login, Manager, searchkeyword, cri})
+    res.render('user/board/tourlandCustBoardRegister', {mypage, Auth, login, Manager, searchkeyword, custBoardVO})
 })
 
 // 여행 후기 등록하기
 router.post('/tourlandCustBoardRegister', upload.single("image"), async (req, res, next) => {
 // userHeader 에서 필요한 변수들
-    let Auth = {username:"manager", empname:"테스트"};
-    let login = "";
     let Manager = {};
     let searchkeyword = "";
-    let mypage = "mypageuser";
-    console.log('--------------등록했따Auth누구------', Auth.username);
+
+    let mypage = {};
+    if (login === 'user') {
+        mypage = "mypageuser"
+    } else if (login === 'Manager') {
+        mypage = "mypageemp"
+    }
+
+    // console.log('--------------등록했따Auth누구------', mypage);
+    console.log('------------------Auth누구------', Auth);
+    console.log('---------------auth비밀번호', Auth.userpass);
 
     let body = {};
     if( req.file !=null){
@@ -1421,7 +1445,7 @@ router.post('/tourlandCustBoardRegister', upload.single("image"), async (req, re
             content : req.body.content,
             writer : req.body.writer,
             regdate : req.body.regdate,
-            image : req.file.filename
+            image : req.file.filename,
         }
     }
     else{
@@ -1433,8 +1457,12 @@ router.post('/tourlandCustBoardRegister', upload.single("image"), async (req, re
             regdate : req.body.regdate,
         }
     }
+    console.log('------------req.body-----', req.body);
+    // console.log('~~~~~~~ req.session~~~~~~~~',req.session.user.Auth.userpass);
 
-    const custRegister = await models.custboard.create(body);
+    const custRegister = await models.custboard.create(body, {
+        passwd : req.session.user.Auth.userpass}
+    );
 
     console.log('-------이미지 등록???----------', req.file);
     console.log('------------------게시글 등록-----------------', custRegister);
@@ -1460,9 +1488,8 @@ router.post('/tourlandCustBoardRegister', upload.single("image"), async (req, re
             ],
             limit, offset
         });
-    console.log('======데이터 전체 count 수=======', listCount.count);
+    console.log('======데이터 전체 count 수 전송전송=======', listCount.count);
     const pagingData = getPagingData(listCount, currentPage, limit);
-    console.log('--------한 페이지에 나오는 데이터-', listCount);
     let cri = currentPage;
 
 

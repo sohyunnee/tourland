@@ -49,9 +49,10 @@
 					   			<%=plan.respond%>
 					   	</div>
 					<% } %>
-				   
+<!--					로그인한 사람이 매니저 이면, 답변관리 메뉴 보이기-->
+<!--					그 외는 안보이게 하기 -->
 				   <!-- 답변  -->
-					<% if (Manager!=null) { %>
+					<% if (login === "manager") { %>
 				   	   	<div id="detailComment">
 				     	 	<button id="reply">답변관리</button>
 				   		</div>

@@ -45,11 +45,9 @@
 				</div>
 				<div class="box-footer">
 							 <button type="button" class="btn btn-primary" id="btnReturnToList">목록으로</button>
-					<!--게시글 본인이라면 수정&삭제 보임, 관리자라면 삭제만 보임 -->
+					<!--게시글 본인이라면 수정&삭제 보임 -->
 					<% if(mypage === 'mypageuser') { %>
 						<button type="button" class="btn btn-primary" onclick="btnUpdate()">수정하기</button>
-						<button type="submit" class="btn btn-primary" id="btnDelete">삭제하기</button>
-					<% } else if(mypage === 'mypageemp') { %>
 						<button type="submit" class="btn btn-primary" id="btnDelete">삭제하기</button>
 					<% } %>
 
