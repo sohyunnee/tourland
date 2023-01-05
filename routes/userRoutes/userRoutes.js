@@ -1117,8 +1117,6 @@ router.get("/tourlandBoardNotice", async (req, res, next) => {
     console.log('---------', noticeNoFixedList);
 
     // userHeader에 들어갈거
-    let Auth = {};
-    let login = "";
     let Manager = {};
     let searchkeyword = "";
 
@@ -1150,8 +1148,6 @@ router.get("/tourlandBoardNoticeDetail", async (req, res, next) => {
 
 
     // userHeader에 들어갈거
-    let Auth = {};
-    let login = "";
     let Manager = {};
     let searchkeyword = "";
 
@@ -1195,8 +1191,6 @@ router.get('/tourlandBoardFAQ', async (req, res, next) => {
 
 
     // userHeader 에서 필요한 변수들
-    let Auth = {};
-    let login = "";
     let Manager = {};
     let searchkeyword = "";
 
@@ -1240,8 +1234,6 @@ router.get('/tourlandPlanBoard', async (req, res, next) => {
 
 
     // userHeader 에서 필요한 변수들
-    let Auth = {};
-    let login = "";
     let Manager = {};
     let searchkeyword = "";
 
@@ -1264,8 +1256,6 @@ router.get('/tourlandPlanBoardDetail', async (req, res, next) => {
     let cri = {};
 
     // userHeader 에서 필요한 변수들
-    let Auth = {};
-    let login = "";
     let Manager = {};
     let searchkeyword = "";
 
@@ -1276,8 +1266,6 @@ router.get('/tourlandPlanBoardDetail', async (req, res, next) => {
 router.get('/tourlandPlanBoardRegister', (req, res, next) => {
 
     // userHeader 에서 필요한 변수들
-    let Auth = {username:"manager", empname:"테스트"};
-    let login = "";
     let Manager = {};
     let searchkeyword = "";
     let mypage = "mypageuser";
@@ -1290,8 +1278,6 @@ router.get('/tourlandPlanBoardRegister', (req, res, next) => {
 // 상품 문의 사항 등록하기
 router.post('/tourlandPlanBoardRegister', async (req, res, next) => {
 // userHeader 에서 필요한 변수들
-    let Auth = {username:"manager", empname:"테스트"};
-    let login = "";
     let Manager = {};
     let searchkeyword = "";
     let mypage = "mypageuser";
@@ -1342,8 +1328,6 @@ router.post('/tourlandPlanBoardRegister', async (req, res, next) => {
 // 여행 후기 게시판 목록 보기
 router.get('/tourlandCustBoard', async (req, res, next) => {
     // userHeader 에서 필요한 변수들
-    let Auth = {};
-    let login = "";
     let Manager = {};
     let searchkeyword = "";
 
@@ -1379,8 +1363,6 @@ router.get('/tourlandCustBoard', async (req, res, next) => {
 // 여행 후기 게시글 보기
 router.get('/tourlandCustBoardDetail', async (req, res, next) => {
     // userHeader 에서 필요한 변수들
-    let Auth = {};
-    let login = "";
     let Manager = {};
     let searchkeyword = "";
 
