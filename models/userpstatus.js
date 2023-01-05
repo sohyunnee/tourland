@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
       comment: "유저번호",
       references: {
         model: 'user',
-        key: 'userno'
+        key: 'id'
       }
     },
     pno: {

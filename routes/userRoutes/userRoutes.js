@@ -11,6 +11,7 @@ const {QueryTypes} = require("sequelize");
 const moment = require("moment");
 
 global.Auth = {};
+global.login ={};
 
 const models = require("../../models/index");
 const {
@@ -303,7 +304,6 @@ router.get('/loginForm', async (req, res, next) => {
 
     let EmpStay = {};
     let error = "";
-    let Auth = {};
     let login = "user";
     let Manager = {};
     let searchkeyword = "";
@@ -327,7 +327,6 @@ router.get('/loginManagerForm', async (req, res, next) => {
     let EmpStay = {empid: id};
     let UserStay = {};
     let error = "";
-    let Auth = {};
     let login = "";
     let Manager = {};
     let searchkeyword = "";
@@ -421,8 +420,6 @@ router.post('/loginForm', (req, res, next) => {
     let UserStay;
     let EmpStay = {};
     let error = "";
-    let Auth = {};
-    let login = "";
     let Manager = {};
     let searchkeyword = "";
     let loginSuccess = false;
@@ -430,7 +427,7 @@ router.post('/loginForm', (req, res, next) => {
     fetchData(req).then((userVO) => {
 
         // 직원 ID가 없는 경우
-        if (userVO.userid == null) {
+        if (userVO.id == null) {
             error = "idnoneexist";
         } else {
 
@@ -460,6 +457,8 @@ router.post('/loginForm', (req, res, next) => {
                             }
                             req.session.save();
                             Auth = userVO;
+                            login = "user";
+
                             console.log(`세션 저장 완료! `);
                         }
                         res.redirect('/customer');
@@ -501,7 +500,6 @@ router.post('/loginManagerForm', (req, res, next) => {
     let UserStay = {};
     let EmpStay;
     let error = "";
-    let Auth = {};
     let login = "";
     let Manager = {};
     let searchkeyword = "";
@@ -674,8 +672,6 @@ router.get("/tourlandProductKRList", async (req, res, next) => {
 
 
         // let list = [];
-        let Auth = {};
-        let login = "";
         let Manager = {};
         let searchkeyword = "";
         let error = "";
@@ -688,13 +684,13 @@ router.get("/tourlandProductKRList", async (req, res, next) => {
 
         if (list != null) {
             res.render("user/product/tourlandProductKRList", {
+                Auth,
+                login,
                 tourDays,
                 date,
                 capa,
                 countlist,
                 list,
-                Auth,
-                login,
                 Manager,
                 searchkeyword,
                 error,
@@ -764,10 +760,6 @@ router.get("/tourlandProductDetail/:pno", async (req, res, next) => {
             }
         });
 
-
-        // let list = [];
-        let Auth = {userno: 6, username: "테스트"};
-        let login = "";
         let Manager = {name: "테스트"};
         let searchkeyword = "";
         let error = "";
@@ -876,7 +868,6 @@ router.get("/tourlandProductDetail/tourlandProductReview/:pno", async (req, res,
 
         console.log("000000-", list);
 
-        let Auth = {userno: 6, username: "테스트"};
         let login = "manager";
         let Manager = {name: "테스트"};
         let searchkeyword = "";
@@ -927,7 +918,7 @@ router.get("/EditPassword", (req, res, next) => {
     console.log(req.session.user);
     try {
         if (req.session.user) {
-            Auth = {
+            Auth = { // 비밀번호 변경하면 Auth에 아래 정보 들어감
                 userid: req.session.user.Auth.userid,
                 empid: req.session.user.Auth.empid
             };
@@ -1052,7 +1043,7 @@ router.post("/logoutWithdrawal", async (req,res,next)=>{
     let {no} = req.query;
     console.log(req.session);
     req.session.destroy();
-    Auth = {};
+    Auth = {}; // 로그아웃 하면 Auth 안에 담긴 정보 초기화
     res.redirect("/customer");
 
 });
@@ -1650,8 +1641,6 @@ router.get("/tourlandEventList/ingEvent", async (req, res, next) => {
     let mistyrose = {};
 
     // userHeader 에서 필요한 변수들
-    let Auth = {};
-    let login = "";
     let Manager = {};
     let searchkeyword = "";
 
