@@ -590,13 +590,13 @@ router.get("/tourlandProductKRList", async (req, res, next) => {
     let searchQuery = "";
 
     if (ddate == "name") {
-        searchQuery = `and pname like concat('%',<%=keyword%>,'%')`;
+        searchQuery = `and pname like concat('%',${keyword},'%')`;
     }
     if (searchType == "expire") {
-        searchQuery = `and pexpire like concat('%',<%=keyword%>,'%')`;
+        searchQuery = `and pexpire like concat('%',${keyword},'%')`;
     }
     if (searchType == "userCart") {
-        searchQuery = `and pname like concat('%',<%=keyword%>,'%')`;
+        searchQuery = `and pname like concat('%',${keyword},'%')`;
     }
     if (searchType == "location") {
         if (keyword === "한국") {

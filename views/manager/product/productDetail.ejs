@@ -1,4 +1,4 @@
-<%- include (../../include/header.ejs) %>
+<%- include ('../../include/header.ejs') %>
 
 <style>
     h2 {
@@ -139,9 +139,9 @@
                             <th>좌석</th>
                             <th>가격</th>
                         </tr>
-                        <% vo.air.forEach( f => { %>
+                        <% vo.airplaneId_airplanes.forEach( f => { %>
                         <tr>
-                            <td><%= f.no %></td>
+                            <td><%= f.id %></td>
                             <td><%= f.ano %></td>
                             <td><%= f.dlocation %></td>
                             <td><%= f.rlocation %></td>
@@ -188,9 +188,9 @@
                             <th>장소구분</th>
                             <th>예약 가능 여부</th>
                         </tr>
-                        <% vo.hotel.forEach( hotel => { %>
+                        <% vo.hotelId_hotels.forEach( hotel => { %>
                         <tr>
-                            <td><%= hotel.no %></td>
+                            <td><%= hotel.id %></td>
                             <td><%= hotel.hname %></td>
                             <td><%= hotel.haddr %></td>
                             <td><%= hotel.checkin %> pattern="yyyy-MM-dd"</td>
@@ -242,9 +242,9 @@
                             <th>가격</th>
                             <th>장소구분</th>
                         </tr>
-                        <% vo.tour.forEach( tour => { %>
+                        <% vo.tourId_tours.forEach( tour => { %>
                         <tr>
-                            <td><%= tour.no %></td>
+                            <td><%= tour.id %></td>
                             <td><%= tour.tname %></td>
                             <td><%= tour.tlocation %></td>
                             <td><%= tour.startDate %> pattern="yyyy-MM-dd"</td>
@@ -278,9 +278,9 @@
                             <th>보험여부</th>
                             <th>국내/해외</th>
                         </tr>
-                        <% vo.rentcar.forEach( rentcarList => { %>
+                        <% vo.rentcarId_rentcars.forEach( rentcarList => { %>
                         <tr>
-                            <td><%= rentcarList.no %></td>
+                            <td><%= rentcarList.id %></td>
                             <td><%= rentcarList.cdiv %></td>
                             <td><%= rentcarList.cno %></td>
                             <td><%= rentcarList.rentddate %> pattern="yyyy-MM-dd "</td>
@@ -347,4 +347,4 @@
 </div>
 </body>
 </html>
-<%- include (../../include/footer.ejs) %>
+<%- include ('../../include/footer.ejs') %>

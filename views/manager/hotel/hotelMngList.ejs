@@ -98,10 +98,10 @@
                                 <% } %>
                                 <td><%= hotel.totalcapacity %></td>
                                 <td>
-                                    <button type="button" class="btn btn-primary active btn-sm btnModify"
+                                    <button type="button" class="btn btn-primary active btn-sm " id="btnModify"
                                             data-no="<%= hotel.id %>">수정
                                     </button>
-                                    <button type="button" class="btn btn-primary btn-danger btn-sm btnDelete"
+                                    <button type="button" class="btn btn-primary btn-danger btn-sm " id="btnDelete"
                                             data-no="<%= hotel.id %>">삭제
                                     </button>
                                 </td>
@@ -171,25 +171,19 @@ $("#btnRegister").click(function () {
     location.href = "hotelRegister";
 })
 
-$(".btnModify").click(function(){
+$("#btnModify").click(function(){
     var id = $(this).attr("data-no");
-var page =    "<%=pagingData.currentPage%>";
-var searchType = "<%=cri.searchType%>";
-var keyword = "<%=cri.keyword%>";
-
-    location.href = "hotelModify?no=" + id + "&page=" + page + "&searchType=" + searchType + "&keyword=" + keyword;
+    var page = "<%=cri.page%>";
+    location.href = "hotelModify?id="+id+"&page="+page;
 })
 
-$(".btnDelete").click(function(){
-    var no = $(this).attr("data-no");
-var page =    "<%=pagingData.currentPage%>";
-var searchType = "<%=cri.searchType%>";
-var keyword = "<%=cri.keyword%>";
+$("btnDelete").click(function(){
+    var id = $(this).attr("data-no");
     var res = confirm("삭제하시겠습니까?");
     if (res) {
         alert("삭제되었습니다.");
-        location.href = "hotelDelete?no=" + no + "&page=" + page + "&searchType=" + searchType + "&keyword=" + keyword;
+        location.href = "hotelDelete?id=" + id;
     }
-})
+});
 </script>
 <%- include ("../../include/footer.ejs") %>

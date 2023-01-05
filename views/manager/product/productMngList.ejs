@@ -142,10 +142,8 @@
         $("#keywordInput").val(keyword);
     };
     $(".productList").click(function () {
-        var no = $(this).attr("data-no");
-        var searchType = "<%=cri.searchType%>";
-        var keyword = "<%=cri.keyword%>";
-        location.href = "/manager/productDetail/"+no+"&page=<%=pagingData.currentPage %>&searchType="+searchType+"&keyword="+keyword;
+        var id = $(this).attr("data-no");
+        location.href = "/manager/productDetail?id="+id;
     })
     $("#btnSearch").click(function () {
         var searchType = $("#searchType option:selected").val();

@@ -62,8 +62,8 @@
                                 <td><%=rentcarList.id%></td>
                                 <td><%=rentcarList.cdiv%></td>
                                 <td><%=rentcarList.cno%></td>
-                                <td><%=rentcarList.rentddate%> pattern="yyyy-MM-dd"</td>
-                                <td><%=rentcarList.returndate%> pattern="yyyy-MM-dd"</td>
+                                <td><%=rentcarList.rentddate%></td>
+                                <td><%=rentcarList.returndate%></td>
                                 <td><%=rentcarList.rentaddr%></td>
                                 <td><%=rentcarList.returnaddr%></td>
                                 <td><%=rentcarList.price%></td>
@@ -131,18 +131,14 @@
     })
 
     $(".toRentcarDetail").click(function(){
-        var no = $(this).attr("data-click");
-        var searchType = "<%=cri.searchType%>";
-        var keyword = "<%=cri.keyword%>";
-        location.href = "/manager/rentcarDetailForm?no="+id+"&page=<%=pagingData.currentPage%>&searchType="+searchType+"&keyword="+keyword;
+        var id = $(this).attr("data-click");
+        location.href = "/manager/rentcarDetailForm?id="+id;
     })
     $(".delRentcar").click(function(){
         var cc = confirm("렌트카 상품을 삭제하시겠습니까?");
         if(cc){
-            var no = $(this).attr("data-click");
-            var searchType = "<%=cri.searchType%>";
-            var keyword = "<%=cri.keyword%>";
-            location.href = "/manager/delRentcar?no="+id+"&page=<%=pagingData.currentPage%>&searchType="+searchType+"&keyword="+keyword;
+            var id = $(this).attr("data-click");
+            location.href = "/manager/delRentcar?id="+id;
         }
     })
 

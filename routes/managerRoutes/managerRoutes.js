@@ -485,6 +485,8 @@ router.get('/hotelRegister', async (req, res, next) => {
 
 //호텔 수정
 router.get('/hotelModify', async (req, res, next) => {
+    let Manager = {};
+    let Auth = {};
 
     let {searchType, keyword} = req.query;
 
@@ -501,15 +503,83 @@ router.get('/hotelModify', async (req, res, next) => {
 
     let cri = {searchType, keyword};
 
+    res.render("manager/hotel/hotelModify", {cri, hotelVo, Manager, Auth});
+});
 
+router.post("/hotelModify", async (req, res, next) => {
+    // header 공통 !!!
     let Manager = {};
     let Auth = {};
 
-    res.render("manager/hotel/hotelModify", {cri, hotelVO, Manager, Auth});
+    let body = {
+        raw: true,
+        id: req.body.id,
+        hname: req.body.hname,
+        haddr: req.body.haddr,
+        checkin: req.body.checkin,
+        checkout: req.body.checkout,
+        capacity: req.body.capacity,
+        price: req.body.price,
+        roomcapacity: req.body.roomcapacity,
+        roomtype: req.body.roomtype,
+        ldiv: req.body.ldiv,
+        bookedup: req.body.bookedup
+    };
+
+    const update = await models.hotel.update(
+        body,
+        {
+            where : {
+                id : req.query.id
+            }
+        });
+
+    // 수정하고 수정된 페이지 보여줘야 하니까
+    // const tourVO = await models.tour.findOne({
+    //     where: {
+    //         id : req.query.id
+    //     }
+    // });
+
+    res.redirect("/manager/hotelMngList");
 });
+router.post("/hotelModify", async (req, res, next) => {
+    // header 공통 !!!
+    let Manager = {};
+    let Auth = {};
+
+    let cri = {};
+    const update = await models.hotel.update({
+        raw : true,
+        id: req.body.id,
+        hname: req.body.hname,
+        haddr: req.body.haddr,
+        checkin: req.body.checkin,
+        checkout: req.body.checkout,
+        capacity: req.body.capacity,
+        price: req.body.price,
+        roomcapacity: req.body.roomcapacity,
+        roomtype: req.body.roomtype,
+        ldiv: req.body.ldiv,
+        bookedup: req.body.bookedup
+    }, {
+        where : {
+            id : req.body.id
+        }
+    });
+
+    // 수정하고 수정된 페이지 보여줘야 하니까
+    const list = await models.hotel.findAll({
+        nest: true,
+        attributes: ['id', 'hname', 'haddr', 'checkin', 'checkout', 'capacity', 'price', 'roomcapacity', 'roomtype', 'ldiv','bookedup','totalcapacity','pdiv'],
+        where: {
+
+        }
+    });
 
 
-
+    res.render("manager/hotel/hotelMngList", {Manager, Auth, cri, update, list});
+});
 
 // 🚩 투어 관리 -------------------
 // 현지 투어 관리 전체 목록
@@ -562,6 +632,129 @@ router.get('/tourRegister', async (req, res, next) => {
     res.render("manager/tour/tourRegister", {Manager, Auth, no});
 });
 
+router.post("/tourRegister", async (req, res, next) => {
+    // header 공통 !!!
+    let Manager = {};
+    let Auth = {};
+
+    const register = await models.tour.create({
+        raw: true,
+        id: req.body.id,
+        ldiv: req.body.ldiv,
+        tlocation: req.body.tlocation,
+        tname: req.body.tname,
+        startDate: req.body.startDate,
+        endDate: req.body.endDate,
+        taddr: req.body.taddr,
+        etime: req.body.etime,
+        capacity: req.body.capacity,
+        tprice: req.body.tprice
+    });
+
+    res.redirect("/manager/tourMngList");
+});
+
+router.get('/tourDetail', async (req, res, next) => {
+// header 공통 !!!
+    let Manager = {};
+    let Auth = {};
+    let {searchType, keyword} = req.query;
+
+    keyword = keyword ? keyword : "";
+    let cri = {searchType, keyword};
+
+    const tourVO =
+        await models.tour.findOne({
+            raw: true,
+            where: {
+                id : req.query.id
+            }
+        });
+
+    res.render("manager/tour/tourDetail", {Manager, Auth,cri,moment, tourVO})
+});
+
+router.get('/tourModify', async (req, res, next) => {
+
+
+    let Manager = {};
+    let Auth = {};
+    let {searchType,searchType2, keyword} = req.query;
+
+    keyword = keyword ? keyword : "";
+    let cri = {searchType,searchType2, keyword};
+
+    const tourVO =
+        await models.tour.findOne({
+            raw: true,
+            where: {
+                id : req.query.id
+            }
+        });
+
+
+    res.render("manager/tour/tourModify", {Manager, Auth, tourVO,cri, moment});
+});
+
+router.post("/tourModify", async (req, res, next) => {
+    // header 공통 !!!
+    let Manager = {};
+    let Auth = {};
+
+    let body = {
+        raw: true,
+        id: req.body.id,
+        ldiv: req.body.ldiv,
+        tlocation: req.body.tlocation,
+        tname: req.body.tname,
+        startDate: req.body.startDate,
+        endDate: req.body.endDate,
+        taddr: req.body.taddr,
+        etime: req.body.etime,
+        capacity: req.body.capacity,
+        tprice: req.body.tprice
+    };
+
+    const update = await models.tour.update(
+        body,
+        {
+            where : {
+                id : req.query.id
+            }
+        });
+
+    // 수정하고 수정된 페이지 보여줘야 하니까
+    // const tourVO = await models.tour.findOne({
+    //     where: {
+    //         id : req.query.id
+    //     }
+    // });
+
+    res.redirect("/manager/tourMngList");
+});
+
+router.get('/tourDelete', async (req, res, next) => {
+
+    let tourVO = await models.tour.findOne({
+        raw: true,
+        where: {
+            id : req.query.id
+        }
+    });
+    models.tour.destroy({
+        where: {
+            id : req.query.id,
+        }
+    }).then( (result) => {
+        console.log('----------삭제되었습니다------->', result);
+    }).catch( (err) => {
+        console.log('삭제 실패!!', err);
+        next(err);
+    })
+
+    res.redirect("/manager/tourMngList");
+})
+
 // 🚗 렌트카 관리-----------------
 // 렌트카 관리 전체 목록
 router.get('/rentcarMngList', async (req, res, next) => {
@@ -569,7 +762,7 @@ router.get('/rentcarMngList', async (req, res, next) => {
 
     let {searchType, keyword} = req.query;
 
-    const contentSize = Number(process.env.CONTENTSIZE); // 한페이지에 나올 개수
+    const contentSize = Number(10); // 한페이지에 나올 개수
     const currentPage = Number(req.query.currentPage) || 1; //현재페이지
     const {limit, offset} = getPagination(currentPage, contentSize);
 
@@ -609,11 +802,101 @@ router.get('/rentcarRegister', async (req, res, next) => {
 
     let Manager = {};
     let Auth = {};
-    let autoNo = '';
 
-    res.render("manager/rentcar/rentcarRegister", {Manager, Auth, autoNo});
+    let autoNO = "";
+
+    res.render("manager/rentcar/rentcarRegister", {Manager, Auth, autoNO});
 });
 
+router.post("/rentcarRegister", async (req, res, next) => {
+    // header 공통 !!!
+    let Manager = {};
+    let Auth = {};
+
+    const register = await models.rentcar.create({
+        raw : true,
+        cdiv: req.body.cdiv,
+        cno: req.body.cno,
+        rentddate: req.body.rentddate,
+        returndate: req.body.returndate,
+        rentaddr: req.body.rentaddr,
+        returnaddr: req.body.returnaddr,
+        price: req.body.price,
+        capacity: req.body.capacity,
+        insurance: req.body.insurance,
+        ldiv: req.body.ldiv
+    });
+
+    res.redirect("/manager/rentcarMngList");
+});
+
+router.get('/rentcarDetailForm', async (req, res, next) => {
+// header 공통 !!!
+    let Manager = {};
+    let Auth = {};
+
+    const rentcarVO =
+        await models.rentcar.findOne({
+            raw: true,
+            where: {
+                id : req.query.id
+            }
+        });
+
+    res.render("manager/rentcar/rentcarDetailForm", {Manager, Auth, rentcarVO})
+});
+
+router.post('/rentcarDetailFormUpdate', async (req, res, next) => {
+    // header 공통 !!!
+    let Manager = {};
+    let Auth = {};
+
+    let body = {
+        raw: true,
+        id: req.body.id,
+        cdiv: req.body.cdiv,
+        cno: req.body.cno,
+        rentddate: req.body.rentddate,
+        returndate: req.body.returndate,
+        rentaddr: req.body.rentaddr,
+        returnaddr: req.body.returnaddr,
+        price: req.body.price,
+        capacity: req.body.capacity,
+        insurance: req.body.insurance,
+        ldiv: req.body.ldiv
+    };
+
+    const update = await models.rentcar.update(body,
+        {
+            where : {
+                id : req.query.id
+            }
+        });
+
+    res.redirect("/manager/rentcarMngList");
+});
+
+router.get('/delRentcar', async (req, res, next) => {
+
+    let rentcarVO = await models.rentcar.findOne({
+        raw: true,
+        where: {
+            id : req.query.id
+        }
+    });
+    models.rentcar.destroy({
+        where: {
+            id : req.query.id,
+        }
+    }).then( (result) => {
+        console.log('----------삭제되었습니다------->', result);
+    }).catch( (err) => {
+        console.log('삭제 실패!!', err);
+        next(err);
+    })
+
+    res.redirect("/manager/rentcarMngList");
+})
 
 // --------------------------------------------------------------- 상품 관리 --------------------------------------------
 //상품 전체 목록
@@ -665,10 +948,7 @@ router.get('/productMngList', async (req, res, next) => {
             },
         ],
         where: {
-            // pname: {
-            //     [Op.like]: "%" + '제주' + "%"
-            // }
-            // id : 13
+
 
         },
         limit, offset
@@ -676,14 +956,6 @@ router.get('/productMngList', async (req, res, next) => {
     let dataCountAll = await models.product.findAndCountAll({
         where: {
 
-            // [Op.or]: [
-            //     {
-            //         userid: { [Op.like]: "%" +keyword+ "%" }
-            //     },
-            //     {
-            //         username: { [Op.like]: "%" + keyword + "%" }
-            //     }
-            // ]
         },
         limit, offset
     });
@@ -700,6 +972,53 @@ router.get('/productMngList', async (req, res, next) => {
     // res.send("ddddddddddddddd"+list);
 
     res.render("manager/product/productMngList", {cri, list, pagingData, Manager, Auth});
+});
+
+router.get('/productDetail', async (req, res, next) => {
+// header 공통 !!!
+    let Manager = {};
+    let Auth = {};
+
+    const vo = await product.findOne({
+        // raw : true,
+        nest: true,
+        attributes: ['id', 'pname', 'pcontent', 'pexpire', 'pprice', 'ppic'],
+        include: [
+            {
+                model: models.airplane,
+                attributes: ['price', 'ano'],
+                as: 'airplaneId_airplanes',
+                nest: true,
+                paranoid: true,
+                required: false,
+            },
+            {
+                model: models.hotel,
+                attributes: ['checkin', 'checkout', 'price', 'hname'],
+                as: 'hotelId_hotels',
+                nest: true,
+                paranoid: true,
+                required: false,
+            },
+            {
+                model: models.tour,
+                attributes: ['tprice'],
+                as: 'tourId_tours',
+                nest: true,
+                paranoid: true,
+                required: false,
+            },
+            {
+                model: models.rentcar,
+                as: 'rentcarId_rentcars',
+                nest: true,
+                paranoid: true,
+                required: false,
+            },
+        ]
+    });
+
+    res.render("manager/product/productDetail", {Manager, Auth, vo})
 });
 
 
