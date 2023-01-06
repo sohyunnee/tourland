@@ -1,10 +1,11 @@
 <%- include ('../../include/header.ejs') %>
-<link href="/resources/plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css">
-<script type="text/javascript" src="/resources/plugins/datepicker/bootstrap-datepicker.js"></script>
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
-<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
-<link rel="stylesheet" href="/resources/plugins/bootstrap-slider/slider.css">
-<script src="/resources/plugins/bootstrap-slider/bootstrap-slider.js"></script>
+
+<link href="/plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="/plugins/datepicker/bootstrap-datepicker.js"></script>
+<link rel="stylesheet" href="https:////cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+<link rel="stylesheet" href="/plugins/bootstrap-slider/slider.css">
+<script src="/plugins/bootstrap-slider/bootstrap-slider.js"></script>
 <script>
     $(function() {
         var makeOption = function() {
@@ -43,20 +44,71 @@
             $("#location").empty();
             makeOption();
         })
-        $("form").submit(function(){
-            var price = $("#price").val();
-            var priceReg = /^[0-9]*$/;
-            if(!priceReg.test(price)) {
-                alert("숫자만 입력하세요")
-                return false;
-            }
-        })
         makeOption();
         $("div option").each(function(i,obj){
             var location = "<%=tourVO.tlocation%>";
             if($(obj).val()==location) {
                 $(obj).prop("selected",true);
             }
+        })
+
+        $("#btnModify").click(function () {
+            $(".error").css("display", "none");
+            var id = $("input[name='id']").val();
+            var ldiv = $("select[name='ldiv']").val();
+            var tlocation = $("select[name='location']").val();
+            var tname = $("input[name='tname']").val();
+            var startDate = $("input[name='startDate']").val();
+            var endDate = $("input[name='endDate']").val();
+            var taddr = $("input[name='taddr']").val();
+            var etime = $("input[name='etime']").val();
+            var capacity = $("input[name='capacity']").val();
+            var tprice = $("input[name='tprice']").val();
+            var priceReg = /^[0-9]*$/;
+            if(!priceReg.test(tprice)) {
+                alert("숫자만 입력하세요")
+                return false;
+            }
+
+            alert("ddddddddddddd");
+
+            let data = {
+                id:id,
+                ldiv:ldiv,
+                tlocation:tlocation,
+                tname:tname,
+                startDate:startDate,
+                endDate:endDate,
+                taddr:taddr,
+                etime:etime,
+                capacity:capacity,
+                tprice:priceReg
+            }
+
+            $.ajax({
+                url: "/manager/tourModify",
+                type: 'post',
+                traditional: true,
+                data: data,
+                dataType: "json",
+                success: function (res) {
+                    if (res.responseText === "modifyfaild") {
+                        $("#errormsg").text("오류발생.");
+                    }else if(res.responseText === "modifysuccess"){
+                        confirm("수정을 완료 했습니다. 이동합니다.");
+                        location.href = "/manager/tourMngList";
+                    }
+                    else return;
+                },
+                error: function (res) {
+                    alert("1111->" + res);
+                    console.log(res);
+                    if (res.responseText === "modfail") {
+                        alert("수정 실패");
+                        return;
+                    }
+                }
+            })
         })
     })
 </script>
@@ -67,7 +119,7 @@
                 <div class="box-header">
                     <h3 class="box-title">현지 투어 등록</h3>
                 </div>
-                <form role="form" action="tourModify" method="post">
+                <form>
                     <input type="hidden" value="<%=cri.page%>" name="page">
                     <input type="hidden" value="<%=cri.searchType%>" name="searchType">
                     <input type="hidden" value="<%=cri.searchType2%>" name="searchType2">
@@ -75,12 +127,12 @@
                     <div class="box-body">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>번호</label> <input type="text" value="<%=tourVO.id%>" name="id"
+                                <label>번호</label> <input type="text" value="<%=tourVO.id%>" name="id" id="id"
                                                          class="form-control" readonly="readonly">
                             </div>
                             <div class="form-group">
                                 <label>지역구분</label> <select class="form-control" name="ldiv"
-                                                            id="div">
+                                                            id="ldiv">
                                     <option value='1' <%=tourVO.ldiv?'selected':''%>>해외</option>
                                     <option value='0' <%=!tourVO.ldiv?'selected':''%>>국내</option>
                                 </select>
@@ -91,7 +143,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>투어 제목</label> <input type="text" name="tname"
+                                <label>투어 제목</label> <input type="text" name="tname" id="tname"
                                                             class="form-control" placeholder="제목을 입력하세요"
                                                             required="required" value="<%=tourVO.tname%>">
                             </div>
@@ -106,7 +158,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>주소</label> <input type="text" name="taddr"
+                                <label>주소</label> <input type="text" name="taddr" id="taddr"
                                                          class="form-control" required="required" value="<%=tourVO.taddr%>">
                             </div>
                             <div class="form-group">
@@ -115,16 +167,16 @@
                             </div>
                             <div class="form-group">
                                 <label>인원수</label>
-                                <input type="text" name="capacity" id="capacity" class="form-control" required="required" data-slider-min="0" data-slider-max="40" data-slider-step="1" data-slider-value="<%=tourVO.capacity%>">
+                                <input type="text" name="capacity" id="capacity" class="form-control" required="required" id="capacity" data-slider-min="0" data-slider-max="40" data-slider-step="1" data-slider-value="<%=tourVO.capacity%>">
                             </div>
                             <div class="form-group">
                                 <label>가격</label> <input type="text" name="tprice"
-                                                         class="form-control" required="required" id="price" value="<%=tourVO.tprice%>">
+                                                         class="form-control" required="required" id="tprice" value="<%=tourVO.tprice%>">
                             </div>
                         </div>
                     </div>
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary">수정</button>
+                        <input type="button" id="btnModify" class="btn btn-primary" value="수정">
                     </div>
                 </form>
             </div>

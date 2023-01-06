@@ -41,6 +41,12 @@
         width: 485px;
     }
 
+    .box-footer input{
+        width: 200px;
+        height: 65px;
+        font-size: 20px;
+        margin-left:20px;
+    }
     .box-footer button{
         width: 200px;
         height: 65px;
@@ -88,10 +94,21 @@
             location.href = "/manager/hotelMngList";
         })
 
-        $("form").submit(function(e){
+        $("#btnModify").click(function () {
             $(".error").css("display", "none");
+            var id = $("input[name='id']").val();
+            var hname = $("input[name='hname']").val();
+            var haddr = $("input[name='haddr']").val();
+            var checkin = $("input[name='checkin']").val();
+            var checkout = $("input[name='checkout']").val();
+            var capacity = $("select[name='capacity']").val();
+            var roomtype = $("select[name='roomtype']").val();
+            var ldiv = $("select[name='ldiv']").val();
+            var bookedup = $("select[name='bookedup']").val();
+
+
             var price = $("input[name='price']").val();
-            var capa = $("input[name='roomcapacity']").val();
+            var roomcapacity = $("input[name='room-capacity']").val();
 
             var priceReg = /^[0-9]{3,13}$/; //가격은 3-13 숫자
             if (priceReg.test(price) == false) {
@@ -100,11 +117,51 @@
             }
 
             var capaReg = /^[0-9]{1,3}$/;
-            if (capaReg.test(capa) == false) {
-                $("input[name='roomcapacity']").next().css("display", "inline");
+            if (capaReg.test(roomcapacity) == false) {
+                $("input[name='room-capacity']").next().css("display", "inline");
                 return false;
             }
+
+            let data = {
+                id:id,
+                hname:hname,
+                haddr:haddr,
+                checkin:checkin,
+                checkout:checkout,
+                capacity:capacity,
+                price:price,
+                roomcapacity:roomcapacity,
+                roomtype:roomtype,
+                ldiv:ldiv,
+                bookedup:bookedup,
+            }
+
+            $.ajax({
+                url: "/manager/hotelModify",
+                type: 'post',
+                traditional: true,
+                data: data,
+                dataType: "json",
+                success: function (res) {
+                    if (res.responseText === "modifyfaild") {
+                        $("#errormsg").text("오류발생.");
+                    }else if(res.responseText === "modifysuccess"){
+                        confirm("수정을 완료 했습니다. 이동합니다.");
+                        location.href = "/manager/hotelMngList";
+                    }
+                    else return;
+                },
+                error: function (res) {
+                    alert("1111->" + res);
+                    console.log(res);
+                    if (res.responseText === "loginfail") {
+                        alert("로그인 실패");
+                        return;
+                    }
+                }
+            })
         })
+
 
     })
 </script>
@@ -115,14 +172,14 @@
                 <div class="box-header">
                     <h3 class="box-title">호텔 상품 등록</h3>
                 </div>
-                <form role="form" action="hotelModify" method="post">
+                <form>
                     <input type="hidden" value="<%=cri.page%>" name="page">
                     <input type="hidden" value="<%=cri.searchType%>" name="searchType">
                     <input type="hidden" value="<%=cri.keyword%>" name="keyword">
                     <div class="box-body">
                         <div class="noNameAddr">
                             <label><span class="red">*</span>번호</label>
-                            <input type="text" name="id" class="form-control" value="<%=hotelVo.id%>" readonly data-no="">
+                            <input type="text" name="id" class="form-control"  id="hotelid" value="<%=hotelVo.id%>" readonly data-no="<%=hotelVo.id%>">
                         </div>
                         <div class="noNameAddr">
                             <label><span class="red">*</span>호텔이름</label>
@@ -181,9 +238,10 @@
                                 <option value="1" <%=hotelVo.bookedup == 1? 'selected':''%>>예약불가능</option>
                             </select>
                         </div>
+                        <div id="errormsg"></div>
                         <div class="box-footer">
-                            <button type="submit" class="btn btn-primary">수정</button>
-                            <button class="btn btn-primary" id="goList">돌아가기</button>
+                            <input type="button" id="btnModify" class="btn btn-primary" value="수정">
+                            <input type="button" class="btn btn-primary" id="goList" value="돌아가기">
                         </div>
                     </div>
                 </form>

@@ -1,4 +1,4 @@
-<%- include (../../include/header.ejs) %>
+<%- include ('../../include/header.ejs') %>
 
 <style>
     h2 {
@@ -81,7 +81,7 @@
         margin: 0;
     }
 </style>
-<%- include (productModifyForm_script.ejs) %>
+<%- include ('productModifyForm_script.ejs') %>
 <body>
 <div class="container">
     <div class="row">
@@ -120,16 +120,15 @@
                                 <th>좌석</th>
                                 <th>가격</th>
                             </tr>
-                            <%= vo.air.forEach(f => { %>
+                            <%= vo.airplaneId_airplanes.forEach(f => { %>
                             <tr class="flightList">
-                                <td><%= f.no %><input type="hidden" name="airNo" value="<%= f.no %>"></td>
+                                <td><%= f.id %><input type="hidden" name="airNo" value="<%= f.id %>"></td>
                                 <td><%= f.ano %></td>
                                 <td><%= f.dlocation %></td>
                                 <td><%= f.rlocation %></td>
-                                <td id="ddate" data-ddate="<%= f.ddate %>" pattern="yyyy-MM-dd"><%= f.ddate %> pattern
-                                    ="yyyy-MM-dd"
+                                <td id="ddate" data-ddate="<%= f.ddate %>" pattern="yyyy-MM-dd"><%= f.ddate %>
                                 </td>
-                                <td><%= f.rdate %>" pattern ="yyyy-MM-dd"</td>
+                                <td><%= f.rdate %></td>
                                 <td><%= f.ldiv==1?'국내':'해외' %></td>
                                 <td id="acapacity" data-capacity="<%= f.capacity %>"><%= f.capacity %></td>
                                 <% if (f.seat == 'F') { %>
@@ -173,17 +172,15 @@
                                 <th>장소구분</th>
                                 <th>예약 가능 여부</th>
                             </tr>
-                            <% vo.hotel.forEach( hotel => { %>
+                            <% vo.hotelId_hotels.forEach( hotel => { %>
                             <tr class="hotelList">
-                                <td id="dateDiff"><%= hotel.no %><input type="hidden" name="hotelNo"
-                                                                        value="<%= hotel.no %>"></td>
+                                <td id="dateDiff"><%= hotel.id %><input type="hidden" name="hotelNo"
+                                                                        value="<%= hotel.id %>"></td>
                                 <td><%= hotel.hname %></td>
                                 <td><%= hotel.haddr %></td>
-                                <td id="checkin" data-checkin="<%= hotel.checkin %>"
-                                    pattern="yyyy-MM-dd"><%= hotel.checkin %> pattern="yyyy-MM-dd"
+                                <td id="checkin" data-checkin="<%= hotel.checkin %>"><%= hotel.checkin %>
                                 </td>
-                                <td id="checkout" data-checkout="<%= hotel.checkout %>"
-                                    pattern="yyyy-MM-dd"><%= hotel.checkout %> pattern="yyyy-MM-dd"
+                                <td id="checkout" data-checkout="<%= hotel.checkout %>"><%= hotel.checkout %>
                                 </td>
                                 <td id="hcapacity" data-capacity="<%= hotel.capacity %>"><%= hotel.capacity %>
                                     <span>인</span></td>
@@ -238,18 +235,17 @@
                                 <th>가격</th>
                                 <th>장소구분</th>
                             </tr>
-                            <% vo.tour.forEach( tour => { %>
+                            <% vo.tourId_tours.forEach( tour => { %>
                             <tr class="tourList">
-                                <td><%= tour.no %><input type="hidden" name="tourNo" value="<%= tour.no %>"></td>
+                                <td><%= tour.id %><input type="hidden" name="tourNo" value="<%= tour.id %>"></td>
                                 <td><%= tour.tname %></td>
                                 <td><%= tour.tlocation %></td>
-                                <td><%= tour.startDate %>" pattern="yyyy-MM-dd"</td>
-                                <td><%= tour.endDate %>" pattern="yyyy-MM-dd"</td>
+                                <td><%= tour.startDate %></td>
+                                <td><%= tour.endDate %></td>
                                 <td><%= tour.taddr %></td>
-                                <td><%= tour.etime %> pattern="HH:mm:ss"</td>
+                                <td><%= tour.etime %></td>
                                 <td id="tcapacity" data-capacity="<%= tour.capacity %>"><%= tour.capacity %></td>
-                                <td id="tprice" data-price="<%= tour.tprice %>"><%= tour.tprice %>" pattern="###,###"
-                                </td>
+                                <td id="tprice" data-price="<%= tour.tprice %>"><%= tour.tprice %></td>
                                 <td><%= tour.ldiv?'국내':'해외' %></td>
                             </tr>
                             <% }) %>
@@ -278,14 +274,14 @@
                                 <th>보험여부</th>
                                 <th>국내/해외</th>
                             </tr>
-                            <% vo.rentcar.forEach(rentcarList => { %>
+                            <% vo.rentcarId_rentcars.forEach(rentcarList => { %>
                             <tr class="rentcarList">
-                                <td><%= rentcarList.no %><input type="hidden" name="rentcarNo"
-                                                                value="<%= rentcarList.no %>"></td>
+                                <td><%= rentcarList.id %><input type="hidden" name="rentcarNo"
+                                                                value="<%= rentcarList.id %>"></td>
                                 <td><%= rentcarList.cdiv %></td>
                                 <td><%= rentcarList.cno %></td>
-                                <td><%= rentcarList.rentddate %>" pattern="yyyy-MM-dd "</td>
-                                <td><%= rentcarList.returndate %>" pattern="yyyy-MM-dd "</td>
+                                <td><%= rentcarList.rentddate %></td>
+                                <td><%= rentcarList.returndate %></td>
                                 <td><%= rentcarList.rentaddr %></td>
                                 <td><%= rentcarList.returnaddr %></td>
                                 <td id="rprice" data-price="<%= rentcarList.price %>"><%= rentcarList.price %></td>
@@ -299,7 +295,7 @@
                     <div class="group">
                         <div class="form-group">
                             <label><span class="red">*</span>상품 번호</label>
-                            <input type="text" class="form-control" readonly="readonly" value="<%= vo.pno %>"
+                            <input type="text" class="form-control" readonly="readonly" value="<%= vo.id %>"
                                    name="pno">
                         </div>
                         <div class="form-group">
@@ -314,7 +310,7 @@
                         </div>
                     </div>
                     <div>
-                        <textarea name="pcontent" rows="80" id="detail"><%= vo.pcontent %></textarea>
+                        <textarea name="pcontent" rows="80" id="detail"><%- vo.pcontent %></textarea>
                     </div>
                     <div class="group">
                         <div class="form-group">
@@ -325,7 +321,7 @@
                         <div class="form-group">
                             <label><span class="red">*</span>상품 유효기간</label> <input
                                     type="text" class="form-control" id="pexpire" name="pexpire"
-                                    value='<%= vo.pexpire %>" pattern="yyyy-MM-dd"' readonly="readonly">
+                                    value='<%= vo.pexpire %>' readonly="readonly">
                         </div>
                     </div>
                     <div class="group">
@@ -333,9 +329,9 @@
                             <label><span class="red">*</span>상품 사진</label> <input
                                     type="file" class="form-control" id="file" name="file">
                             <div id="preview" style="display : inline;">
-                                <% if(vo.pic != null) { %>
-                                <img src="displayFile/productSmall?filename=<%= vo.pic %>" style="margin : 10px;">
-                                <input type="hidden" name="originalPic" value="<%= vo.pic %>">
+                                <% if(vo.ppic != null) { %>
+                                <img src="/displayFile/productSmall?filename=<%= vo.ppic %>" style="margin : 10px;">
+                                <input type="hidden" name="originalPic" value="<%= vo.ppic %>">
                                 <% } %>
                             </div>
                         </div>
@@ -364,7 +360,7 @@
                     <div class="box-body">
                         <select name="searchType" id="searchType">
                             <option value="n">선택하세요</option>
-                            <option value="no">번호</option>
+                            <option value="id">번호</option>
                             <option value="ano">항공기 번호</option>
                             <option value="rloca">도착 지역</option>
                         </select> <input type="text" name="keyword" id="keywordInput">
@@ -385,13 +381,13 @@
                                 <th>가격</th>
                             </tr>
                             <% flightListDepature.forEach( f => { %>
-                            <tr class='flightList' data-no="<%= f.no %>">
-                                <td><%= f.no %></td>
+                            <tr class='flightList' data-no="<%= f.id %>">
+                                <td><%= f.id %></td>
                                 <td><%= f.ano %></td>
                                 <td><%= f.dlocation %></td>
                                 <td><%= f.rlocation %></td>
-                                <td><%= f.ddate %> pattern ="yyyy-MM-dd"</td>
-                                <td><%= f.rdate %> pattern ="yyyy-MM-dd"</td>
+                                <td><%= f.ddate %></td>
+                                <td><%= f.rdate %></td>
                                 <% if (f.ldiv == 0) { %>
                                     <td>해외</td>
                                 <% } %>
@@ -464,13 +460,13 @@
                                 <th>가격</th>
                             </tr>
                             <% flightListRending.forEach( f => { %>
-                            <tr class='flightList' data-no="<%= f.no %>">
-                                <td><%= f.no %></td>
+                            <tr class='flightList' data-no="<%= f.id %>">
+                                <td><%= f.id %></td>
                                 <td><%= f.ano %></td>
                                 <td><%= f.dlocation %></td>
                                 <td><%= f.rlocation %></td>
-                                <td><%= f.ddate %> pattern ="yyyy-MM-dd"</td>
-                                <td><%= f.rdate %> pattern ="yyyy-MM-dd"</td>
+                                <td><%= f.ddate %></td>
+                                <td><%= f.rdate %></td>
                                 <% if (f.ldiv == 0) { %>
                                     <td>해외</td>
                                 <% } %>
@@ -548,12 +544,12 @@
                                 <th>예약 가능 여부</th>
                             </tr>
                             <% hotelList.forEach( hotel => { %>
-                            <tr class="hotelList" data-no="<%= hotel.no %>">
-                                <td><%= hotel.no %></td>
+                            <tr class="hotelList" data-no="<%= hotel.id %>">
+                                <td><%= hotel.id %></td>
                                 <td><%= hotel.hname %></td>
                                 <td><%= hotel.haddr %></td>
-                                <td><%= hotel.checkin %> pattern="yyyy-MM-dd"</td>
-                                <td><%= hotel.checkout %> pattern="yyyy-MM-dd"</td>
+                                <td><%= hotel.checkin %></td>
+                                <td><%= hotel.checkout %></td>
                                 <td><%= hotel.capacity %><span>인</span></td>
                                 <td><%= hotel.price %></td>
                                 <td><%= hotel.roomcapacity %><span>실</span></td>
@@ -644,16 +640,16 @@
                                 <th>장소구분</th>
                             </tr>
                             <% tourList.forEach( tour => { %>
-                            <tr class="tourList" data-no="<%= tour.no %>">
-                                <td><%= tour.no %></td>
+                            <tr class="tourList" data-no="<%= tour.id %>">
+                                <td><%= tour.id %></td>
                                 <td><%= tour.tname %></td>
                                 <td><%= tour.tlocation %></td>
-                                <td><%= tour.startDate %> pattern="yyyy-MM-dd"</td>
-                                <td><%= tour.endDate %> pattern="yyyy-MM-dd"</td>
+                                <td><%= tour.startDate %></td>
+                                <td><%= tour.endDate %></td>
                                 <td><%= tour.taddr %></td>
-                                <td><%= tour.etime %> pattern="HH:mm:ss"</td>
+                                <td><%= tour.etime %></td>
                                 <td><%= tour.capacity %></td>
-                                <td><%= tour.tprice %> pattern="###,###"</td>
+                                <td><%= tour.tprice %></td>
                                 <td><%= tour.ldiv?'국내':'해외' %></td>
                             </tr>
                             <% }) %>
@@ -735,12 +731,12 @@
                                 <th>국내/해외</th>
                             </tr>
                             <% rentcarList.forEach( rentcar => { %>
-                            <tr class="rentcarList" data-no="<%= rentcar.no %>">
-                                <td><%= rentcar.no %></td>
+                            <tr class="rentcarList" data-no="<%= rentcar.id %>">
+                                <td><%= rentcar.id %></td>
                                 <td><%= rentcar.cdiv %></td>
                                 <td><%= rentcar.cno %></td>
-                                <td><%= rentcar.rentddate %> pattern="yyyy-MM-dd "</td>
-                                <td><%= rentcar.returndate %> pattern="yyyy-MM-dd "</td>
+                                <td><%= rentcar.rentddate %></td>
+                                <td><%= rentcar.returndate %></td>
                                 <td><%= rentcar.rentaddr %></td>
                                 <td><%= rentcar.returnaddr %></td>
                                 <td><%= rentcar.price %></td>
@@ -779,4 +775,4 @@
 </div>
 </body>
 </html>
-<%- include (../../include/footer.ejs) %>
+<%- include ('../../include/footer.ejs') %>

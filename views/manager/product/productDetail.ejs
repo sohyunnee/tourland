@@ -80,24 +80,20 @@
 <script>
     $(function () {
         $("#mod").click(function () {
-            var no = "<%= vo.pno %>";
+            var id = "<%= vo.id %>";
             var page = "<%= cri.page %>";
             var searchType = "<%= cri.searchType %>";
             var searchType2 = "<%= cri.searchType2 %>";
             var keyword = "<%= cri.keyword %>";
-            location.href = "productModify?no=" + no + "&page=" + page + "&searchType=" + searchType + "&keyword=" + keyword;
+            location.href = "productModify?id="+id;
         })
         $("#del").click(function () {
             if (!confirm("정말 삭제하시겠습니까?")) {
                 alert("삭제가 취소되었습니다");
                 return false;
             }
-            var no = "<%= vo.pno %>";
-            var page = "<%= cri.page %>";
-            var searchType = "<%= cri.searchType %>";
-            var searchType2 = "<%= cri.searchType2 %>";
-            var keyword = "<%= cri.keyword %>";
-            location.href = "productDelete?no=" + no + "&page=" + page + "&searchType=" + searchType + "&keyword=" + keyword;
+            var id = "<%= vo.id %>";
+            location.href = "productDelete?id="+id;
         })
         $("#return").click(function () {
             var page = "<%= cri.page %>";
@@ -145,8 +141,8 @@
                             <td><%= f.ano %></td>
                             <td><%= f.dlocation %></td>
                             <td><%= f.rlocation %></td>
-                            <td><%= f.ddate %> pattern ="yyyy-MM-dd"</td>
-                            <td><%= f.rdate %> pattern ="yyyy-MM-dd"</td>
+                            <td><%= moment(f.ddate).format('YYYY-MM-DD') %></td>
+                            <td><%= moment(f.rdate).format('YYYY-MM-DD') %></td>
                             <% if (f.ldiv == 0) { %>
                                 <td>해외</td>
                             <% } %>
@@ -193,8 +189,8 @@
                             <td><%= hotel.id %></td>
                             <td><%= hotel.hname %></td>
                             <td><%= hotel.haddr %></td>
-                            <td><%= hotel.checkin %> pattern="yyyy-MM-dd"</td>
-                            <td><%= hotel.checkout %> pattern="yyyy-MM-dd"</td>
+                            <td><%= moment(hotel.checkin).format('YYYY-MM-DD') %></td>
+                            <td><%= moment(hotel.checkout).format('YYYY-MM-DD') %></td>
                             <td><%= hotel.capacity %><span>인</span></td>
                             <td><%= hotel.price %></td>
                             <td><%= hotel.roomcapacity %><span>실</span></td>
@@ -247,12 +243,12 @@
                             <td><%= tour.id %></td>
                             <td><%= tour.tname %></td>
                             <td><%= tour.tlocation %></td>
-                            <td><%= tour.startDate %> pattern="yyyy-MM-dd"</td>
-                            <td><%= tour.endDate %> pattern="yyyy-MM-dd"</td>
+                            <td><%= moment(tour.startDate).format('YYYY-MM-DD') %></td>
+                            <td><%= moment(tour.endDate).format('YYYY-MM-DD') %></td>
                             <td><%= tour.taddr %></td>
-                            <td><%= tour.etime %> pattern="HH:mm:ss"</td>
+                            <td><%= tour.etime %></td>
                             <td><%= tour.capacity %></td>
-                            <td><%= tour.tprice %> pattern="###,###"</td>
+                            <td><%= tour.tprice %></td>
                             <td><%= tour.ldiv?'해외':'국내' %></td>
                         </tr>
                         <% }) %>
@@ -283,8 +279,8 @@
                             <td><%= rentcarList.id %></td>
                             <td><%= rentcarList.cdiv %></td>
                             <td><%= rentcarList.cno %></td>
-                            <td><%= rentcarList.rentddate %> pattern="yyyy-MM-dd "</td>
-                            <td><%= rentcarList.returndate %> pattern="yyyy-MM-dd "</td>
+                            <td><%= rentcarList.rentddate %></td>
+                            <td><%= rentcarList.returndate %></td>
                             <td><%= rentcarList.rentaddr %></td>
                             <td><%= rentcarList.returnaddr %></td>
                             <td><%= rentcarList.price %></td>
@@ -298,7 +294,7 @@
                 <div class="group">
                     <div class="form-group">
                         <label>상품 번호</label> <input type="text" class="form-control" readonly="readonly"
-                                                    value="<%= vo.pno %>">
+                                                    value="<%= vo.id %>">
                     </div>
                     <div class="form-group">
                         <label><span class="red">*</span>상품 이름</label> <input
@@ -313,7 +309,7 @@
                 </div>
                 <div class="group">
                     <div class="form-group" style="width : 100%;" id="detail">
-                        <%= vo.pcontent %>
+                        <%- vo.pcontent %>
                     </div>
                 </div>
                 <div class="group">
@@ -324,7 +320,7 @@
                     <div class="form-group">
                         <label><span class="red">*</span>상품 유효기간</label> <input
                                 type="text" class="form-control"
-                                value='<%=vo.pexpire%> pattern="yyyy-MM-dd"'
+                                value='<%=vo.pexpire%>'
                                 readonly="readonly">
                     </div>
                 </div>
@@ -334,7 +330,7 @@
                     </div>
                 </div>
                 <div style="width : 100%;">
-                    <img src="displayFile/product?filename=<%=vo.pic%>" style="width : 90%; margin : 10px;">
+                    <img src="/displayFile/product?filename=<%=vo.ppic%>" style="width : 90%; margin : 10px;">
                 </div>
                 <div class="box-footer" style="text-align : center;">
                     <button class="btn btn-warning" id="mod">수정</button>

@@ -78,11 +78,60 @@
             location.href="/manager/rentcarMngList";
         })
 
-        $("form").submit(function(){
-            alert("수정 되었습니다");
-        })
 
-        // alert("<%=rentcarVO.rentddate%>");
+        $("#btnModify").click(function () {
+            $(".error").css("display", "none");
+            var id = $("input[name='id']").val();
+            var cdiv = $("select[name='cdiv']").val();
+            var cno = $("input[name='cno']").val();
+            var rentddate = $("input[name='rentddate']").val();
+            var returndate = $("input[name='returndate']").val();
+            var rentaddr = $("input[name='rentaddr']").val();
+            var returnaddr = $("input[name='returnaddr']").val();
+            var price = $("input[name='price']").val();
+            var capacity = $("select[name='capacity']").val();
+            var insurance = $("select[name='insurance']").val();
+            var ldiv = $("select[name='ldiv']").val();
+
+
+            let data = {
+                id:id,
+                cdiv:cdiv,
+                cno:cno,
+                rentddate:rentddate,
+                returndate:returndate,
+                returnaddr:returnaddr,
+                price:price,
+                capacity:capacity,
+                insurance:insurance,
+                ldiv:ldiv
+            }
+
+            $.ajax({
+                url: "/manager/rentcarDetailFormUpdate",
+                type: 'post',
+                traditional: true,
+                data: data,
+                dataType: "json",
+                success: function (res) {
+                    if (res.responseText === "modifyfaild") {
+                        $("#errormsg").text("오류발생.");
+                    }else if(res.responseText === "modifysuccess"){
+                        confirm("수정을 완료 했습니다. 이동합니다.");
+                        location.href = "/manager/rentcarMngList";
+                    }
+                    else return;
+                },
+                error: function (res) {
+                    alert("1111->" + res);
+                    console.log(res);
+                    if (res.responseText === "loginfail") {
+                        alert("로그인 실패");
+                        return;
+                    }
+                }
+            })
+        })
     })
 </script>
 <div class="content">
@@ -92,7 +141,7 @@
                 <div class="box-header">
                     <h3 class="box-title">렌트카 상품 상세페이지</h3>
                 </div>
-                <form role="form" action="rentcarDetailFormUpdate" method="post" id="rentcarForm">
+                <form>
                     <div class="box-body">
                         <div class="noNameAddr">
                             <label><span class="red">*</span>번호</label>
@@ -157,7 +206,7 @@
                         </div>
 
                         <div class="box-footer" style="clear:both;">
-                            <button type="submit" class="btn btn-primary">수정</button> <br>
+                            <input type="button" class="btn btn-primary" id="btnModify" value="수정"><br>
                             <button type="button" class="btn btn-primary" id="btnReturnToList" style="margin-top:10px;">목록으로</button>
                         </div>
                     </div>
