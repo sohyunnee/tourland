@@ -140,9 +140,8 @@
 <header>
     <nav id="nav1">
         <ul>
-            <% if (
-                    Auth == "" || Auth == null || Auth == undefined || ( Auth != null && typeof Auth == "object" && !Object.keys(Auth).length )
-            ) { %>
+            <%
+            if (Auth.userid == "" || Auth.userid == null || Auth.userid == undefined || ( Auth.userid != null && typeof Auth.userid == "object" && !Object.keys(Auth.userid).length )) { %>
                 <li><a href="/customer/tourlandBoardNotice">고객센터</a></li>
                 <li><a href="/customer/tourlandRegister">회원가입</a></li>
                 <li><a href="/customer/loginForm" class="balance">로그인</a></li>

@@ -321,7 +321,7 @@
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="/manager/employeeDetail/<%= Auth.empretired %>?empno=<%= Auth.empno %>"
+                                    <a href="/manager/employeeDetail/<%= AuthEmp.empretired %>?empno=<%= AuthEmp.empno %>"
                                        class="btn btn-default btn-flat">프로필</a>
                                 </div>
                                 <div class="pull-right">
@@ -350,7 +350,7 @@
                 </div>
                 <div class="pull-left info">
                     <p><%= Manager.name %></p>
-                    <a href="/manager/employeeDetail/<%= Auth.empretired %>?empno=<%= Auth.empno %>">
+                    <a href="/manager/employeeDetail/<%= AuthEmp.empretired %>?empno=<%= AuthEmp.empno %>">
                         <i class="fa fa-circle text-success"></i> 내 프로필</a>
                 </div>
             </div>

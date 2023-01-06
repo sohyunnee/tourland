@@ -29,7 +29,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser("1234"));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({}));
+app.use(session({
+    // secret: 'keyboard cat',
+    // resave: false,
+    // saveUninitialized: true,
+    // cookie: { secure: true },
+
+}))
 
 // sequelize.sync({ force: false }) // 서버 실행시마다 테이블을 재생성할건지에 대한 여부
 //     .then(() => {

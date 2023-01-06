@@ -15,14 +15,17 @@ const moment = require("moment");
 const bodyParser = require('body-parser');
 const parser = bodyParser.urlencoded({extended : false});
 const {upload} = require("../../controller/fileupload");
+const {sessionEmpCheck} = require('../../controller/sessionCtl');
+
 
 // ------------------------------------- 관리자 페이지 메인 -------------------------------------
 router.get('/statistics', (req, res, next) => {
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res, next);
 
-    let Manager = {right: 1};
-    let Auth = {};
-
-    res.render("manager/main/statistics", {Manager, Auth});
+    console.log('-----관리자페이지메인------',);
+    console.log('------Auth???-------', Auth);
+    console.log('------AuthEmp-------', AuthEmp);
+    res.render("manager/main/statistics", {Manager, Auth, AuthEmp, login});
 });
 
 router.get('/userlist', (req, res, next) => {
@@ -34,10 +37,19 @@ router.get('/userlist', (req, res, next) => {
     res.render("userMngList", {cri, btnName, list});
 });
 
+// 관리자 마이프로필에서 관리자의 프로필 보기
+router.get('/employeeDetail', async(req, res, next) => {
+
+
+    res.redirect("/employeeDetail");
+})
+
+
 //----------------------------- 고객관리 ---------------------------------------
 // 고객 관리 전체 목록
 router.get('/userMngList/:usersecess', async (req, res, next) => {
     //usersecess 정상회원, 탈퇴회원 구분
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res, next);
 
     const usersecess = req.params.usersecess;
     let {searchType, keyword} = req.query;
@@ -94,18 +106,16 @@ router.get('/userMngList/:usersecess', async (req, res, next) => {
     let btnName = (Boolean(Number(usersecess)) ? "회원 리스트" : "탈퇴회원 조회");
 
     console.log("usersecbtt->", btnName)
-    let Manager = {right: 1};
-    let Auth = {};
     let list = dataAll;
 
-    res.render("manager/user/userMngList", {cri, list, btnName, pagingData, Manager, usersecess, Auth});
+    res.render("manager/user/userMngList", {cri, list, btnName, pagingData, Manager, usersecess, AuthEmp, Auth, login});
 });
 
 // ------------------------------------------------ 직원관리 --------------------------------------------------------
 // 직원 관리 전체 목록
 router.get('/employeeMngList/:empretired', async (req, res, next) => {
     //empretired 정상사원, 퇴사사원 구분
-
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res, next);
     const empretired = req.params.empretired;
     let {searchType, keyword} = req.query;
 
@@ -161,13 +171,11 @@ router.get('/employeeMngList/:empretired', async (req, res, next) => {
     let btnName = (Boolean(Number(empretired)) ? "직원 리스트" : "퇴사사원 조회");
 
     console.log("usersecbtt->", btnName)
-    let Manager = {};
-    let Auth = {};
     let list = dataAll;
 
-    res.render("manager/employee/employeeMngList", {cri, list, btnName, pagingData, Manager, empretired, Auth});
+    res.render("manager/employee/employeeMngList", {cri, list, btnName, pagingData, Manager, empretired, Auth, AuthEmp, login});
 });
-
+// 직원 상세보기
 router.get('/employeeDetailForm/:empretired', async (req, res, next) => {
     //empretired 일반사원, 퇴사사원 구분
 
@@ -183,10 +191,14 @@ router.get('/employeeDetailForm/:empretired', async (req, res, next) => {
 
     let cri = {};
     let Manager = {};
-    let Auth = {};
+    // header에서 관리자 프로필의 정보를 차은우로 고정시켜버림
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
     let success = "";
 
-    res.render("manager/employee/employeeDetailForm", {empVO, cri, Manager, Auth, empretired, success});
+    res.render("manager/employee/employeeDetailForm", {empVO, cri, Manager, empretired, success, AuthEmp});
 });
 
 router.post('/employeeDetailForm/:empretired', async (req, res, next) => {
@@ -205,15 +217,20 @@ router.post('/employeeDetailForm/:empretired', async (req, res, next) => {
 
     let cri = {};
     let Manager = {};
-    let Auth = {};
+    let AuthEmp = {
+        empretired: 0,
+        empno: 7
+    }
     let success = "";
 
-    res.render("manager/employee/employeeDetailForm", {empVO, cri, Manager, Auth, empretired, success});
+    res.render("manager/employee/employeeDetailForm", {empVO, cri, Manager, Auth, empretired, success, AuthEmp});
 });
 
 // 고객 정보 상세 보기
 router.get('/userDetailForm/:usersecess', async (req, res, next) => {
     //usersecess 정상회원, 탈퇴회원 구분
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res, next);
+
     const usersecess = req.params.usersecess;
     let {no, currentPage, searchType, keyword} = req.query;
 
@@ -225,11 +242,9 @@ router.get('/userDetailForm/:usersecess', async (req, res, next) => {
     console.log("userid->", userVO);
 
     let cri = {};
-    let Manager = {};
-    let Auth = {};
     let couponLists = [{}];
 
-    res.render("manager/user/userDetailForm", {userVO, cri, Manager, Auth, usersecess, couponLists});
+    res.render("manager/user/userDetailForm", {userVO, cri, Manager, Auth, usersecess, couponLists, AuthEmp, login});
 });
 
 

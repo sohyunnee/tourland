@@ -147,14 +147,14 @@
                             <label>주소</label>
                             <input type="text" name="empaddr" required="required" value="<%=empVO.empaddr%>" >
                         </div>
-                        <%if (Auth.empauth==1) {%>
+                        <%if (AuthEmp.empauth==1) {%>
                         <div class="form-group">
                             <label>권한</label>
                             <input type="text" name="empauth" required="required"  placeholder=" 일반사원은 0" value="<%=empVO.empauth%>">
                             <span class="errorMsg">0또는 1을 넣어주세요 일반 사원은 0</span>
                         </div>
                         <% } %>
-                        <%if (Auth.empauth==0) {%>
+                        <%if (AuthEmp.empauth==0) {%>
                         <div class="form-group">
                             <label>권한</label>
                             <input type="text" name="empauth" required="required"  placeholder=" 일반사원은 0" value="<%=empVO.empauth%>" readonly="readonly" style="background:lavender;">
@@ -174,7 +174,7 @@
                             <input type="text" name="emppass" placeholder="기존 비밀번호 입력 필요" >
                             <span class="errorMsg">비밀번호가 일치하지 않습니다.</span> 관리자일 경우 프리패스로 만들 것  -->
                         </div>
-                        <%if (Auth.empauth==1) {%>
+                        <%if (AuthEmp.empauth==1) {%>
                         <div class="box-footer">
                             <button type="button" class="btn btn-primary" style="background:red;" id="btnDel"><%=empretired =='0'?'퇴사사원처리':'삭제'%></button> <!-- 관리자일때만 활성화 -->
                             <button type="submit" class="btn btn-primary" style="<%=empretired== 0?'visibility:visible;':'visibility:hidden;'%>">수정</button>
@@ -182,7 +182,7 @@
                             <button type="button" class="btn btn-primary" style="margin-top:10px;" id="btnReturnToList">리스트로 돌아가기</button>
                         </div>
                         <% } %>
-                        <%if (Auth.empauth==0) {%>
+                        <%if (AuthEmp.empauth==0) {%>
                         <div class="box-footer">
                             <button type="submit" class="btn btn-primary" style="<%=empretired== 0?'visibility:visible;':'visibility:hidden;'%>">수정</button>
                         </div>
