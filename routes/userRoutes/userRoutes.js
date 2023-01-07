@@ -567,7 +567,7 @@ router.get("/logout", (req, res, next) => {
 
 // KR 패키지 목록
 router.get("/tourlandProductKRList", async (req, res, next) => {
-
+    let {Auth, AuthEmp, Manager, login} = sessionCheck(req,res);
     const userid = req.params.userid;
     let {ddate, rdate, cnt, searchType, keyword} = req.query;
     const contentSize = Number(process.env.CONTENTSIZE); // 한페이지에 나올 개수
@@ -674,6 +674,7 @@ router.get("/tourlandProductKRList", async (req, res, next) => {
         if (list != null) {
             res.render("user/product/tourlandProductKRList", {
                 Auth,
+                AuthEmp,
                 login,
                 tourDays,
                 date,
@@ -1344,7 +1345,7 @@ router.post('/tourlandPlanBoardRegister', async (req, res, next) => {
 // 여행 후기 게시판 목록 보기
 router.get('/tourlandCustBoard', async (req, res, next) => {
     // userHeader 에서 필요한 변수들
-    let Manager = {};
+    let {Auth, AuthEmp, Manager, login} = sessionCheck(req,res);
     let searchkeyword = "";
 
     const contentSize = 5 // 한페이지에 나올 개수
@@ -1373,14 +1374,15 @@ router.get('/tourlandCustBoard', async (req, res, next) => {
     let cri = currentPage;
 
 
-    res.render('user/board/tourlandCustBoard', {Auth, login, Manager, searchkeyword, cri, list, pagingData})
+    res.render('user/board/tourlandCustBoard', {Auth, AuthEmp, login, Manager, searchkeyword, cri, list, pagingData})
 })
 
 // 여행 후기 게시글 보기
 router.get('/tourlandCustBoardDetail', async (req, res, next) => {
     // userHeader 에서 필요한 변수들
-    let Manager = {};
-    let mypage = {};
+    let {Auth, AuthEmp, Manager, login} = sessionCheck(req,res);
+    let mypage = req.session.user.mypage;
+    let username = req.session.user.Auth.username;
     let searchkeyword = "";
 
     console.log('=---쿼리에서 id 추출 ---', req.query.id);
@@ -1395,10 +1397,11 @@ router.get('/tourlandCustBoardDetail', async (req, res, next) => {
     console.log('----게시글보기====', custBoardVO);
     // custBoardVO 테이블에 있는 자료중 1개만갖고오기
 
-    console.log('------현재사용자????----->>>>', mypage);
+    console.log('------현재사용자????----->>>>', Auth);
+    console.log('-------현재사용자mypage??------', mypage);
 
 
-    res.render('user/board/tourlandCustBoardDetail', {custBoardVO, Auth, login, Manager, searchkeyword, mypage});
+    res.render('user/board/tourlandCustBoardDetail', {custBoardVO, Auth, AuthEmp, login, Manager, searchkeyword, mypage, username});
 })
 
 
@@ -1664,10 +1667,10 @@ router.get("/tourlandEventList/ingEvent", async (req, res, next) => {
     let mistyrose = {};
 
     // userHeader 에서 필요한 변수들
-    let Manager = {};
+    let {Auth, AuthEmp, Manager, login} = sessionCheck(req,res);
     let searchkeyword = "";
 
-    res.render("user/event/tourEventList", {Auth, login, Manager, searchkeyword, eventList, mistyrose});
+    res.render("user/event/tourEventList", {Auth, AuthEmp, login, Manager, searchkeyword, eventList, mistyrose});
 });
 
 // 만료된 이벤트 목록
@@ -1684,10 +1687,10 @@ router.get("/tourlandEventList/expiredEvent", async (req, res, next) => {
     let mistyrose = {};
 
     // userHeader 에서 필요한 변수들
-    let Manager = {};
+    let {Auth, AuthEmp, Manager, login} = sessionCheck(req,res);
     let searchkeyword = "";
 
-    res.render("user/event/tourEventEndList", {Auth, login, Manager, searchkeyword, eventList, mistyrose});
+    res.render("user/event/tourEventEndList", {Auth, AuthEmp, login, Manager, searchkeyword, eventList, mistyrose});
 });
 
 // 이벤트 상세페이지

@@ -23,7 +23,30 @@
 				$("#hiddenInfo").val("1");
 			}
 		})
-		
+
+	})
+	$("#btnSubmit").click(function() {
+		$.ajax({
+			url: "/manager/addNoticeForm",
+			type: "post",
+			dataType: "json",
+			success: function (res) {
+				console.log('---------', res);
+				console.log('등록성공!!!', res);
+				// if (res.responseText === "addSuccess") {
+				alert("등록 성공!!");
+				location.href = "/manager/noticeMngList";
+				// } else {
+				// 	$("#responseText").val("문제가 발생 했습니다. 관리자에 문의 하세요.");
+				// 	// alert("수정을 완료했습니다.");
+				// }
+			},
+			error: function (res) {
+				console.log("error------");
+
+			}
+
+		})
 	})
 	
 </script>   
@@ -70,7 +93,7 @@
 			<div class="group"></div>
 			   <div class="group">
 			    <div class="form-group">
-			      	<button class="btn btn-primary">등록</button>
+			      	<button id="btnSubmit" class="btn btn-primary">등록</button>
 			    </div>
 		    </div>
 		    </div>

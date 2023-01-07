@@ -37,13 +37,6 @@ router.get('/userlist', (req, res, next) => {
     res.render("userMngList", {cri, btnName, list});
 });
 
-// 관리자 마이프로필에서 관리자의 프로필 보기
-router.get('/employeeDetail', async(req, res, next) => {
-
-
-    res.redirect("/employeeDetail");
-})
-
 
 //----------------------------- 고객관리 ---------------------------------------
 // 고객 관리 전체 목록
@@ -1878,8 +1871,8 @@ router.delete('/deletePlanBoard', async (req, res, next) => {
 // --------------------------------------------------------------- 📢️️ 공지사항 관리 ------------------------------------------
 router.get('/noticeMngList', async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
+    if(Manager == undefined) res.redirect("/customer");
 
     const usersecess = req.params.usersecess;
     let {searchType, keyword} = req.query;
@@ -1929,18 +1922,18 @@ router.get('/noticeMngList', async (req, res, next) => {
     const pagingData = getPagingData(noticeNoFixedCountList, currentPage, limit);
     console.log('---------', noticeNoFixedList);
 
-    res.render("manager/notice/noticeMngList", {Manager, Auth, cri, noticeFixedList, noticeNoFixedList, pagingData});
+    res.render("manager/notice/noticeMngList", {Manager, AuthEmp, cri, noticeFixedList, noticeNoFixedList, pagingData});
 })
 
 //공지사항 추가하는 화면
 router.get('/addNoticeForm', (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
+    if(Manager == undefined) res.redirect("/customer");
 
     let totalCnt = {};
 
-    res.render('manager/notice/addNoticeForm', {Manager, Auth, totalCnt});
+    res.render('manager/notice/addNoticeForm', {Manager, AuthEmp, totalCnt});
 })
 
 //공지사항 추가하기
@@ -1949,96 +1942,112 @@ router.post('/addNoticeForm', async (req, res, next) => {
     let Manager = {};
     let Auth = {};
 
-    let totalCnt = {};
-
-// ------------------공지 등록하면 공지사항도 같이 보여줘야함-----------------------------------
-    const usersecess = req.params.usersecess;
-    let {searchType, keyword} = req.query;
-
-    const contentSize = 5 // 한페이지에 나올 개수
-    const currentPage = Number(req.query.currentPage) || 1; //현재페이
-    const {limit, offset} = getPagination(currentPage, contentSize);
-
-    keyword = keyword ? keyword : "";
-
-    let cri = {currentPage};
-
+    let {title, content} = req.body;
+    console.log('-----------req.body---------', req.body);
     let body = {};
     let isChecked = req.body.fixed;
     if (isChecked != true) {
         body = {
             raw: true,
             fixed: 0,
-            title: req.body.title,
+            title: title,
             writer: req.body.writer, //투어랜드 hidden 되어있음
-            content: req.body.content,
+            content: content
         }
     } else {
         body = {
             raw: true,
             fixed: 1,
-            title: req.body.title,
+            title: title,
             writer: req.body.writer, //투어랜드 hidden 되어있음
-            content: req.body.content,
+            content: content,
         }
     }
     const noticeRegister = await models.notice.create(body);
+    console.log('전송성공전송성공전송성공전송성공전송성공전송성공');
+    console.log('----------------등록내용-----------------', noticeRegister);
+    if( noticeRegister != null){
+        return res.status(204).json({"responseText":"addSuccess"});
+    }else{
+        return res.status(406).json({"responseText":"addFail"});
+    }
 
-    let noticeFixedList =
-        await models.notice.findAll({
-            raw: true,
-            where: {
-                fixed: 1
-            },
-            limit, offset
-        });
-    console.log('====', noticeFixedList);
-    let noticeNoFixedList =
-        await models.notice.findAll({
-            raw: true,
-            where: {
-                fixed: 0
-            },
-            order: [
-                ["regdate", "DESC"]
-            ],
-            limit, offset
-        });
-    let noticeNoFixedCountList =
-        await models.notice.findAndCountAll({
-            raw: true,
-            where: {
-                fixed: 0
-            },
-            order: [
-                ["regdate", "DESC"]
-            ],
-            limit, offset
-        });
+// // ------------------공지 등록하면 공지사항도 같이 보여줘야함-----------------------------------
+//     const usersecess = req.params.usersecess;
+//     let {searchType, keyword} = req.query;
+//
+//     const contentSize = 5 // 한페이지에 나올 개수
+//     const currentPage = Number(req.query.currentPage) || 1; //현재페이
+//     const {limit, offset} = getPagination(currentPage, contentSize);
+//
+//     keyword = keyword ? keyword : "";
+//
+//     let cri = {currentPage};
+//
+//     let body = {};
+//     let isChecked = req.body.fixed;
+//     if (isChecked != true) {
+//         body = {
+//             raw: true,
+//             fixed: 0,
+//             title: req.body.title,
+//             writer: req.body.writer, //투어랜드 hidden 되어있음
+//             content: req.body.content,
+//         }
+//     } else {
+//         body = {
+//             raw: true,
+//             fixed: 1,
+//             title: req.body.title,
+//             writer: req.body.writer, //투어랜드 hidden 되어있음
+//             content: req.body.content,
+//         }
+//     }
+//     const noticeRegister = await models.notice.create(body);
+//
+//     let noticeFixedList =
+//         await models.notice.findAll({
+//             raw: true,
+//             where: {
+//                 fixed: 1
+//             },
+//             limit, offset
+//         });
+//     console.log('====', noticeFixedList);
+//     let noticeNoFixedList =
+//         await models.notice.findAll({
+//             raw: true,
+//             where: {
+//                 fixed: 0
+//             },
+//             order: [
+//                 ["regdate", "DESC"]
+//             ],
+//             limit, offset
+//         });
+//     let noticeNoFixedCountList =
+//         await models.notice.findAndCountAll({
+//             raw: true,
+//             where: {
+//                 fixed: 0
+//             },
+//             order: [
+//                 ["regdate", "DESC"]
+//             ],
+//             limit, offset
+//         });
+//
+//     const pagingData = getPagingData(noticeNoFixedCountList, currentPage, limit);
+//     console.log('---------', noticeNoFixedList);
 
-    const pagingData = getPagingData(noticeNoFixedCountList, currentPage, limit);
-    console.log('---------', noticeNoFixedList);
-
-
-    res.render('manager/notice/noticeMngList', {
-        Manager,
-        Auth,
-        totalCnt,
-        noticeRegister,
-        pagingData,
-        noticeNoFixedCountList,
-        noticeNoFixedList,
-        noticeFixedList,
-        cri
-    });
 })
 
 // 공지사항 읽기
 router.get('/noticeDetail', async (req, res, next) => {
 
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
+    if(Manager == undefined) res.redirect("/customer");
 
     let cri = {};
     const notice = await models.notice.findOne({
@@ -2048,14 +2057,14 @@ router.get('/noticeDetail', async (req, res, next) => {
         }
     });
 
-    res.render("manager/notice/noticeDetail", {Manager, Auth, notice, cri});
+    res.render("manager/notice/noticeDetail", {Manager, AuthEmp, notice, cri});
 })
 
 // 공지사항 수정하기
 router.get('/editNotice', async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
+    if(Manager == undefined) res.redirect("/customer");
 
     let cri = {};
     const notice = await models.notice.findOne({
@@ -2066,7 +2075,7 @@ router.get('/editNotice', async (req, res, next) => {
     });
     console.log('-------수정화면입장----------', notice);
 
-    res.render("manager/notice/editNotice", {Manager, Auth, cri, notice});
+    res.render("manager/notice/editNotice", {Manager, AuthEmp, cri, notice});
 })
 
 // 공지사항 수정하기 전송
@@ -2075,7 +2084,6 @@ router.post('/editNotice', async (req, res, next) => {
     let Manager = {};
     let Auth = {};
 
-    let cri = {};
     const update = await models.notice.update({
         raw: true,
         title: req.body.title,
@@ -2087,17 +2095,15 @@ router.post('/editNotice', async (req, res, next) => {
         }
     });
 
-    // 수정하고 수정된 페이지 보여줘야 하니까
-    const notice = await models.notice.findOne({
-        where: {
-            no: req.body.no
-        }
-    });
-
     console.log('---------req.body------', req.body);
     console.log('-------수정하기----------', update);
+    console.log('전송성공전송성공전송성공전송성공전송성공전송성공');
+    if( update != null){
+        return res.status(204).json({"responseText":"addSuccess"});
+    }else{
+        return res.status(406).json({"responseText":"addFail"});
+    }
 
-    res.render("manager/notice/noticeDetail", {Manager, Auth, cri, update, notice});
 });
 
 // 공지사항 삭제하기
