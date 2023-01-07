@@ -50,7 +50,7 @@
 							<th>답변상태</th>
 						</tr>
 						<% list.forEach( planBoard => { %>
-						<tr class="planBoardList" data-no="<%=planBoard.id%>" data-respond="<%=planBoard.respond%>">
+						<tr class="planBoardList" data-no="<%=planBoard.id%>" data-respond="<%=planBoard.answer%>">
 							<td><%=planBoard.id%></td>
 							<td><%=planBoard.title%></td>
 							<td><%=planBoard.writer%></td>
@@ -101,10 +101,10 @@
 		$(".planBoardList").click(function() {
 		var id = $(this).attr("data-no");
 		var respond=$(this).attr("data-respond");
-		if(respond==null || respond==""){
-			location.href = "planBoardDetail?id="+id;
-		}else{
+		if(respond==null || respond=="" || respond == 0){
 			location.href = "planBoardModify?id="+id;
+		}else{
+			location.href = "planBoardDetail?id="+id;
 		}
 	})
 

@@ -20,7 +20,7 @@ const {sessionEmpCheck} = require('../../controller/sessionCtl');
 
 // ------------------------------------- 관리자 페이지 메인 -------------------------------------
 router.get('/statistics', (req, res, next) => {
-    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res, next);
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
 
     console.log('-----관리자페이지메인------',);
     console.log('------Auth???-------', Auth);
@@ -49,7 +49,6 @@ router.get('/employeeDetail', async(req, res, next) => {
 // 고객 관리 전체 목록
 router.get('/userMngList/:usersecess', async (req, res, next) => {
     //usersecess 정상회원, 탈퇴회원 구분
-    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res, next);
 
     const usersecess = req.params.usersecess;
     let {searchType, keyword} = req.query;
@@ -106,16 +105,21 @@ router.get('/userMngList/:usersecess', async (req, res, next) => {
     let btnName = (Boolean(Number(usersecess)) ? "회원 리스트" : "탈퇴회원 조회");
 
     console.log("usersecbtt->", btnName)
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired: 0,
+        empno: 7
+    }
     let list = dataAll;
 
-    res.render("manager/user/userMngList", {cri, list, btnName, pagingData, Manager, usersecess, AuthEmp, Auth, login});
+    res.render("manager/user/userMngList", {cri, list, btnName, pagingData, Manager, usersecess, AuthEmp});
 });
 
 // ------------------------------------------------ 직원관리 --------------------------------------------------------
 // 직원 관리 전체 목록
 router.get('/employeeMngList/:empretired', async (req, res, next) => {
     //empretired 정상사원, 퇴사사원 구분
-    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res, next);
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
     const empretired = req.params.empretired;
     let {searchType, keyword} = req.query;
 
@@ -190,8 +194,8 @@ router.get('/employeeDetailForm/:empretired', async (req, res, next) => {
     console.log("empid->", empVO);
 
     let cri = {};
-    let Manager = {};
-    // header에서 관리자 프로필의 정보를 차은우로 고정시켜버림
+    // header에서 관리자 프로필의 정보를 테스트로 고정시켜버림
+    let Manager = {right: 1, name:"테스트"};
     let AuthEmp = {
         empretired : 0,
         empno : 7
@@ -229,8 +233,6 @@ router.post('/employeeDetailForm/:empretired', async (req, res, next) => {
 // 고객 정보 상세 보기
 router.get('/userDetailForm/:usersecess', async (req, res, next) => {
     //usersecess 정상회원, 탈퇴회원 구분
-    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res, next);
-
     const usersecess = req.params.usersecess;
     let {no, currentPage, searchType, keyword} = req.query;
 
@@ -242,17 +244,25 @@ router.get('/userDetailForm/:usersecess', async (req, res, next) => {
     console.log("userid->", userVO);
 
     let cri = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired: 0,
+        empno: 7
+    }
     let couponLists = [{}];
 
-    res.render("manager/user/userDetailForm", {userVO, cri, Manager, Auth, usersecess, couponLists, AuthEmp, login});
+    res.render("manager/user/userDetailForm", {userVO, cri, Manager, AuthEmp, usersecess, couponLists});
 });
 
 
 // --------------------------------------------------------------- 예약 관리 ---------------------------------------------------------------
 router.get('/reservationMngList', async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
 
     const usersecess = req.params.usersecess;
     let {searchType, keyword} = req.query;
@@ -287,7 +297,8 @@ router.get('/reservationMngList', async (req, res, next) => {
     let cri = {currentPage};
 
 
-    res.render("manager/reservation/reservationMngList", {Manager, Auth, noList, yesList, list, pagingData, cri});
+    res.render("manager/reservation/reservationMngList", {Manager, AuthEmp, noList, yesList, list , pagingData, cri});
+
 });
 
 
@@ -346,10 +357,13 @@ router.get('/flightMngList', async (req, res, next) => {
     let cri = {searchType, keyword};
 
 
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
 
-    res.render("manager/flight/flightMngList2", {cri, flightList, pagingData, Manager, Auth, moment});
+    res.render("manager/flight/flightMngList2", {cri, flightList, pagingData, Manager, AuthEmp, moment});
 })
 
 // 항공 관리 페이지에서 검색 기능(국내)
@@ -382,10 +396,13 @@ router.get('/flightDomList/:currentPage', async (req, res, next) => {
     let cri = {searchType, keyword};
 
 
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
 
-    res.render("manager/flight/flightMngList2", {cri, flightList, pagingData, Manager, Auth});
+    res.render("manager/flight/flightMngList2", {cri, flightList, pagingData, Manager, AuthEmp});
 });
 // 항공 관리 페이지에서 검색 기능(해외)
 router.get('/flightAbroadList/:currentPage', async (req, res, next) => {
@@ -417,34 +434,43 @@ router.get('/flightAbroadList/:currentPage', async (req, res, next) => {
     let cri = {searchType, keyword};
 
 
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
 
-    res.render("manager/flight/flightMngList2", {cri, flightList, pagingData, Manager, Auth});
+    res.render("manager/flight/flightMngList2", {cri, flightList, pagingData, Manager, AuthEmp});
 });
 //항공편 추가 페이지
 router.get('/addFlightForm', async (req, res, next) => {
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
     let list = await models.airplane.findAll({
         where: {},
     });
     let airTotalCnt = {};
     let airTotalNextCnt = {};
 
-    res.render("manager/flight/addFlightForm2", {airTotalNextCnt, airTotalCnt, list, Manager, Auth});
+    res.render("manager/flight/addFlightForm2", {airTotalNextCnt, airTotalCnt, list, Manager, AuthEmp});
 });
 
 router.post('/addFlightForm', async (req, res, next) => {
 
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
     let list = await models.airplane.findAll({
         where: {},
     });
 
 
-    res.render("manager/flight/addFlightForm2", {list, Manager, Auth});
+    res.render("manager/flight/addFlightForm2", {list, Manager, AuthEmp});
 });
 
 router.get('/flightDetail', async (req, res, next) => {
@@ -508,18 +534,24 @@ router.get('/hotelMngList', async (req, res, next) => {
     let cri = {searchType, keyword, keyword2, keyword3};
 
 
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
 
-    res.render("manager/hotel/hotelMngList", {cri, list, pagingData, Manager, Auth, moment});
+    res.render("manager/hotel/hotelMngList", {cri, list, pagingData, Manager, AuthEmp, moment});
 });
 //호텔 등록
 router.get('/hotelRegister', async (req, res, next) => {
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
     let lastNum = "";
 
-    res.render("manager/hotel/hotelRegister", {lastNum, Manager, Auth});
+    res.render("manager/hotel/hotelRegister", {lastNum, Manager, AuthEmp});
 });
 
 router.post("/hotelRegister", async (req, res, next) => {
@@ -550,8 +582,11 @@ router.post("/hotelRegister", async (req, res, next) => {
 
 //호텔 수정
 router.get('/hotelModify', async (req, res, next) => {
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
 
     let {searchType, keyword} = req.query;
 
@@ -570,7 +605,7 @@ router.get('/hotelModify', async (req, res, next) => {
 
     let cri = {searchType, keyword};
 
-    res.render("manager/hotel/hotelModify", {cri, hotelVo, Manager, Auth});
+    res.render("manager/hotel/hotelModify", {cri, hotelVo, Manager, AuthEmp});
 });
 
 router.post("/hotelModify", async (req, res, next) => {
@@ -657,20 +692,26 @@ router.get('/tourMngList', async (req, res, next) => {
     let cri = {searchType, keyword};
 
 
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
 
-    res.render("manager/tour/tourMngList", {cri, list, pagingData, Manager, Auth, moment});
+    res.render("manager/tour/tourMngList", {cri, list, pagingData, Manager, AuthEmp, moment});
 });
 
 router.get('/tourRegister', async (req, res, next) => {
 
 
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
     let no = '';
 
-    res.render("manager/tour/tourRegister", {Manager, Auth, no});
+    res.render("manager/tour/tourRegister", {Manager, AuthEmp, no});
 });
 
 router.post("/tourRegister", async (req, res, next) => {
@@ -697,8 +738,11 @@ router.post("/tourRegister", async (req, res, next) => {
 
 router.get('/tourDetail', async (req, res, next) => {
 // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
     let {searchType, keyword} = req.query;
 
     keyword = keyword ? keyword : "";
@@ -712,15 +756,21 @@ router.get('/tourDetail', async (req, res, next) => {
             }
         });
 
-    res.render("manager/tour/tourDetail", {Manager, Auth, cri, moment, tourVO})
+
+    res.render("manager/tour/tourDetail", {Manager, AuthEmp,cri,moment, tourVO})
+
 });
 
 router.get('/tourModify', async (req, res, next) => {
 
 
-    let Manager = {};
-    let Auth = {};
-    let {searchType, searchType2, keyword} = req.query;
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
+    let {searchType,searchType2, keyword} = req.query;
+
 
     keyword = keyword ? keyword : "";
     let cri = {searchType, searchType2, keyword};
@@ -734,7 +784,8 @@ router.get('/tourModify', async (req, res, next) => {
         });
 
 
-    res.render("manager/tour/tourModify", {Manager, Auth, tourVO, cri, moment});
+    res.render("manager/tour/tourModify", {Manager, AuthEmp, tourVO,cri, moment});
+
 });
 
 router.post("/tourModify", async (req, res, next) => {
@@ -822,21 +873,27 @@ router.get('/rentcarMngList', async (req, res, next) => {
     let cri = {searchType, keyword};
 
 
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
 
-    res.render("manager/rentcar/rentcarMngList", {cri, list, pagingData, Manager, Auth});
+    res.render("manager/rentcar/rentcarMngList", {cri, list, pagingData, Manager, AuthEmp});
 });
 
 router.get('/rentcarRegister', async (req, res, next) => {
 
 
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
 
     let autoNO = "";
 
-    res.render("manager/rentcar/rentcarRegister", {Manager, Auth, autoNO});
+    res.render("manager/rentcar/rentcarRegister", {Manager, AuthEmp, autoNO});
 });
 
 router.post("/rentcarRegister", async (req, res, next) => {
@@ -863,8 +920,11 @@ router.post("/rentcarRegister", async (req, res, next) => {
 
 router.get('/rentcarDetailForm', async (req, res, next) => {
 // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
 
     const rentcarVO =
         await models.rentcar.findOne({
@@ -874,7 +934,7 @@ router.get('/rentcarDetailForm', async (req, res, next) => {
             }
         });
 
-    res.render("manager/rentcar/rentcarDetailForm", {Manager, Auth, rentcarVO})
+    res.render("manager/rentcar/rentcarDetailForm", {Manager, AuthEmp, rentcarVO})
 });
 
 router.post("/rentcarDetailFormUpdate", async (req, res, next) => {
@@ -995,20 +1055,28 @@ router.get('/productMngList', async (req, res, next) => {
 
 
     console.log("usersecbtt->")
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
     // res.send("ddddddddddddddd"+list);
 
-    res.render("manager/product/productMngList", {cri, list, pagingData, Manager, Auth});
+    res.render("manager/product/productMngList", {cri, list, pagingData, Manager, AuthEmp});
 });
 
 router.get('/productDetail', async (req, res, next) => {
 // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+
     let {searchType, keyword} = req.query;
 
     keyword = keyword ? keyword : "";
+
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
 
     const vo = await product.findOne({
         // raw : true,
@@ -1132,6 +1200,7 @@ router.get('/productModify', async (req, res, next) => {
         tourList,
         rentcarList
     });
+
 });
 
 router.get('/productDelete', async (req, res, next) => {
@@ -1200,8 +1269,8 @@ router.get("/addProductForm", async (req, res, next) => {
 // 전체 이벤트 보기
 router.get("/eventMngList", async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
+    if(Manager == undefined) res.redirect("/customer");
 
     const usersecess = req.params.usersecess;
     let {searchType, keyword} = req.query;
@@ -1231,14 +1300,17 @@ router.get("/eventMngList", async (req, res, next) => {
 
     const pagingData = getPagingData(listCount, currentPage, limit);
 
-    res.render("manager/event/eventMngList", {Manager, Auth, list, pagingData})
+    res.render("manager/event/eventMngList", {Manager, AuthEmp, list, pagingData})
 })
 
 // 이벤트 상세보기
 router.get('/eventDetailForm', async (req, res, next) => {
 // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
 
     const eventVO =
         await models.event.findOne({
@@ -1249,18 +1321,21 @@ router.get('/eventDetailForm', async (req, res, next) => {
         });
     console.log('--------이벤트 상세보기--------', eventVO)
 
-    res.render("manager/event/eventDetailForm", {Manager, Auth, eventVO})
+    res.render("manager/event/eventDetailForm", {Manager, AuthEmp, eventVO})
 })
 
 // 이벤트 등록하기 화면 보이기
 router.get("/eventRegister", async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
 
     let url2 = {};
 
-    res.render("manager/event/eventRegister", {Manager, Auth, url2});
+    res.render("manager/event/eventRegister", {Manager, AuthEmp, url2});
 })
 
 // 이벤트 등록할 게시글 작성하고 전송하기
@@ -1287,8 +1362,9 @@ router.post("/eventRegister", upload.single("eventPic"), async (req, res, next) 
 // 이벤트 수정하기(전송)
 router.post('/eventUpdate', upload.single("eventPic"), async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    // let Manager = {};
+    // let Auth = {};
+    const { Manager} = sessionEmpCheck(req ,res);
 
     let body = {};
     if (req.file != null) {
@@ -1316,11 +1392,11 @@ router.post('/eventUpdate', upload.single("eventPic"), async (req, res, next) =>
                 id: req.body.id
             }
         });
-
+    console.log('매니저매니저', Manager);
     console.log('---------req.body------', req.body);
     console.log('-------수정하기----------', update);
 
-    res.redirect("/manager/eventMngList")
+    res.redirect("/manager/eventMngList");
     // res.render("manager/event/eventDetailForm", {Manager, Auth, update, eventVO});
 })
 
@@ -1352,8 +1428,11 @@ router.delete('/deleteEvent', async (req, res, next) => {
 // ️ ️FAQ 게시판 보기
 router.get('/FAQMngList', async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
 
     const usersecess = req.params.usersecess;
     let {searchType, keyword} = req.query;
@@ -1385,23 +1464,30 @@ router.get('/FAQMngList', async (req, res, next) => {
     let cri = {currentPage};
 
 
-    res.render("manager/board/FAQMngList", {Manager, Auth, list, pagingData, cri});
+    res.render("manager/board/FAQMngList", {Manager, AuthEmp, list , pagingData, cri});
+
 })
 
 // FAQ 등록하기 입장
 router.get("/FAQRegister", async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
 
-    res.render("manager/board/FAQRegister", {Manager, Auth})
+    res.render("manager/board/FAQRegister", {Manager, AuthEmp})
 })
 
 // FAQ 등록하기 전송
 router.post("/FAQRegister", async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
 
     const faq = await models.faq.create({
         raw: true,
@@ -1440,14 +1526,17 @@ router.post("/FAQRegister", async (req, res, next) => {
     const pagingData = getPagingData(listCount, currentPage, limit);
     let cri = {currentPage};
 
-    res.render("manager/board/FAQMngList", {Manager, Auth, faq, list, listCount, pagingData, cri})
+    res.render("manager/board/FAQMngList", {Manager, AuthEmp, faq, list, listCount, pagingData, cri})
 })
 
 // FAQ 게시글 읽기
 router.get("/FAQDetail", async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
 
     console.log('-------------query??------------', req.query);
     let faq = await models.faq.findOne({
@@ -1460,14 +1549,17 @@ router.get("/FAQDetail", async (req, res, next) => {
 
     let cri = {};
 
-    res.render("manager/board/FAQDetail", {Manager, Auth, faq, cri});
+    res.render("manager/board/FAQDetail", {Manager, AuthEmp, faq, cri});
 })
 
 // FAQ 게시글 수정
 router.get("/FAQModify", async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
 
     let cri = {};
     let faq = await models.faq.findOne({
@@ -1478,14 +1570,17 @@ router.get("/FAQModify", async (req, res, next) => {
     });
     console.log('-------수정화면입장----------', faq);
 
-    res.render("manager/board/FAQModify", {Manager, Auth, faq, cri})
+    res.render("manager/board/FAQModify", {Manager, AuthEmp, faq, cri})
 })
 
 // FAQ 게시글 수정한거 전송하기
 router.post("/FAQModify", async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
 
     let cri = {};
     const update = await models.faq.update({
@@ -1508,14 +1603,17 @@ router.post("/FAQModify", async (req, res, next) => {
     console.log('---------req.body------', req.body);
     console.log('-------수정하기----------', update);
 
-    res.render("manager/board/FAQDetail", {Manager, Auth, cri, update, faq});
+    res.render("manager/board/FAQDetail", {Manager, AuthEmp, cri, update, faq});
 })
 
 // FAQ 게시글 삭제
 router.delete('/removeFAQ', async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    let Manager = {right: 1, name:"테스트"};
+    let AuthEmp = {
+        empretired : 0,
+        empno : 7
+    }
 
     let cri = {};
     models.faq.destroy({
@@ -1529,16 +1627,14 @@ router.delete('/removeFAQ', async (req, res, next) => {
         next(err);
     })
 
-    res.render('manager/notice/FAQMngList', {Manager, Auth, cri})
+    res.render('manager/notice/FAQMngList', {Manager, AuthEmp, cri})
 })
 
 // 여행후기 관리 ------------------------------------------------------------------------
 // 여행 후기 관리 게시판
 router.get("/custBoardMngList", async (req, res, next) => {
     // header 공통 !!!
-
-    let Manager = {};
-    let Auth = {};
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req ,res);
 
     const usersecess = req.params.usersecess;
     let {searchType, keyword} = req.query;
@@ -1574,14 +1670,15 @@ router.get("/custBoardMngList", async (req, res, next) => {
     const pagingData = getPagingData(listCount, currentPage, limit);
     let cri = {currentPage};
 
-    res.render("manager/board/custBoardList", {Manager, Auth, list, pagingData, cri});
+    res.render("manager/board/custBoardList", {Manager, Auth, AuthEmp, login, list, pagingData, cri});
 })
 
 // 여행 후기 관리 게시글 읽기
 router.get("/custBoardDetail", async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    const {AuthEmp, Manager} = sessionEmpCheck(req , res);
+
+
 
     let custBoardVO =
         await models.custboard.findOne({
@@ -1592,7 +1689,7 @@ router.get("/custBoardDetail", async (req, res, next) => {
         });
     let cri = {};
 
-    res.render("manager/board/custBoardDetail", {Manager, Auth, custBoardVO, cri});
+    res.render("manager/board/custBoardDetail", {Manager, AuthEmp, custBoardVO, cri});
 })
 
 // 여행 후기 관리 게시글 삭제
@@ -1624,8 +1721,8 @@ router.delete("/removeCustBoard", async (req, res, next) => {
 // 상품 문의 사항 게시판 목록 보기
 router.get('/planBoardList', async (req, res, next) => {
 // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
+    if(Manager == undefined) res.redirect("/customer");
 
     const usersecess = req.params.usersecess;
     let {searchType, keyword} = req.query;
@@ -1654,15 +1751,15 @@ router.get('/planBoardList', async (req, res, next) => {
     const pagingData = getPagingData(listCount, currentPage, limit);
     let cri = {};
 
-    res.render("manager/board/planBoardList", {Manager, Auth, list, pagingData, cri});
+    res.render("manager/board/planBoardList", {Manager, AuthEmp, list, pagingData, cri});
 
 })
 
 // 미답변 상품 문의 사항 게시글 읽기
-router.get('/planBoardDetail', async (req, res, next) => {
+router.get('/planBoardModify', async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {name: "홍길동"};
-    let Auth = {};
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
+    if(Manager == undefined) res.redirect("/customer");
 
     let plan =
         await models.planboard.findOne({
@@ -1674,47 +1771,47 @@ router.get('/planBoardDetail', async (req, res, next) => {
     console.log('---답변전------', plan);
     let cri = {};
 
-    res.render("manager/board/planBoardDetail", {Manager, Auth, plan, cri});
+    res.render("manager/board/planBoardModify", {Manager, AuthEmp, plan, cri});
 })
 
 // 답변 달고 전송하기
-router.post('/planBoardModify', async (req, res, next) => {
+router.post('/planBoardModify/reply/:id', async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {name: "홍길동"};
-    let Auth = {};
+    console.log("444444444444->", req.params.id);
 
-    let cri = {};
+    let {id } = req.params.id;
+    let {respondWriter, respondcontent} = req.body;
 
     const update = await models.planboard.update({
-        raw: true,
-        writer: req.body.respondWriter,
-        answer: 1,
-        respond: req.body.respondcontent
+        raw : true,
+        answer : 1,
+        respond : respondcontent
     }, {
-        where: {
-            id: req.body.id
+        where : {
+            id : req.params.id
         }
     });
 
-    // 수정하고 수정된 페이지 보여줘야 하니까
-    let plan = await models.planboard.findOne({
-        where: {
-            id: req.body.id
-        }
-    });
-    console.log('---------req.body------', req.body);
-    console.log('---------수정완---------', update);
+    console.log("4444444444443333333->", update);
+    console.log('답변달기성공답변달기성공답변달기성공답변달기성공');
+    if( update != null){
+        res.status(204).json({"responsetxt":"updatesuccess"});
+    }else{
+        res.status(406).json({"responsetxt":"updatefailed"});
+    }
 
-    // 답변 완료된 화면 띄어주기인데.. planBoardDetail로 가네,,
-    res.render("manager/board/planBoardModify", {Manager, Auth, cri, update, plan});
 })
 
 
 // 답변 완료 상품 문의 사항 게시글 읽기
-router.get("/planBoardModify", async (req, res, next) => {
+router.get("/planBoardDetail", async (req, res, next) => {
 // header 공통 !!!
-    let Manager = {name: "홍길동"};
-    let Auth = {};
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
+    if(Manager == undefined) res.redirect("/customer");
+
+    const passedUpdate = req.session.update;
+    req.session.update = [];
+    console.log('-------req.query----------', req.query);
 
     let plan =
         await models.planboard.findOne({
@@ -1726,31 +1823,32 @@ router.get("/planBoardModify", async (req, res, next) => {
     console.log('---답변완료된 게시물------', plan);
     let cri = {};
 
-    res.render("manager/board/planBoardModify", {Manager, Auth, plan, cri});
+    res.render("manager/board/planBoardDetail", {passedUpdate, Manager, AuthEmp, plan, cri});
 })
 
-// 답변 완료 상품 문의 사항 게시글의 '답변' 수정하기
-router.post("/planBoardModify/:id", async (req, res, next) => {
-
-    let {data} = req.body;
-    let {test, kkkk} = req.query;
-    console.log('----수정된 respond---------', req.params, req.body);
-    let update = await models.planboard.update({
-        raw: true,
-        respond: req.body.respondText
-    }, {
-        where: {
-            id: req.params.id
-        }
-    });
-
-    if (update != null) {
-        res.status(201).json({"response": "success"});
-    } else {
-        res.status(500).json({"response": "fail"});
-    }
-
-})
+// // 답변 완료 상품 문의 사항 게시글의 '답변' 수정하기
+// router.post("/planBoardModify/:id", async ( req, res, next) => {
+//
+//     let {data} = req.body;
+//     let {test, kkkk} = req.query;
+//     console.log('----수정된 respond---------',req.params, req.body);
+//     let update = await models.planboard.update({
+//         raw : true,
+//         respond : req.body.respondText
+//     }, {
+//         where : {
+//             id : req.params.id
+//         }
+//     });
+//
+//     if(update != null){
+//         res.status(201).json({"response":"success"});
+//     }
+//     else{
+//         res.status(500).json({"response":"fail"});
+//     }
+//
+// })
 
 
 // 상품 문의 사항 게시글 삭제

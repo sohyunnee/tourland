@@ -4,6 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< Updated upstream
     <list default="true" id="022f6912-a924-4b38-9214-54f3b4c729bd" name="변경" comment="01.05 sg 답변관리 링크 수정">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/managerRoutes/managerRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/managerRoutes/managerRoutes.js" afterDir="false" />
@@ -16,6 +17,25 @@
       <change beforePath="$PROJECT_DIR$/views/manager/rentcar/rentcarDetailForm.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/rentcar/rentcarDetailForm.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/manager/tour/tourModify.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/tour/tourModify.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/manager/tour/tourRegister.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/tour/tourRegister.ejs" afterDir="false" />
+=======
+    <list default="true" id="022f6912-a924-4b38-9214-54f3b4c729bd" name="변경" comment="01.06 sg 14:43">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/fileupload.js" beforeDir="false" afterPath="$PROJECT_DIR$/controller/fileupload.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/sessionCtl.js" beforeDir="false" afterPath="$PROJECT_DIR$/controller/sessionCtl.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/managerRoutes/managerRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/managerRoutes/managerRoutes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/userRoutes/userRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/userRoutes/userRoutes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/include/header.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/include/header.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/manager/board/custBoardDetail.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/board/custBoardDetail.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/manager/board/planBoardDetail.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/board/planBoardDetail.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/manager/board/planBoardList.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/board/planBoardList.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/manager/board/planBoardModify.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/board/planBoardModify.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/manager/event/eventDetailForm.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/event/eventDetailForm.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/manager/event/eventMngList.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager/event/eventMngList.ejs" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,27 +66,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;16.17.1&quot;,
-    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;16.18.10&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/edu01/IdeaProjects/tourland_manager&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "javascript.nodejs.core.library.configured.version": "14.20.0",
+    "javascript.nodejs.core.library.typings.version": "14.18.36",
+    "last_opened_file_path": "/home/edu01/IdeaProjects/tourland",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "node",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/views/manager/reservation" />
@@ -82,6 +102,11 @@
       <recent name="$PROJECT_DIR$/views/user" />
       <recent name="$PROJECT_DIR$/public/stylesheets" />
     </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="logout" />
+    </option>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -114,7 +139,11 @@
       <workItem from="1672615540803" duration="10295000" />
       <workItem from="1672701678496" duration="29405000" />
       <workItem from="1672790556418" duration="26749000" />
+<<<<<<< Updated upstream
       <workItem from="1672961262132" duration="27583000" />
+=======
+      <workItem from="1672964491568" duration="36985000" />
+>>>>>>> Stashed changes
     </task>
     <task id="LOCAL-00001" summary="변경">
       <created>1670416532650</created>
@@ -249,7 +278,21 @@
       <option name="project" value="LOCAL" />
       <updated>1672882564097</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="01.05 sg manager.name-&gt; empname 변경">
+      <created>1672911683515</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1672911683515</updated>
+    </task>
+    <task id="LOCAL-00021" summary="01.06 sg 14:43">
+      <created>1672983814390</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1672983814390</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -293,7 +336,27 @@
     <MESSAGE value="01.04 18:30" />
     <MESSAGE value="01.05 10:32 auth, login 수정" />
     <MESSAGE value="01.05 sg 답변관리 링크 수정" />
-    <option name="LAST_COMMIT_MESSAGE" value="01.05 sg 답변관리 링크 수정" />
+    <MESSAGE value="01.05 sg manager.name-&gt; empname 변경" />
+    <MESSAGE value="01.06 sg 14:43" />
+    <option name="LAST_COMMIT_MESSAGE" value="01.06 sg 14:43" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/routes/userRoutes/userRoutes.js</url>
+          <line>48</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/routes/managerRoutes/managerRoutes.js</url>
+          <line>1591</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

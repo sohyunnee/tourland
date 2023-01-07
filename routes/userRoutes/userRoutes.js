@@ -41,42 +41,9 @@ const {upload} = require("../../controller/fileupload");
 // 투어랜드 메인 페이지
 router.get('/', async (req, res, next) => {
 
-    if (req.session.user == undefined) {
-        console.log("111111111111******->");
-        req.session.user = {
-            Auth: {
-                id: "",
-                username: "",
-                userbirth: "",
-                usertel: "",
-                useraddr: "",
-                userpassport: "",
-                userid: "",
-                usersecess: "",
-                useremail: ""
-            },
-            AuthEmp: {
-                empno: "",
-                empname: "",
-                empbirth: "",
-                emptel: "",
-                empaddr: "",
-                epmauth: "",
-                empid: "",
-                epmretired: ""
-            },
-            Mananger: {name: "", right: 1},
-            User: "",
-            login: "user",
-            mypage: "mypageuser"
-        }
-
-        req.session.save();
-    }
-
     console.log("111111111111////->", req.session.user);
 
-    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
+    let {Auth, AuthEmp, Manager, login} = sessionCheck(req,res);
 
 
     const currentProductPrice = {};

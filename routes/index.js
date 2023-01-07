@@ -44,6 +44,9 @@ router.get('/displayFile/:whichOne', async  (req, res, next) => {
     if ( choice === "event"){
         path = base_dir + "/event" + query;
     }
+    if ( choice === "eventUpload"){
+        path = base_dir + "/upload/" + query;
+    }
     if ( choice === "product" || (choice === "productSmall")){
         path = base_dir + "/product" + query;
         console.log("10000000000000000000");

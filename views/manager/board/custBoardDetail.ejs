@@ -16,7 +16,7 @@
 				<div class="box-header">
 					<h3 class="box-title">고객의 소리 조회</h3>
 				</div>
-				<form role="form" action="custBoardMngList" method="post" id="bannerForm">
+				<form action="custBoardMngList" method="get">
 					<div class="box-body">
 						<div class="form-group">
 							<label>번호</label>
@@ -41,7 +41,7 @@
 						<div class="box-footer">
 							<!-- <button type="submit" class="btn btn-primary">수정-테스트</button> -->
 							 <button class="btn btn-primary" style="background:red;" id="btnDel">삭제</button><br>
-							 <button class="btn btn-primary" id="btnReturnToList" style="margin-top:10px;">목록으로</button>
+							 <input type="submit" class="btn btn-primary" id="btnReturnToList" style="margin-top:10px;">목록으로</button>
 						</div>
 					</div>
 				</form>
@@ -51,12 +51,7 @@
 </div>
 <script>
 
-      
-       //리스트로 버튼 눌렀을 때 리스트로 돌아가기 
-		$("#btnReturnToList").click(function(){
-			location.href = "custBoardMngList";
-		})
-		
+
 	   //삭제 누르면 삭제 되기
 	   $("button#btnDel").click(function(){
 		   if(!confirm("정말 삭제하시겠습니까?")) {
@@ -71,7 +66,7 @@
 			   console.log('삭제 실패!!', err);
 		   })
 	   })
-	   
-   
+
+
   </script>
 <%- include("../../include/footer.ejs")%>

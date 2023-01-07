@@ -72,6 +72,10 @@
         src="/plugins/jQuery/jQuery-2.1.4.min.js"></script>
 <script>
     $(function () {
+        if( "<%=Manager.name%>" == null){
+            location.href = "/customer";
+        }
+
         $(".dropdown").click(function () {
             $(".dropdown-menu").css("display", "none");
             $(this).find(".dropdown-menu").css("display", "block");

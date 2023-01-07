@@ -15,6 +15,8 @@ const apiRouter = require('./routes/indexApi');
 const userRoutes = require('./routes/userRoutes/userRoutes');
 const managerRoutes = require('./routes/managerRoutes/managerRoutes');
 const bodyParser = require("express");
+const FileStore = require('session-file-store')(session);
+
 const app = express();
 
 // view engine setup
@@ -34,7 +36,7 @@ app.use(session({
     // resave: false,
     // saveUninitialized: true,
     // cookie: { secure: true },
-
+    // store : new FileStore(),
 }))
 
 // sequelize.sync({ force: false }) // 서버 실행시마다 테이블을 재생성할건지에 대한 여부
