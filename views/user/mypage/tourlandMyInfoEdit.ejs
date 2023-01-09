@@ -96,6 +96,7 @@
     <script>
 
         function userInfoEditor(){
+            var id = $("input[name='id']").val();
             var userid = $("input[name='userid']").val();
             $(".error").css("display","none");
             var userpass = $("input[name='userpass']").val();
@@ -135,7 +136,7 @@
                     $.ajax({
                         url:"/customer/editProfile",
                         type:"post",
-                        data : {"userid":userid, "userpass":userpass,
+                        data : {"id":id,"userid":userid, "userpass":userpass,
                             "useraddr":useraddr,
                             "username":username,
                             "userbirth":userbirth,
@@ -143,15 +144,14 @@
                             "userpassport":userpassport,
                         },
                         dataType:"json",
-                        success:function(res){
-                            console.log(res);
-                            if(res !="success"){
-                                hide();
-                                return false;
-                            }else{
-                                show();
-                                // location.href="/customer/tourlandMyInfoEdit";
+                        success: function (res) {
+                            if (res.responseText === "modifyfaild") {
+                                $("#errormsg").text("오류발생.");
+                            }else if(res.responseText === "modifysuccess"){
+                                confirm("수정을 완료 했습니다. 이동합니다.");
+                                location.href = "/customer";
                             }
+                            else return;
                         }
                     })
                 }
@@ -160,17 +160,28 @@
         }
         $(function(){
             $("#withdraw").click(function(){
-                var no = $("input[name='userno']").val();
+                var id = $("input[name='id']").val();
                 var res = confirm("정말로 탈퇴하시겠습니까?");
                 if(res){
-                    location.href="/customer/logoutWithdrawal?no="+no;
-                    alert("탈퇴되었습니다.");
+                    $.ajax({
+                        url:"/customer/logoutWithdrawal",
+                        type:"post",
+                        data : {"id":id},
+                        dataType:"json",
+
+                        success: function (res) {
+                            if (res.responseText === "modifyfaild") {
+                                $("#errormsg").text("오류발생.");
+                            }else if(res.responseText === "modifysuccess"){
+                                confirm("탈퇴를 완료 했습니다. 이동합니다.");
+                                location.href = "/customer";
+                            }
+                            else return;
+                        }
+                    })
                 }
             })
 
-            $("form").submit(function(e){
-
-            })
         })
     </script>
 <% } %>
@@ -239,7 +250,7 @@
     <div id="editProfile">
         <h1>내 정보 수정</h1>
         <span id="info">투어랜드는 고객님의 개인정보가 외부로 노출되지 않도록 항상 노력하고 있습니다.</span>
-        <form method="post" autocomplete="off">
+        <form>
                 <% if (mypage=='mypageuser') { %>
                     <input type="hidden" value="<%=Auth.id%>" name="id">
                     <p>
