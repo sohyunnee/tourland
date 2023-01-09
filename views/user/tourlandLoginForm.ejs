@@ -8,13 +8,59 @@
 
 <body>
 <%- include("../include/userHeader.ejs") %>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script  type="text/javascript">
+
+    $(document).ready(function(){
+
+            $("#btnLogin").click(function () {
+
+
+                const id = $("#id").val();
+                const pass = $("#pass").val();
+                alert("ccccccccccccccccc"+id + pass);
+                $.ajax({
+                    url: "/customer/loginForm",
+                    type: 'post',
+                    traditional: true,
+                    data: {"id" : id, "pass":pass},
+                    dataType: "json",
+                    success: function (res) {
+                        console.log("11111111111111");
+                        if (res.responseText === "loginfail") {
+
+                            $("#errormsg").text("아이디와 비밀번호 확인 하세요.");
+
+                        }else if(res.responseText === "loginsuccess"){
+                            confirm("로그이 완료되었습니다.첫 페이지로 이동합니다.");
+                            location.href = "/customer";
+                        }
+                        else return;
+
+                    },
+                    error: function (res) {
+                        alert("1111->" + res);
+                        console.log(res);
+                        if (res.responseText === "loginfail") {
+                            alert("로그인 실패");
+                            return;
+                        }
+                    }
+                })
+            })
+
+        }
+    );
+
+
+</script>
 <section>
     <div id="loginHead">
         <h1>로그인</h1>
         <p>새로운 세상, 투어랜드</p>
     </div>
     <div id="loginBox">
-        <form action="/customer/loginForm" method="post">
+        <form>
             <% if (registerSuccess != null) { %>
                 <h3>아이디 또는 비밀번호가 틀렸습니다.<br> 다시 로그인 수행하여 주십시오.</h3>
             <% } %>
@@ -33,11 +79,12 @@
                     <% } %>
                 </div>
                 <div id="submitBox">
-                    <input type="submit" value="로그인" style="cursor: pointer">
+                    <input type="button" id="btnLogin" value="입력">
                 </div>
                 <% if(error != null) { %>
-                <p class="error"><%= error %></p>
+                    <p class="error"><%= error %></p>
                 <% } %>
+                <div id="errormsg"></div>
             </div>
         </form>
         <div id="loginBtns">

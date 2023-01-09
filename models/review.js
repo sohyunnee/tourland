@@ -33,7 +33,7 @@ module.exports = function(sequelize, DataTypes) {
     regdate: {
       type: DataTypes.DATE,
       allowNull: true,
-      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
+      defaultValue: Sequelize.Sequelize.fn('current_timestamp'),
       comment: "등록일"
     },
     starpoint: {

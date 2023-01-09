@@ -38,13 +38,54 @@ const parser = bodyParser.urlencoded({extended: false});
 const {upload} = require("../../controller/fileupload");
 
 
+let user = {
+    Auth: {
+        id: "",
+        username: "",
+        userbirth: "",
+        usertel: "",
+        useraddr: "",
+        userpassport: "",
+        userid: "",
+        usersecess: "",
+        useremail: ""
+    },
+    AuthEmp: {
+        empno: "",
+        empname: "",
+        empbirth: "",
+        emptel: "",
+        empaddr: "",
+        epmauth: "",
+        empid: "",
+        epmretired: ""
+    },
+    Mananger: {name: "", right: 1},
+    User: "",
+    login: "user",
+    mypage: "mypageuser"
+}
+
+
+
+
 // 투어랜드 메인 페이지
 router.get('/', async (req, res, next) => {
 
-    console.log("111111111111////->", req.session.user);
-
-    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
-
+    console.log("33333333333333333->", user);
+    let Auth, AuthEmp, Manager, login;
+    if(req.session.user == undefined){
+        Auth = user.Auth;
+        AuthEmp = user.AuthEmp;
+        Manager = user.Mananger;
+        login = user.login;
+    }
+    else {
+        Auth = req.session.user.Auth;
+        AuthEmp = req.session.user.AuthEmp;
+        Manager = req.session.user.Mananger;
+        login = req.session.user.login;
+    }
 
     const currentProductPrice = {};
     const currentProductPrice2 = {};
@@ -106,15 +147,36 @@ router.get('/', async (req, res, next) => {
 
     if (req.session.user) {
         msg = `${req.session.user.User}`;
-        Auth = {
-            username: req.session.user.User,
-            userid: req.session.user.Auth.userid,
-            userpass: req.session.user.Auth.userpass
-        };
+        if(Auth != null){
+            Auth = {
+                username: req.session.user.User,
+                userid: req.session.user.Auth.userid,
+                userpass: req.session.user.Auth.userpass
+            };
+            Manager : {
+                name: req.session.user.Auth.username
+            }
+        }
+        if(AuthEmp != null){
+            Auth = {
+                username: req.session.user.User,
+                userid: req.session.user.AuthEmp.empid,
+                userpass: req.session.user.AuthEmp.emppass
+            };
+            AuthEmp = {
+                empname: req.session.user.User,
+                emprid: req.session.user.AuthEmp.empid,
+                emppass: req.session.user.AuthEmp.emppass
+            };
+            Manager = {
+                name :  req.session.user.AuthEmp.empname
+            }
+        }
+
         login = req.session.user.login;
     }
 
-    console.log("Auth============->", Auth, msg);
+    console.log("Auth============->", Auth, AuthEmp, msg);
 
     let {searchType, keyword, keyword2} = req.query;
     let searchkeyword = keyword;
@@ -430,25 +492,25 @@ router.post('/loginForm', (req, res, next) => {
     let loginSuccess = false;
 
     fetchData(req).then((userVO) => {
-
+        console.log("11111111111111111111111->",userVO);
         // 직원 ID가 없는 경우
         if (userVO == null) {
             error = "idnoneexist";
+            res.status(405).json({"responseText":error});
+            console.log("2222222222222->",userVO);
         } else {
 
             // 직원 ID가 있고 탈퇴한 회원
             if (userVO.usersecess === 1) {
                 error = "retiredcustomer";
+                res.status(405).json({"responseText":error});
+
             } else if (userVO.usersecess === 0) {
 
-                console.log("comparePassword2222->", userVO.userid);
-
                 bcrypt.compare(req.body.pass, userVO.userpass, (err, result) => {
-                    console.log("comparePassword2222->", result);
                     UserStay = userVO;
                     if (result) {
                         loginSuccess = true;
-
 
                         req.session.user = {
                             "User": userVO.username,
@@ -463,26 +525,15 @@ router.post('/loginForm', (req, res, next) => {
                         login = "user";
 
                         console.log(`세션 저장 완료! `);
-                        res.redirect('/customer');
+                        res.status(200).json({"responseText":"loginsuccess"});
                     } else {
-                        console.log("comparePassword4444->", result);
-                        error = "passnotequal";
-                        res.render("user/tourlandLoginForm", {
-                            Auth,
-                            login,
-                            Manager,
-                            searchkeyword,
-                            registerSuccess,
-                            UserStay,
-                            EmpStay,
-                            error
-                        });
-
+                        res.status(405).json({"responseText":err});
                     }
                 })
 
             } else {
                 error = "usernotfind";
+                res.status(405).json({"responseText":error});
             }
 
         }
@@ -491,6 +542,9 @@ router.post('/loginForm', (req, res, next) => {
 
 
 });
+
+
+
 
 // 매니저 로그인 전송
 router.post('/loginManagerForm', (req, res, next) => {

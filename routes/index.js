@@ -54,14 +54,25 @@ router.get('/displayFile/:whichOne', async  (req, res, next) => {
     if ( choice === "practice"){
         path = base_dir + "/practice" + query;
     }
-    fs.readFile(path, (err, data)=>{
-        if(err){
-            throw err;
+    fs.exists(path, (exists) =>{
+        console.log("파일존재 확인->",exists);
+        if(exists){
+
+            fs.readFile(path, (err, data)=>{
+                if(err){
+                    throw err;
+                }
+                else{
+                    fs.createReadStream(path).pipe(res);
+                }
+            })
+        }else{
+            fs.readFile(base_dir + "/noimage.jpg", (err, data)=>{
+                fs.createReadStream(base_dir + "/noimage.jpg").pipe(res);
+            })
         }
-        else{
-            fs.createReadStream(path).pipe(res);
-        }
-    })
+    } )
+
 });
 
 router.get("/logout", (req, res, next)=>{

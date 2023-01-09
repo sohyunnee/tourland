@@ -21,6 +21,7 @@ const {sessionEmpCheck} = require('../../controller/sessionCtl');
 // ------------------------------------- 관리자 페이지 메인 -------------------------------------
 router.get('/statistics', (req, res, next) => {
     const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
+    if(Manager == undefined) res.redirect("/customer");
 
     console.log('-----관리자페이지메인------',);
     console.log('------Auth???-------', Auth);
@@ -1271,6 +1272,8 @@ router.get("/eventMngList", async (req, res, next) => {
 router.get('/eventDetailForm', async (req, res, next) => {
 // header 공통 !!!
     const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
+    if(Manager == undefined) res.redirect("/customer");
+
     const eventVO =
         await models.event.findOne({
             raw: true,

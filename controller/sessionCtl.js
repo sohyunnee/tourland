@@ -28,12 +28,12 @@ let user = {
 }
 
 
+
 exports.sessionCheck = (req, res) => {
 
-    if (req.session.user == undefined) {
+    if (req.session.user == undefined || req.session.user == null) {
         console.log("111111111111******->");
         req.session.user = user;
-
         req.session.save();
     }
 
@@ -41,6 +41,8 @@ exports.sessionCheck = (req, res) => {
         return res.redirect("/customer");
     }
     else{
+        console.log("22222222222******->",req.session.user);
+
         return  req.session.user;
     }
     // if (req.session.user.Manager === undefined) return res.redirect("/customer");
