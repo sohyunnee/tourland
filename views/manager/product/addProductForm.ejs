@@ -209,7 +209,6 @@
 
 
                             <label><span class="red">*</span>상품 번호</label>
-                            <input type="text" class="form-control" readonly="readonly" value="<%= size %>" name="pno">
 
                         </div>
                         <div class="form-group">
@@ -256,6 +255,8 @@
     </div>
 
 </div>
+
+<!--====-->
 <div id="flightDepature" class="modal fade" role="dialog"
      data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
@@ -290,9 +291,10 @@
                                 <th>좌석</th>
                                 <th>가격</th>
                             </tr>
+
                             <% flightListDepature.forEach( f => { %>
                                 <tr class='flightList' data-no="<%= f.id %>">
-                                    <td><%= f.id %></td>
+                                    <td color="red"><%= f.id %></td>
                                     <td><%= f.ano %></td>
                                     <td><%= f.dlocation %></td>
                                     <td><%= f.rlocation %></td>
@@ -316,25 +318,36 @@
                                     <% } %>
                                     <td><%= f.price %></td>
                                 </tr>
+                            <tr color="red"><td>dddd</td></tr>
                             <% }) %>
+
+
+
                         </table>
                     </div>
-                    <div class="box-footer">
-                        <div class="text-center">
-                            <ul class="pagination">
-                                <% if (pageMakerByFlightDepature.prev == true) { %>
-                                    <li><a id="prev">&laquo;</a></li>
-                                <% } %>
-                                <% for(idx = pageMakerByFlightDepature.startPage; idx <= pageMakerByFlightDepature.endPage; idx++){ %>
-                                    <li
-                                            class="<%= pageMakerByFlightDepature.cri.page == idx ?'active':'' %>"><a
-                                                class="index" data-index="<%= idx %>"><%= idx %></a></li>
-                                <% } %>
-                                <% if (pageMakerByFlightDepature.next == true) { %>
-                                    <li><a id="next">&raquo;</a></li>
-                                <% } %>
-                            </ul>
-                        </div>
+                    <div class='text-center'>
+                        <ul class="pagination">
+                            <% if (pagingData_airplane.totalPages != 0) { %>
+                            <div class="" style="text-align:center;">
+                                <ul class="pagination">
+                                    <li <%if(pagingData_airplane.airplane_currentPage == 1){%> class="disabled" <%}else{%>class="waves-effect" <%}%> >
+                                        <a <%if(pagingData_airplane.airplane_currentPage > 1){%> href="?airplane_currentPage=<%=pagingData_airplane.airplane_currentPage-1%>" <%}%>>
+                                            <i class="material-icons">prev</i>
+                                        </a>
+                                    </li>
+                                    <% for(var i=pagingData_airplane.pnStart; i<=pagingData_airplane.pnEnd; i++){ %> <li <%if(i===pagingData_airplane.currentPage){%> class="active"
+                                            <%}%>><a href="?airplane_currentPage=<%=i%>"><%=i%></a></li>
+                                    <% } %>
+                                    <li <%if(pagingData_airplane.airplane_currentPage == pagingData_airplane.totalPages){%> class="disabled" <%}else{%> class="waves-effect" <%}%>>
+                                        <a <%if(pagingData_airplane.airplane_currentPage < pagingData_airplane.totalPages){%> href="?currentPage=<%=pagingData_airplane.airplane_currentPage+1%>" <%}%> class="waves-effect">
+                                            <i class="material-icons">next</i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <% } %>
+
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -489,23 +502,32 @@
                                     <% } %>
                                 </tr>
                             <% }) %>
+
                         </table>
                     </div>
-                    <div class="box-footer">
-                        <div class="text-center">
-                            <ul class="pagination">
-                                <% if (pageMakerByHotel.prev == true) { %>
-                                    <li><a id="prev">&laquo;</a></li>
-                                <% } %>
-                                <% for(idx = pageMakerByHotel.startPage; idx <= pageMakerByHotel.endPage; idx++) { %>
-                                    <li class="<%= pageMakerByHotel.cri.page == idx ?'active':'' %>"><a
-                                                class="index" data-index="<%= idx %>"><%= idx %></a></li>
-                                <% } %>
-                                <% if (pageMakerByHotel.next == true) { %>
-                                    <li><a id="next">&raquo;</a></li>
-                                <% } %>
-                            </ul>
-                        </div>
+                    <div class='text-center'>
+                        <ul class="pagination">
+                            <% if (pagingData_hotel.totalPages != 0) { %>
+                            <div class="" style="text-align:center;">
+                                <ul class="pagination">
+                                    <li <%if(pagingData_hotel.hotel_currentPage == 1){%> class="disabled" <%}else{%>class="waves-effect" <%}%> >
+                                        <a <%if(pagingData_hotel.hotel_currentPage > 1){%> href="?hotel_currentPage=<%=pagingData_hotel.hotel_currentPage-1%>" <%}%>>
+                                            <i class="material-icons">prev</i>
+                                        </a>
+                                    </li>
+                                    <% for(var i=pagingData_hotel.pnStart; i<=pagingData_hotel.pnEnd; i++){ %> <li <%if(i===pagingData_hotel.hotel_currentPage){%> class="active"
+                                            <%}%>><a href="?hotel_currentPage=<%=i%>"><%=i%></a></li>
+                                    <% } %>
+                                    <li <%if(pagingData_hotel.hotel_currentPage == pagingData_hotel.totalPages){%> class="disabled" <%}else{%> class="waves-effect" <%}%>>
+                                        <a <%if(pagingData_hotel.hotel_currentPage < pagingData_hotel.totalPages){%> href="?hotel_currentPage=<%=pagingData_hotel.hotel_currentPage+1%>" <%}%> class="waves-effect">
+                                            <i class="material-icons">next</i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <% } %>
+
+                        </ul>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default"
@@ -553,7 +575,7 @@
                                 <th>가격</th>
                                 <th>장소구분</th>
                             </tr>
-                            <%= tourList.forEach( tour => { %>
+                            <% tourList.forEach( tour => { %>
                             <tr class="tourList" data-no="<%= tour.id %>">
                                 <td><%= tour.id %></td>
                                 <td><%= tour.tname %></td>
@@ -569,21 +591,29 @@
                             <% }) %>
                         </table>
                     </div>
-                    <div class="box-footer">
-                        <div class="text-center">
-                            <ul class="pagination">
-                                <% if (pageMakerByTour.prev == true) { %>
-                                    <li><a id="prev">&laquo;</a></li>
-                                <% } %>
-                                <% for (idx = pageMakerByTour.startPage; idx <= pageMakerByTour.endPage; idx++;) { %>
-                                    <li class="${pageMakerByTour.cri.page == idx ?'active':''}"><a
-                                                class="index" data-index="<%= idx %>"><%= idx %></a></li>
-                                <% } %>
-                                <% if (pageMakerByTour.next == true) { %>
-                                    <li><a id="next">&raquo;</a></li>
-                                <% } %>
-                            </ul>
-                        </div>
+                    <div class='text-center'>
+                        <ul class="pagination">
+                            <% if (pagingData_tour.totalPages != 0) { %>
+                            <div class="" style="text-align:center;">
+                                <ul class="pagination">
+                                    <li <%if(pagingData_tour.tour_currentPage == 1){%> class="disabled" <%}else{%>class="waves-effect" <%}%> >
+                                        <a <%if(pagingData_tour.tour_currentPage > 1){%> href="?tour_currentPage=<%=pagingData_tour.tour_currentPage-1%>" <%}%>>
+                                            <i class="material-icons">prev</i>
+                                        </a>
+                                    </li>
+                                    <% for(var i=pagingData_tour.pnStart; i<=pagingData_tour.pnEnd; i++){ %> <li <%if(i===pagingData_tour.tour_currentPage){%> class="active"
+                                            <%}%>><a href="?tour_currentPage=<%=i%>"><%=i%></a></li>
+                                    <% } %>
+                                    <li <%if(pagingData_tour.tour_currentPage == pagingData_tour.totalPages){%> class="disabled" <%}else{%> class="waves-effect" <%}%>>
+                                        <a <%if(pagingData_tour.tour_currentPage < pagingData_tour.totalPages){%> href="?tour_currentPage=<%=pagingData_tour.tour_currentPage+1%>" <%}%> class="waves-effect">
+                                            <i class="material-icons">next</i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <% } %>
+
+                        </ul>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default"
@@ -609,19 +639,19 @@
                     <div class="box-body">
                         <select name="searchType" id="searchType"
                                 style="width: 200px; height: 25px;">
-                            <option value="N" <%=cri.searchType==null?'selected':''%>>----------</option>
+                            <option value="N" <% cri.searchType==null?'selected':''%>>----------</option>
                             <option value="rentcarType"
-                                    <%=cri.searchType=='rentcarType'?'selected':''%>>차종류
+                                    <%cri.searchType=='rentcarType'?'selected':''%>>차종류
                             </option>
                             <option value="rentcarCno"
-                                    <%=cri.searchType=='rentcarCno'?'selected':''%>>차번호
+                                    <%cri.searchType=='rentcarCno'?'selected':''%>>차번호
                             </option>
                             <option value="rentDepartaddr"
-                                    <%=cri.searchType=='rentDepartaddr'?'selected':''%>>대여,반납
+                                    <%cri.searchType=='rentDepartaddr'?'selected':''%>>대여,반납
                                 장소
                             </option>
                             <option value="rentLDiv"
-                                    <%=cri.searchType=='rentLDiv'?'selected':''%>>장소구분(국내/해외)
+                                    <%cri.searchType=='rentLDiv'?'selected':''%>>장소구분(국내/해외)
                             </option>
                         </select> <input type="text" name="keyword" id="keywordInput">
                         <button id="btnSearch">Search</button>
@@ -668,21 +698,29 @@
                             <% }) %>
                         </table>
                     </div>
-                    <div class="box-footer">
-                        <div class="text-center">
-                            <ul class="pagination">
-                                <% if (pageMakerByRentcar.prev == true) { %>
-                                    <li><a id="prev">&laquo;</a></li>
-                                <% } %>
-                                <% for(idx=pageMakerByRentcar.startPage; idx<=pageMakerByRentcar.endPage; idx++){ %>
-                                <li class="<%=pageMakerByRentcar.cri.page == idx ?'active':''%>"><a
-                                            class="index" data-index="<%=idx%>"><%=idx%></a></li>
-                                <% } %>
-                                <% if (pageMakerByRentcar.next == true) { %>
-                                    <li><a id="next">&raquo;</a></li>
-                                <% } %>
-                            </ul>
-                        </div>
+                    <div class='text-center'>
+                        <ul class="pagination">
+                            <% if (pagingData_rentcar.totalPages != 0) { %>
+                            <div class="" style="text-align:center;">
+                                <ul class="pagination">
+                                    <li <%if(pagingData_rentcar.rentcar_currentPage == 1){%> class="disabled" <%}else{%>class="waves-effect" <%}%> >
+                                        <a <%if(pagingData_rentcar.rentcar_currentPage > 1){%> href="?rentcar_currentPage=<%=pagingData_rentcar.rentcar_currentPage-1%>" <%}%>>
+                                            <i class="material-icons">prev</i>
+                                        </a>
+                                    </li>
+                                    <% for(var i=pagingData_rentcar.pnStart; i<=pagingData_rentcar.pnEnd; i++){ %> <li <%if(i===pagingData_rentcar.rentcar_currentPage){%> class="active"
+                                            <%}%>><a href="?rentcar_currentPage=<%=i%>"><%=i%></a></li>
+                                    <% } %>
+                                    <li <%if(pagingData_rentcar.rentcar_currentPage == pagingData_rentcar.totalPages){%> class="disabled" <%}else{%> class="waves-effect" <%}%>>
+                                        <a <%if(pagingData_rentcar.rentcar_currentPage < pagingData_rentcar.totalPages){%> href="?rentcar_currentPage=<%=pagingData_rentcar.rentcar_currentPage+1%>" <%}%> class="waves-effect">
+                                            <i class="material-icons">next</i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <% } %>
+
+                        </ul>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default"

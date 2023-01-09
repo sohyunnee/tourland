@@ -31,7 +31,7 @@
 					    <input type="hidden" value="" id="forSubmit">
 						<div class="form-group">
 							<label>고객 번호</label>
-							<input type="text" name="userno" value="<%=userVO.userno%>" readonly="readonly" style="background:lavender;" >
+							<input type="text" name="id" value="<%=userVO.id%>" readonly="readonly" style="background:lavender;" >
 						</div>
 						<div class="form-group">
 							<label>고객 이름</label>
@@ -92,7 +92,7 @@
 
 <script>
 
-	let userno ="<%=userVO.userno%>";
+	let id ="<%=userVO.id%>";
 	let searchType = "<%=cri.searchType%>";
 	let keyword = "<%=cri.keyword%>";
 

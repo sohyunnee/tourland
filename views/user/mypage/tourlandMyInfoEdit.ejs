@@ -241,7 +241,7 @@
         <span id="info">투어랜드는 고객님의 개인정보가 외부로 노출되지 않도록 항상 노력하고 있습니다.</span>
         <form method="post" autocomplete="off">
                 <% if (mypage=='mypageuser') { %>
-                    <input type="hidden" value="<%=Auth.userno%>" name="userno">
+                    <input type="hidden" value="<%=Auth.id%>" name="id">
                     <p>
                         <label>아이디</label><input type="text" value="<%=Auth.userid %>" name="userid" readonly="readonly" style="background-color: lightgray;">
                     </p>

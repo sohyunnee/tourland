@@ -415,7 +415,7 @@ const fetchEmpData = async (req) => {
 // 로그인 전송
 router.post('/loginForm', (req, res, next) => {
     let {id, pass} = req.body;
-
+    console.log("comparePassword11111->", id, pass);
     let empVO = {};
     let session = {};
 
@@ -430,7 +430,7 @@ router.post('/loginForm', (req, res, next) => {
     fetchData(req).then((userVO) => {
 
         // 직원 ID가 없는 경우
-        if (userVO.id == null) {
+        if (userVO == null) {
             error = "idnoneexist";
         } else {
 
@@ -578,13 +578,13 @@ router.get("/tourlandProductKRList", async (req, res, next) => {
     let searchQuery = "";
 
     if (ddate == "name") {
-        searchQuery = `and pname like concat('%',${keyword},'%')`;
+        searchQuery = `and pname like concat('%',<%=keyword%>,'%')`;
     }
     if (searchType == "expire") {
-        searchQuery = `and pexpire like concat('%',${keyword},'%')`;
+        searchQuery = `and pexpire like concat('%',<%=keyword%>,'%')`;
     }
     if (searchType == "userCart") {
-        searchQuery = `and pname like concat('%',${keyword},'%')`;
+        searchQuery = `and pname like concat('%',<%=keyword%>,'%')`;
     }
     if (searchType == "location") {
         if (keyword === "한국") {
@@ -698,7 +698,7 @@ router.get("/tourlandProductKRList", async (req, res, next) => {
 
 })
 
-// KR 패키지 제품 상세 리스트
+// 패키지 제품 상세 리스트
 router.get("/tourlandProductDetail/:pno", async (req, res, next) => {
 
     const pno = req.params.pno;
@@ -787,7 +787,141 @@ router.get("/tourlandProductDetail/:pno", async (req, res, next) => {
 
 });
 
-// KR 패키지 제품 후기
+// JP 패키지 목록
+router.get("/tourlandProductJPList", async (req, res, next) => {
+    let {Auth, AuthEmp, Manager, login} = sessionCheck(req,res);
+    const userid = req.params.userid;
+    let {ddate, rdate, cnt, searchType, keyword} = req.query;
+    const contentSize = Number(process.env.CONTENTSIZE); // 한페이지에 나올 개수
+    const currentPage = Number(req.query.currentPage) || 1; //현재페이
+    const {limit, offset} = getPagination(currentPage, contentSize);
+
+
+    let searchQuery = "";
+
+    if (ddate == "name") {
+        searchQuery = `and pname like concat('%',<%=keyword%>,'%')`;
+    }
+    if (searchType == "expire") {
+        searchQuery = `and pexpire like concat('%',<%=keyword%>,'%')`;
+    }
+    if (searchType == "userCart") {
+        searchQuery = `and pname like concat('%',<%=keyword%>,'%')`;
+    }
+    if (searchType == "location") {
+        if (keyword === "한국") {
+            searchQuery = `and pname like '%제주%'`;
+        }
+        if (keyword === "일본") {
+            searchQuery = `and pname like '%도쿄%'`;
+        }
+        if (keyword === "중국") {
+            searchQuery = `and pname like '%베이징%'`;
+        }
+    }
+
+    try {
+
+        const list = await product.findAll({
+            // raw : true,
+            nest: true, attributes: ['id', 'pname', 'pcontent', 'pexpire', 'pprice', 'ppic'],
+            include: [
+                {
+                    model: models.airplane,
+                    attributes: ['price'],
+                    as: 'airplaneId_airplanes',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+                {
+                    model: models.hotel,
+                    attributes: ['checkin', 'checkout', 'price'],
+                    as: 'hotelId_hotels',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+                {
+                    model: models.tour,
+                    attributes: ['tprice'],
+                    as: 'tourId_tours',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+                {
+                    model: models.rentcar,
+                    as: 'rentcarId_rentcars',
+                    nest: true,
+                    paranoid: true,
+                    required: false,
+                },
+            ],
+            where: {
+                pname: {
+                    [Op.like]: "%" + '도쿄' + "%"
+                }
+                // id : 13
+
+            },
+            limit, offset
+        });
+
+        const countlist = await product.findAndCountAll({
+            nest: true, attributes: ['id', 'pname', 'pcontent', 'pexpire', 'pprice', 'ppic'],
+            where: {
+                pname: {
+                    [Op.like]: "%" + '도쿄' + "%"
+                }
+                // id : 13
+
+            },
+            limit, offset
+        });
+        const {count: totalItems, rows: tutorials} = countlist;
+        const pagingData = getPagingDataCount(totalItems, currentPage, limit);
+
+
+        // let list = [];
+        let searchkeyword = "";
+        let error = "";
+        let cri = {};
+        let idx = '';
+        let tourDays = '';
+        let date = '';
+        let capa = '';
+
+        console.log("jjjjjjjjjjjjjj->", list);
+
+        if (list != null) {
+            res.render("user/product/tourlandProductJPList", {
+                Auth,
+                AuthEmp,
+                login,
+                tourDays,
+                date,
+                capa,
+                countlist,
+                list,
+                Manager,
+                searchkeyword,
+                error,
+                pagingData,
+                cri,
+                idx
+            });
+        } else {
+            res.status(202).send("notexist");
+        }
+    } catch (e) {
+        console.error(e);
+        next(e);
+    }
+
+});
+
+// 패키지 제품 후기
 router.get("/tourlandProductDetail/tourlandProductReview/:pno", async (req, res, next) => {
 
     const pno = req.params.pno;
@@ -963,7 +1097,7 @@ router.get("/tourlandMyInfoEdit", (req, res, next) => {
             Auth = {
                 userid: req.session.user.Auth.userid,
                 empid: req.session.user.Auth.empid,
-                userno: req.session.user.Auth.userno,
+                id: req.session.user.Auth.id,
                 empno: req.session.user.Auth.empno,
                 username: req.session.user.Auth.username,
                 empname: req.session.user.Auth.empname,

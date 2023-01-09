@@ -24,9 +24,9 @@ module.exports = function(sequelize, DataTypes) {
       comment: "작성자"
     },
     regdate: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: true,
-      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
+      defaultValue: Sequelize.Sequelize.fn('curdate'),
       comment: "작성일자"
     },
     lcate: {

@@ -42,6 +42,8 @@ router.get('/userlist', (req, res, next) => {
 // 고객 관리 전체 목록
 router.get('/userMngList/:usersecess', async (req, res, next) => {
     //usersecess 정상회원, 탈퇴회원 구분
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
+    if(Manager == undefined) res.redirect("/customer");
 
     const usersecess = req.params.usersecess;
     let {searchType, keyword} = req.query;
@@ -98,11 +100,6 @@ router.get('/userMngList/:usersecess', async (req, res, next) => {
     let btnName = (Boolean(Number(usersecess)) ? "회원 리스트" : "탈퇴회원 조회");
 
     console.log("usersecbtt->", btnName)
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired: 0,
-        empno: 7
-    }
     let list = dataAll;
 
     res.render("manager/user/userMngList", {cri, list, btnName, pagingData, Manager, usersecess, AuthEmp});
@@ -175,7 +172,7 @@ router.get('/employeeMngList/:empretired', async (req, res, next) => {
 // 직원 상세보기
 router.get('/employeeDetailForm/:empretired', async (req, res, next) => {
     //empretired 일반사원, 퇴사사원 구분
-
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
     const empretired = req.params.empretired;
     let {no, currentPage, searchType, keyword} = req.query;
 
@@ -188,11 +185,7 @@ router.get('/employeeDetailForm/:empretired', async (req, res, next) => {
 
     let cri = {};
     // header에서 관리자 프로필의 정보를 테스트로 고정시켜버림
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
+
     let success = "";
 
     res.render("manager/employee/employeeDetailForm", {empVO, cri, Manager, empretired, success, AuthEmp});
@@ -200,7 +193,7 @@ router.get('/employeeDetailForm/:empretired', async (req, res, next) => {
 
 router.post('/employeeDetailForm/:empretired', async (req, res, next) => {
     //empretired 일반사원, 퇴사사원 구분
-
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
     console.log("33333333333333333333");
     const {empretired, empno, empname, empbirth, emptel, empaddr, empauth, empid} = req.params;
     let {no, currentPage, searchType, keyword} = req.query;
@@ -213,11 +206,6 @@ router.post('/employeeDetailForm/:empretired', async (req, res, next) => {
     console.log("empid->", empVO);
 
     let cri = {};
-    let Manager = {};
-    let AuthEmp = {
-        empretired: 0,
-        empno: 7
-    }
     let success = "";
 
     res.render("manager/employee/employeeDetailForm", {empVO, cri, Manager, Auth, empretired, success, AuthEmp});
@@ -226,22 +214,20 @@ router.post('/employeeDetailForm/:empretired', async (req, res, next) => {
 // 고객 정보 상세 보기
 router.get('/userDetailForm/:usersecess', async (req, res, next) => {
     //usersecess 정상회원, 탈퇴회원 구분
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
+    if(Manager == undefined) res.redirect("/customer");
     const usersecess = req.params.usersecess;
-    let {no, currentPage, searchType, keyword} = req.query;
+    let {id, userid, currentPage, searchType, keyword} = req.query;
 
     let userVO = await models.user.findOne({
         raw: true,
 
-        where: {userno: no}
+        where: {id: id}
     })
     console.log("userid->", userVO);
 
     let cri = {};
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired: 0,
-        empno: 7
-    }
+
     let couponLists = [{}];
 
     res.render("manager/user/userDetailForm", {userVO, cri, Manager, AuthEmp, usersecess, couponLists});
@@ -251,11 +237,7 @@ router.get('/userDetailForm/:usersecess', async (req, res, next) => {
 // --------------------------------------------------------------- 예약 관리 ---------------------------------------------------------------
 router.get('/reservationMngList', async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
 
     const usersecess = req.params.usersecess;
     let {searchType, keyword} = req.query;
@@ -298,7 +280,7 @@ router.get('/reservationMngList', async (req, res, next) => {
 // / ✈️ 항공관리 productfilightMngList----------------------------------------------------
 // 항공 관리 전체 목록
 router.get('/flightMngList', async (req, res, next) => {
-
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
 
     let {searchType, keyword} = req.query;
 
@@ -349,19 +331,12 @@ router.get('/flightMngList', async (req, res, next) => {
 
     let cri = {searchType, keyword};
 
-
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
-
     res.render("manager/flight/flightMngList2", {cri, flightList, pagingData, Manager, AuthEmp, moment});
 })
 
 // 항공 관리 페이지에서 검색 기능(국내)
 router.get('/flightDomList/:currentPage', async (req, res, next) => {
-
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
 
     let {searchType, keyword} = req.query;
 
@@ -387,19 +362,13 @@ router.get('/flightDomList/:currentPage', async (req, res, next) => {
     const pagingData = getPagingData(dataCountAll, currentPage, limit);
 
     let cri = {searchType, keyword};
-
-
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
 
     res.render("manager/flight/flightMngList2", {cri, flightList, pagingData, Manager, AuthEmp});
 });
 // 항공 관리 페이지에서 검색 기능(해외)
 router.get('/flightAbroadList/:currentPage', async (req, res, next) => {
 
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
 
     let {searchType, keyword} = req.query;
 
@@ -426,22 +395,13 @@ router.get('/flightAbroadList/:currentPage', async (req, res, next) => {
 
     let cri = {searchType, keyword};
 
-
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
-
     res.render("manager/flight/flightMngList2", {cri, flightList, pagingData, Manager, AuthEmp});
 });
 //항공편 추가 페이지
 router.get('/addFlightForm', async (req, res, next) => {
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
+
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
+
     let list = await models.airplane.findAll({
         where: {},
     });
@@ -453,11 +413,8 @@ router.get('/addFlightForm', async (req, res, next) => {
 
 router.post('/addFlightForm', async (req, res, next) => {
 
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
+
     let list = await models.airplane.findAll({
         where: {},
     });
@@ -468,8 +425,9 @@ router.post('/addFlightForm', async (req, res, next) => {
 
 router.get('/flightDetail', async (req, res, next) => {
 // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
+
+
     let {searchType, searchType2, keyword} = req.query;
 
     keyword = keyword ? keyword : "";
@@ -500,7 +458,7 @@ router.get('/flightDetail', async (req, res, next) => {
 // 호텔 관리 전체 목록
 router.get('/hotelMngList', async (req, res, next) => {
 
-
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
     let {searchType, keyword, keyword2, keyword3} = req.query;
 
     const contentSize = Number(10); // 한페이지에 나올 개수
@@ -526,22 +484,12 @@ router.get('/hotelMngList', async (req, res, next) => {
 
     let cri = {searchType, keyword, keyword2, keyword3};
 
-
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
-
     res.render("manager/hotel/hotelMngList", {cri, list, pagingData, Manager, AuthEmp, moment});
 });
 //호텔 등록
 router.get('/hotelRegister', async (req, res, next) => {
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
+
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
     let lastNum = "";
 
     res.render("manager/hotel/hotelRegister", {lastNum, Manager, AuthEmp});
@@ -575,12 +523,7 @@ router.post("/hotelRegister", async (req, res, next) => {
 
 //호텔 수정
 router.get('/hotelModify', async (req, res, next) => {
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
-
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
     let {searchType, keyword} = req.query;
 
     keyword = keyword ? keyword : "";
@@ -603,9 +546,7 @@ router.get('/hotelModify', async (req, res, next) => {
 
 router.post("/hotelModify", async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
-
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
 
     const update = await models.hotel.update({
                 hname: req.body.hname,
@@ -657,7 +598,7 @@ router.get('/hotelDelete', async (req, res, next) => {
 // 🚩 투어 관리 -------------------
 // 현지 투어 관리 전체 목록
 router.get('/tourMngList', async (req, res, next) => {
-
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
 
     let {searchType, keyword} = req.query;
 
@@ -684,24 +625,13 @@ router.get('/tourMngList', async (req, res, next) => {
 
     let cri = {searchType, keyword};
 
-
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
-
     res.render("manager/tour/tourMngList", {cri, list, pagingData, Manager, AuthEmp, moment});
 });
 
 router.get('/tourRegister', async (req, res, next) => {
 
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
 
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
     let no = '';
 
     res.render("manager/tour/tourRegister", {Manager, AuthEmp, no});
@@ -709,8 +639,7 @@ router.get('/tourRegister', async (req, res, next) => {
 
 router.post("/tourRegister", async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
 
     const register = await models.tour.create({
         raw: true,
@@ -731,11 +660,8 @@ router.post("/tourRegister", async (req, res, next) => {
 
 router.get('/tourDetail', async (req, res, next) => {
 // header 공통 !!!
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
+
     let {searchType, keyword} = req.query;
 
     keyword = keyword ? keyword : "";
@@ -756,12 +682,8 @@ router.get('/tourDetail', async (req, res, next) => {
 
 router.get('/tourModify', async (req, res, next) => {
 
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
 
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
     let {searchType,searchType2, keyword} = req.query;
 
 
@@ -783,9 +705,7 @@ router.get('/tourModify', async (req, res, next) => {
 
 router.post("/tourModify", async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
-
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
 
     const update = await models.hotel.update({
             id: req.body.id,
@@ -838,7 +758,7 @@ router.get('/tourDelete', async (req, res, next) => {
 // 🚗 렌트카 관리-----------------
 // 렌트카 관리 전체 목록
 router.get('/rentcarMngList', async (req, res, next) => {
-
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
 
     let {searchType, keyword} = req.query;
 
@@ -865,25 +785,12 @@ router.get('/rentcarMngList', async (req, res, next) => {
 
     let cri = {searchType, keyword};
 
-
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
-
     res.render("manager/rentcar/rentcarMngList", {cri, list, pagingData, Manager, AuthEmp});
 });
 
 router.get('/rentcarRegister', async (req, res, next) => {
 
-
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
-
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
     let autoNO = "";
 
     res.render("manager/rentcar/rentcarRegister", {Manager, AuthEmp, autoNO});
@@ -891,8 +798,7 @@ router.get('/rentcarRegister', async (req, res, next) => {
 
 router.post("/rentcarRegister", async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
 
     const register = await models.rentcar.create({
         raw: true,
@@ -913,11 +819,7 @@ router.post("/rentcarRegister", async (req, res, next) => {
 
 router.get('/rentcarDetailForm', async (req, res, next) => {
 // header 공통 !!!
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
 
     const rentcarVO =
         await models.rentcar.findOne({
@@ -932,9 +834,7 @@ router.get('/rentcarDetailForm', async (req, res, next) => {
 
 router.post("/rentcarDetailFormUpdate", async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
-
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
 
     const update = await models.rentcar.update({
             id: req.body.id,
@@ -988,6 +888,8 @@ router.get('/delRentcar', async (req, res, next) => {
 //상품 전체 목록
 router.get('/productMngList', async (req, res, next) => {
 
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
+    if(Manager == undefined) res.redirect("/customer");
 
     let {searchType, keyword} = req.query;
 
@@ -1048,33 +950,23 @@ router.get('/productMngList', async (req, res, next) => {
 
 
     console.log("usersecbtt->")
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
-    // res.send("ddddddddddddddd"+list);
 
     res.render("manager/product/productMngList", {cri, list, pagingData, Manager, AuthEmp});
 });
 
 router.get('/productDetail', async (req, res, next) => {
 // header 공통 !!!
-
-    let {searchType, keyword} = req.query;
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
+    if(Manager == undefined) res.redirect("/customer");
+    let {id, searchType, keyword} = req.query;
 
     keyword = keyword ? keyword : "";
-
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
 
     const vo = await product.findOne({
         // raw : true,
         nest: true,
         attributes: ['id', 'pname', 'pcontent', 'pexpire', 'pprice', 'ppic'],
+        where : { id : id},
         include: [
             {
                 model: models.airplane,
@@ -1110,17 +1002,16 @@ router.get('/productDetail', async (req, res, next) => {
             },
         ]
     });
+    console.log("ccccccccccccc->", vo);
 
     let cri = {searchType, keyword};
 
-    res.render("manager/product/productDetail", {Manager, Auth, vo, cri, moment})
+    res.render("manager/product/productDetail", {Manager, AuthEmp,  vo, cri, moment})
 });
 
 router.get('/productModify', async (req, res, next) => {
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
 
-
-    let Manager = {};
-    let Auth = {};
     let {searchType, searchType2, keyword, keyword2, keyword3} = req.query;
 
     keyword = keyword ? keyword : "";
@@ -1220,42 +1111,122 @@ router.get('/productDelete', async (req, res, next) => {
 
 router.get("/addProductForm", async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
+    if(Manager == undefined) res.redirect("/customer");
 
-    let {searchType, keyword, keyword2, keyword3} = req.query;
+    let {searchType, keyword} = req.query;
 
     keyword = keyword ? keyword : "";
-    let cri = {searchType, keyword, keyword2, keyword3};
+    let cri = {searchType, keyword};
+    const contentSize = Number(process.env.CONTENTSIZE); // 한페이지에 나올 개수
+    const airplane_currentPage = Number(req.query.airplane_currentPage) || 1; //현재페이지
+    let {limit_airplne, offset_airplne} = getPagination_airplne(airplane_currentPage, contentSize);
+
+    let airplane_count = await models.airplane.findAndCountAll({
+        nest : true,
+        where: {},
+        limit, offset
+    });
+    const pagingData_airplane = getPagingData(airplane_count, airplane_currentPage, limit);
+
+    console.log("----->",airplane_currentPage, contentSize, limit, offset );
+
+    const hotel_currentPage = Number(req.query.hotel_currentPage) || 1; //현재페이지
+    let {limit_hotel, offset_hotel} = getPagination(hotel_currentPage, contentSize);
+    let hotel_count = await models.hotel.findAndCountAll({
+        where: {},
+        limit_hotel, offset_hotel
+    });
+    const pagingData_hotel = getPagingData(hotel_count, hotel_currentPage, limit_hotel);
+
+
+    const tour_currentPage = Number(req.query.tour_currentPage) || 1; //현재페이지
+    const {limit_tour, offset_tour} = getPagination(tour_currentPage, contentSize);
+    let tour_count = await models.tour.findAndCountAll({
+        where: {},
+        limit_tour, offset_tour
+    });
+    const pagingData_tour = getPagingData(tour_count, tour_currentPage, limit_tour);
+
+
+    const rentcar_currentPage = Number(req.query.rentcar_currentPage) || 1; //현재페이지
+    const {limit_rentcar, offset_rentcar} = getPagination(rentcar_currentPage, contentSize);
+    let rentcar_count = await models.rentcar.findAndCountAll({
+        where: {},
+        limit_rentcar, offset_rentcar
+    });
+    const pagingData_rentcar = getPagingData(rentcar_count, rentcar_currentPage, limit_rentcar);
+
 
     const flightListDepature = await models.airplane.findAll({
         where: {},
+        limit_airplane, offset_airplane
     });
+
     const flightListRending = await models.airplane.findAll({
         where: {},
     });
     const hotelList = await models.hotel.findAll({
         where: {},
+        limit_hotel, offset_hotel
     });
     const tourList = await models.tour.findAll({
         where: {},
+        limit_tour, offset_tour
     });
     const rentcarList = await models.rentcar.findAll({
         where: {},
+        limit_rentcar, offset_rentcar
     });
 
 
     res.render("manager/product/addProductForm", {
         Manager,
         Auth,
+        AuthEmp,
         cri,
         flightListDepature,
         flightListRending,
         hotelList,
         tourList,
-        rentcarList
+        rentcarList,
+        pagingData_airplane,
+        pagingData_hotel,
+        pagingData_tour,
+        pagingData_rentcar
     });
 })
+
+router.post('/flightList/:id', async (req, res, next)=>{
+
+    const {id} = req.params;
+
+    console.log("7777777777777->", id);
+
+    let cri = {searchType, keyword} = req.query;
+    const contentSize = 5 // 한페이지에 나올 개수
+    const currentPage = Number(req.query.currentPage) || 1; //현재페이
+
+    const {limit_airplane, offset_airplane} = getPagination(currentPage, contentSize);
+    let airplane_count = await models.airplane.findAndCountAll({
+        nest:true,
+        where: {},
+        limit_airplane, offset_airplane
+    });
+    const pagingData_airplane = getPagingData(airplane_count, currentPage, limit_airplane);
+
+
+
+    const list = await models.airplane.findAll({
+        raw : true,
+        where: { id : id},
+    });
+
+    if(list != null){
+        res.status(204).json({pagingData_airplane,list});
+    }
+
+});
 
 
 // 🎁️ 이벤트 관리 ----------------------------------------------------------
@@ -1299,12 +1270,7 @@ router.get("/eventMngList", async (req, res, next) => {
 // 이벤트 상세보기
 router.get('/eventDetailForm', async (req, res, next) => {
 // header 공통 !!!
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
-
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
     const eventVO =
         await models.event.findOne({
             raw: true,
@@ -1320,12 +1286,7 @@ router.get('/eventDetailForm', async (req, res, next) => {
 // 이벤트 등록하기 화면 보이기
 router.get("/eventRegister", async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
-
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
     let url2 = {};
 
     res.render("manager/event/eventRegister", {Manager, AuthEmp, url2});
@@ -1334,9 +1295,7 @@ router.get("/eventRegister", async (req, res, next) => {
 // 이벤트 등록할 게시글 작성하고 전송하기
 router.post("/eventRegister", upload.single("eventPic"), async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
-
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
     const register = await models.event.create({
         raw: true,
         title: req.body.title,
@@ -1355,8 +1314,7 @@ router.post("/eventRegister", upload.single("eventPic"), async (req, res, next) 
 // 이벤트 수정하기(전송)
 router.post('/eventUpdate', upload.single("eventPic"), async (req, res, next) => {
     // header 공통 !!!
-    // let Manager = {};
-    // let Auth = {};
+
     const { Manager} = sessionEmpCheck(req ,res);
 
     let body = {};
@@ -1421,11 +1379,8 @@ router.delete('/deleteEvent', async (req, res, next) => {
 // ️ ️FAQ 게시판 보기
 router.get('/FAQMngList', async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
+    if(Manager == undefined) res.redirect("/customer");
 
     const usersecess = req.params.usersecess;
     let {searchType, keyword} = req.query;
@@ -1464,23 +1419,14 @@ router.get('/FAQMngList', async (req, res, next) => {
 // FAQ 등록하기 입장
 router.get("/FAQRegister", async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
-
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
     res.render("manager/board/FAQRegister", {Manager, AuthEmp})
 })
 
 // FAQ 등록하기 전송
 router.post("/FAQRegister", async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
 
     const faq = await models.faq.create({
         raw: true,
@@ -1525,12 +1471,7 @@ router.post("/FAQRegister", async (req, res, next) => {
 // FAQ 게시글 읽기
 router.get("/FAQDetail", async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
-
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
     console.log('-------------query??------------', req.query);
     let faq = await models.faq.findOne({
         raw: true,
@@ -1548,12 +1489,7 @@ router.get("/FAQDetail", async (req, res, next) => {
 // FAQ 게시글 수정
 router.get("/FAQModify", async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
-
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
     let cri = {};
     let faq = await models.faq.findOne({
         raw: true,
@@ -1569,12 +1505,7 @@ router.get("/FAQModify", async (req, res, next) => {
 // FAQ 게시글 수정한거 전송하기
 router.post("/FAQModify", async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
-
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
     let cri = {};
     const update = await models.faq.update({
         raw: true,
@@ -1602,12 +1533,7 @@ router.post("/FAQModify", async (req, res, next) => {
 // FAQ 게시글 삭제
 router.delete('/removeFAQ', async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {right: 1, name:"테스트"};
-    let AuthEmp = {
-        empretired : 0,
-        empno : 7
-    }
-
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
     let cri = {};
     models.faq.destroy({
         where: {
@@ -1939,8 +1865,7 @@ router.get('/addNoticeForm', (req, res, next) => {
 //공지사항 추가하기
 router.post('/addNoticeForm', async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
 
     let {title, content} = req.body;
     console.log('-----------req.body---------', req.body);
@@ -2081,8 +2006,8 @@ router.get('/editNotice', async (req, res, next) => {
 // 공지사항 수정하기 전송
 router.post('/editNotice', async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
+    if(Manager == undefined) res.redirect("/customer");
 
     const update = await models.notice.update({
         raw: true,
@@ -2109,8 +2034,8 @@ router.post('/editNotice', async (req, res, next) => {
 // 공지사항 삭제하기
 router.delete('/removeNotice', async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
+    if(Manager == undefined) res.redirect("/customer");
 
     let cri = {};
     models.notice.destroy({
@@ -2130,8 +2055,8 @@ router.delete('/removeNotice', async (req, res, next) => {
 // --------------------------------------------------------------- 쿠폰 관리 ---------------------------------------------------------------
 router.get('/couponMngList', async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    const { AuthEmp, Auth, Manager} = sessionEmpCheck(req ,res);
+    if(Manager == undefined) res.redirect("/customer");
 
     const usersecess = req.params.usersecess;
     let {searchType, keyword} = req.query;
@@ -2171,14 +2096,14 @@ router.get('/couponMngList', async (req, res, next) => {
 
     const pagingData = getPagingData(listCount, currentPage, limit);
 
-    res.render("manager/coupon/couponMngList", {Manager, Auth, cri, available, expired, pagingData});
+    res.render("manager/coupon/couponMngList", {AuthEmp,Manager, Auth, cri, available, expired, pagingData});
 })
 
 // --------------------------------------------------------------- 결제 관리 ---------------------------------------------------------------
 router.get('/paymentList', async (req, res, next) => {
     // header 공통 !!!
-    let Manager = {};
-    let Auth = {};
+    const { Auth, AuthEmp, Manager} = sessionEmpCheck(req ,res);
+    if(Manager == undefined) res.redirect("/customer");
 
     let cri = {};
 
@@ -2271,28 +2196,28 @@ router.post('/loginForm', async (req, res, next) => {
     });
 });
 
-
-router.post('/loginForm', async (req, res, next) => {
-    let {registerSuccess, id} = req.query;
-    let EmpStay = {};
-    let error = "";
-    let Auth = {};
-    let login = "";
-    let Manager = {};
-    let searchkeyword = "";
-
-
-    res.render("user/tourlandLoginForm", {
-        Auth,
-        login,
-        Manager,
-        searchkeyword,
-        registerSuccess,
-        UserStay,
-        EmpStay,
-        error
-    });
-});
+//
+// router.post('/loginForm', async (req, res, next) => {
+//     let {registerSuccess, id} = req.query;
+//     let EmpStay = {};
+//     let error = "";
+//     let Auth = {};
+//     let login = "";
+//     let Manager = {};
+//     let searchkeyword = "";
+//
+//
+//     res.render("user/tourlandLoginForm", {
+//         Auth,
+//         login,
+//         Manager,
+//         searchkeyword,
+//         registerSuccess,
+//         UserStay,
+//         EmpStay,
+//         error
+//     });
+// });
 
 
 router.get('/employee/idCheck/:userid', async (req, res, next) => {

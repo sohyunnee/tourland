@@ -54,7 +54,14 @@ router.get('/displayFile/:whichOne', async  (req, res, next) => {
     if ( choice === "practice"){
         path = base_dir + "/practice" + query;
     }
-    fs.createReadStream(path).pipe(res);
+    fs.readFile(path, (err, data)=>{
+        if(err){
+            throw err;
+        }
+        else{
+            fs.createReadStream(path).pipe(res);
+        }
+    })
 });
 
 router.get("/logout", (req, res, next)=>{

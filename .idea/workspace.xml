@@ -86,7 +86,7 @@
     "settings.editor.selected.configurable": "editor.preferences.fonts.default",
     "vue.rearranger.settings.migration": "true"
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/views/manager/reservation" />
@@ -357,6 +357,8 @@
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <MESSAGE value="01.05 sh manager 수" />
+    <option name="LAST_COMMIT_MESSAGE" value="01.05 sh manager 수" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

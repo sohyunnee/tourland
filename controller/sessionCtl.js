@@ -37,11 +37,13 @@ exports.sessionCheck = (req, res) => {
         req.session.save();
     }
 
-    if (req.session.user.Auth.id === undefined) return res.redirect("/customer");
+    if (req.session.user.Auth == undefined || req.session.user.Auth == null){
+        return res.redirect("/customer");
+    }
+    else{
+        return  req.session.user;
+    }
     // if (req.session.user.Manager === undefined) return res.redirect("/customer");
-
-    return  req.session.user;
-
 }
 
 
@@ -53,7 +55,10 @@ exports.sessionEmpCheck = (req, res) => {
         req.session.save();
     }
 
-    if (req.session.user.AuthEmp.empno === undefined) return res.json({"responsetxt":"/loginManagerForm"});
-    return  req.session.user;
+    if (req.session.user.AuthEmp.empno == undefined){
+        return res.json({"responsetxt":"/loginManagerForm"})
+    }else{
+        return  req.session.user;
+    }
 
 }

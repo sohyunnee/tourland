@@ -1,5 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%>
 <script>
     var div;
     var page;
@@ -138,13 +136,13 @@ pageEncoding="UTF-8"%>
         price += Number(res.vo.price);
         $("#price").val(price);
     }
-    var clickAir = function(no, div) {
+    var clickAir = function(id, div) {
         $.ajax({
-            url : "flightList/" + no,
-            type : "get",
+            url : "flightList/" + id,
+            type : "post",
             dataType : "json",
             success : function(res) {
-                if(res.vo.no==$("#airTable .flightList").find("td").eq(0).attr("data-no")) {
+                if(res.vo.id==$("#airTable .flightList").find("td").eq(0).attr("data-no")) {
                     alert("같은 항공기가 추가되어 있어 추가할 수 없습니다");
                     return;
                 }
@@ -171,8 +169,8 @@ pageEncoding="UTF-8"%>
         })
     }
     var airAjax = function(div, page, searchType, keyword) {
-        $
-            .ajax({
+
+        $.ajax({
                 url : "flightList",
                 type : "get",
                 data : {
@@ -223,17 +221,17 @@ pageEncoding="UTF-8"%>
                         var prevli = $("<li>").append(preva);
                         var nexta = $("<a id='next'>").html("&raquo;");
                         var nextli = $("<li>").append(nexta);
-                        if (res.pageMaker.prev) $("#flightDepature .pagination").append(prevli);
-                        for (var i = res.pageMaker.startPage; i <= res.pageMaker.endPage; i++) {
+                        if (pagingData_airplane.currentPage == 1) $("#flightDepature .pagination").append(prevli);
+                        for (var i = res.pagingData_airplane.pnStart; i <= res.pagingData_airplane.pnEnd; i++) {
                             var a = $("<a class='index' data-index='"+i+"'>")
                                 .html(i);
                             var li = $("<li>").append(a);
-                            if (res.pageMaker.cri.page == i) {
+                            if (res.pagingData_airplane.cri.page == i) {
                                 li.addClass("active");
                             }
                             $("#flightDepature .pagination").append(li);
                         }
-                        if (res.pageMaker.next) $("#flightDepature .pagination").append(nextli);
+                        if (pagingData_airplane.currentPage == pagingData_airplane.totalPages) $("#flightDepature .pagination").append(nextli);
                     }
                 },
                 error : function(request, status, error) { // 결과 에러 콜백함수
@@ -477,6 +475,7 @@ pageEncoding="UTF-8"%>
         })
     }
     $(function() {
+
         $("#file").change(function() {
             var files = $(this)[0].files;
             console.log(files);
@@ -495,13 +494,16 @@ pageEncoding="UTF-8"%>
             "click",
             "#flightDepature .index",
             function() {
+
                 div = "Depature";
-                page = $(this).attr("data-index");
+                currentPage = $(this).attr("data-index");
                 searchType = $(
                     "#flightDepature #searchType option:selected")
                     .val();
                 keyword = $("#flightDepature #keywordInput").val();
-                airAjax(div, page, searchType, keyword);
+
+
+                airAjax(div, currentPage, searchType, keyword);
             })
         $(document).on(
             "click",
@@ -532,6 +534,7 @@ pageEncoding="UTF-8"%>
         $(document).on("click", "#flightDepature .flightList", function() {
             var no = $(this).attr("data-no");
             var div = "Depature";
+            alert("ccccccccc")
             clickAir(no, div);
         })
         $("#flightDepature #btnSearch").click(
@@ -733,6 +736,7 @@ pageEncoding="UTF-8"%>
         })
         //다이얼로그 호출
         $("#addFlight").click(function() {
+            alert("---------------------" + airAdd[0] + airAdd[1])
             if(airAdd[0]&&airAdd[1]) {
                 if(confirm("기존의 출도착 항공편이 추가되어있습니다 다시 추가하시겠습니까?")) {
                     airAdd[0] = false;
@@ -742,6 +746,7 @@ pageEncoding="UTF-8"%>
                 }
             }
             else if(!airAdd[0]&&!airAdd[1]) {
+                alert("***************")
                 $("#flightDepature").modal("show");
             }
         })
