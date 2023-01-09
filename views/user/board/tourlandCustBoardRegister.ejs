@@ -9,7 +9,7 @@
 	background: mistyrose;
 }
 
-  #boardRegister, #btnReturnToList{
+  #btnWrite, #btnReturnToList{
     width:100px;
     height:30px;
     border:none;
@@ -34,12 +34,12 @@
                                   <label>작성자</label>
                                   <% if(mypage === 'mypageuser') { %>
                                   <%=Auth.username%><br>
-                                  <input type="text" name="writer"  value="<%-Auth.username%>" readonly="readonly">
+                                  <input type="hidden" name="writer"  value="<%-Auth.username%>" readonly="readonly">
                                   <% } %>
 
                                   <% if(mypage === 'mypageemp') { %>
                                   <%=Auth.empname%>
-                                  <input type="text" name="writer"  value="<%-Auth.empname%>" readonly="readonly">
+                                  <input type="hidden" name="writer"  value="<%-Auth.empname%>" readonly="readonly">
                                   <% } %>
 							  </p>
 							  <p>
@@ -59,8 +59,8 @@
 					   <input type="file" name="image"/>
 					   <br>
 							<div>
-								 <button type="submit" class="btn btn-primary" onclick="btnWrite()">등록</button>
-								 <button type="button" class="btn btn-primary" onclick="btnReturnToList()">목록으로</button>
+								 <button type="submit" class="btn btn-primary" onclick="btnWrite()" id="btnWrite">등록</button>
+								 <button type="button" class="btn btn-primary" onclick="location.href = 'tourlandCustBoard'" id="btnReturnToList">목록으로</button>
 							</div>
 				   </form>
 
@@ -72,9 +72,9 @@
 		</section>
 		<script>
 
-	function btnReturnToList() {
-		location.href = 'tourlandCustBoard';
-	}
+	// function btnReturnToList() {
+	// 	location.href = 'tourlandCustBoard';
+	// }
 
 	function btnWrite() {
 		location.href = 'tourlandCustBoard';

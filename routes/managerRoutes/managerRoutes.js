@@ -217,7 +217,7 @@ router.get('/userDetailForm/:usersecess', async (req, res, next) => {
     const {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
     if(Manager == undefined) res.redirect("/customer");
     const usersecess = req.params.usersecess;
-    let {id, userid, currentPage, searchType, keyword} = req.query;
+    let {id, currentPage, searchType, keyword} = req.query;
 
     let userVO = await models.user.findOne({
         raw: true,
@@ -1657,6 +1657,7 @@ router.get('/planBoardList', async (req, res, next) => {
         order: [
             ["id", "DESC"]
         ],
+        limit, offset
     })
     const listCount =
         await models.planboard.findAndCountAll({
@@ -2005,9 +2006,6 @@ router.get('/editNotice', async (req, res, next) => {
 
 // 공지사항 수정하기 전송
 router.post('/editNotice', async (req, res, next) => {
-    // header 공통 !!!
-    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
-    if(Manager == undefined) res.redirect("/customer");
 
     const update = await models.notice.update({
         raw: true,
@@ -2055,8 +2053,7 @@ router.delete('/removeNotice', async (req, res, next) => {
 // --------------------------------------------------------------- 쿠폰 관리 ---------------------------------------------------------------
 router.get('/couponMngList', async (req, res, next) => {
     // header 공통 !!!
-    const { AuthEmp, Auth, Manager} = sessionEmpCheck(req ,res);
-    if(Manager == undefined) res.redirect("/customer");
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
 
     const usersecess = req.params.usersecess;
     let {searchType, keyword} = req.query;
@@ -2096,19 +2093,19 @@ router.get('/couponMngList', async (req, res, next) => {
 
     const pagingData = getPagingData(listCount, currentPage, limit);
 
-    res.render("manager/coupon/couponMngList", {AuthEmp,Manager, Auth, cri, available, expired, pagingData});
+    res.render("manager/coupon/couponMngList", {Manager, AuthEmp, cri, available, expired, pagingData});
 })
 
 // --------------------------------------------------------------- 결제 관리 ---------------------------------------------------------------
 router.get('/paymentList', async (req, res, next) => {
     // header 공통 !!!
-    const { Auth, AuthEmp, Manager} = sessionEmpCheck(req ,res);
-    if(Manager == undefined) res.redirect("/customer");
+    const { AuthEmp, Manager} = sessionEmpCheck(req ,res);
+
 
     let cri = {};
 
 
-    res.render("manager/payment/paymentList", {Manager, Auth, cri});
+    res.render("manager/payment/paymentList", {Manager, AuthEmp, cri});
 })
 
 

@@ -12,7 +12,7 @@
  #datailRealContent{
    height: 550px;
  }
- #btnReturnToList{
+ #btnReturnToList, #btnUpdate, #btnDelete{
     width:100px;
     height:30px;
     border:none;
@@ -25,10 +25,12 @@
 <body>
 	<%- include("../../include/userHeader.ejs")%>
 		<section>
-		    <div id="detailDiv">
+		    <div id="detailCustBoard">
 				<div>
-				  <br>
-				  <p>여행후기 게시판 입니다 ------ </p>
+					<br>
+					<h1>여행 후기</h1>
+					--------------------------------------
+					<br>
 				</div>
 				<div id="detailContent">
 				   <ul id="datailUl">
@@ -39,7 +41,11 @@
 				   </ul>
 				   <div id="datailRealContent">
 				       <%=custBoardVO.content%><br>
-					   <img src="<%=custBoardVO.image%>" alt="image"/>
+					   <% if(custBoardVO.image !== null) { %>
+					   <img src="/displayFile/event?filename=<%=custBoardVO.image%>" alt="image" onerror="this.remove ? this.remove() : this.removeNode();"/>
+					   <% } else { %>
+					   <div border="1px solid white"/>
+					   <% } %>
 				   </div>
 
 				</div>
@@ -47,7 +53,7 @@
 							 <button type="button" class="btn btn-primary" id="btnReturnToList">목록으로</button>
 					<!--게시글 본인이라면 수정&삭제 보임 -->
 					<% if(mypage === 'mypageuser' && username === custBoardVO.writer) { %>
-						<button type="button" class="btn btn-primary" onclick="btnUpdate()">수정하기</button>
+						<button type="button" class="btn btn-primary" onclick="btnUpdate()" id="btnUpdate">수정하기</button>
 						<button type="submit" class="btn btn-primary" id="btnDelete">삭제하기</button>
 					<% } %>
 

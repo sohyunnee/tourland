@@ -67,6 +67,10 @@ table#reserv th.thTitle{
     height: 50px;
 }
 
+#detailCustBoard{
+    width: 800px;
+    margin : 0 auto;
+}
 
 /* 디테일 페이지 */
 #detailDiv{

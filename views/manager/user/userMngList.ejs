@@ -52,8 +52,8 @@
 						    <tr data-click="<%=userList.id%>" class="userList"> <!-- 전체 줄 클릭했을 때 디테일로 넘어가도록 처리할 data-click 속성 선언 -->
 						    <td><%=userList.id%></td>
 						    <td><%=userList.username%></td>
-						    <td><%=new Date(userList.userbirth)%></td>
-						    <td style="background-color: <%=(userList.userpassport == null) ? "red":"green"%>">
+						    <td><%=userList.userbirth%></td>
+						    <td style="background-color: <%=(userList.userpassport == null) ? "pink":"yellow"%>">
 <%=(userList.userpassport == null) ? '등록필요':'등록완료' %></td>
 						    <td><%=userList.userid%></td>
 						    </tr>

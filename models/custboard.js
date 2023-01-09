@@ -33,6 +33,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(50),
       allowNull: true,
       comment: "비밀번호"
+    },
+    image: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      comment: "사진"
     }
   }, {
     sequelize,

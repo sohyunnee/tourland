@@ -5,11 +5,11 @@ const path = require("path");
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public/displayFile/upload/')
+        cb(null, 'public/displayFile/event/')
     },
     filename: function (req, file, cb) {
         const ext = path.extname(file.originalname);  // 파일 확장자
-        cb(null, path.basename(file.originalname, ext) + '-' + Date.now() + ext); // 새 파일명(기존 파일명 + 시간 + 확장자)} else
+        cb(null, '/' + path.basename(file.originalname, ext) + '-' + Date.now() + ext); // 새 파일명(기존 파일명 + 시간 + 확장자)} else
     },
     limits : { filesize : 30 * 1024 * 1024 }, // 30KB
 })
