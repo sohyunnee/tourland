@@ -85,6 +85,7 @@
             $("#bigImgBox img").attr("src", $(this).attr("src"));
         })
         $("#review").click(function() {
+            alert("ddddddddd")
             location.href = "tourlandProductReview/<%=vo.id%>?price=<%=vo.pprice%>";
         })
         for (var i = 1; i <= 45; i++) {
@@ -198,7 +199,7 @@
         $(".selTour").change();
 
         $("#doReserv").click(function () {
-            if (<%=Auth.userno%>==null) {
+            if ("<%=Auth.userid%>"==null) {
                 alert("로그인부터 먼저해주세요");
                 location.href = "/loginForm";
                 return false;
@@ -270,7 +271,7 @@
             })
         });
         $("#doWish").click(function () {
-            if ( <%=Auth.userno%>==null ) {
+            if ( "<%=Auth.userid%>"==null ) {
                 alert("로그인부터 먼저해주세요");
                 location.href = "/loginForm";
                 return false;
@@ -376,7 +377,7 @@
 </script>
 <% if (Auth != null && login == 'user') { %>
 <script>
-    uno = <%= Auth.userno %>;
+    uno = "<%= Auth.userid %>";
 </script>
 <% } %>
 <section>

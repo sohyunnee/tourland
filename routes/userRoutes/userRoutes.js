@@ -40,13 +40,13 @@ const {upload} = require("../../controller/fileupload");
 
 let user = {
     Auth: {
-        id: "",
+        id: "0",
         username: "",
         userbirth: "",
         usertel: "",
         useraddr: "",
         userpassport: "",
-        userid: "",
+        userid: "0",
         usersecess: "",
         useremail: ""
     },
@@ -756,9 +756,11 @@ router.get("/tourlandProductKRList", async (req, res, next) => {
 
 // 패키지 제품 상세 리스트
 router.get("/tourlandProductDetail/:pno", async (req, res, next) => {
-
+    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
     const pno = req.params.pno;
     let {price, rdate, cnt, searchType, keyword} = req.query;
+
+    console.log("1212121212->", Auth);
 
 
     try {
@@ -806,7 +808,6 @@ router.get("/tourlandProductDetail/:pno", async (req, res, next) => {
             }
         });
 
-        let Manager = {name: "테스트"};
         let searchkeyword = "";
         let error = "";
         let cri = {};
@@ -979,7 +980,7 @@ router.get("/tourlandProductJPList", async (req, res, next) => {
 
 // 패키지 제품 후기
 router.get("/tourlandProductDetail/tourlandProductReview/:pno", async (req, res, next) => {
-
+    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
     const pno = req.params.pno;
     let {price, rdate, cnt, searchType, keyword} = req.query;
 
@@ -1048,8 +1049,6 @@ router.get("/tourlandProductDetail/tourlandProductReview/:pno", async (req, res,
 
         console.log("000000-", list);
 
-        let login = "manager";
-        let Manager = {name: "테스트"};
         let searchkeyword = "";
         let error = "";
         let cri = {};
