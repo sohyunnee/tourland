@@ -845,6 +845,8 @@ router.get("/tourlandProductDetail/:pno", async (req, res, next) => {
 });
 
 // JP 패키지 목록
+
+// KR 패키지 목록
 router.get("/tourlandProductJPList", async (req, res, next) => {
     let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
     const userid = req.params.userid;
@@ -949,10 +951,9 @@ router.get("/tourlandProductJPList", async (req, res, next) => {
         let date = '';
         let capa = '';
 
-        console.log("jjjjjjjjjjjjjj->", list);
 
         if (list != null) {
-            res.render("user/product/tourlandProductJPList", {
+            res.render("user/product/tourlandProductKRList", {
                 Auth,
                 AuthEmp,
                 login,
@@ -976,7 +977,7 @@ router.get("/tourlandProductJPList", async (req, res, next) => {
         next(e);
     }
 
-});
+})
 
 // 패키지 제품 후기
 router.get("/tourlandProductDetail/tourlandProductReview/:pno", async (req, res, next) => {
@@ -1261,7 +1262,7 @@ router.get('/tourlandMyCoupon', async (req, res, next) => {
 
 // 공지사항 전체 목록
 router.get("/tourlandBoardNotice", async (req, res, next) => {
-
+    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
     const usersecess = req.params.usersecess;
     let {searchType, keyword} = req.query;
 
@@ -1312,7 +1313,6 @@ router.get("/tourlandBoardNotice", async (req, res, next) => {
     console.log('---------', noticeNoFixedList);
 
     // userHeader에 들어갈거
-    let Manager = {};
     let searchkeyword = "";
 
     res.render("user/board/tourlandBoardNotice", {
@@ -1329,7 +1329,7 @@ router.get("/tourlandBoardNotice", async (req, res, next) => {
 
 // 공지사항 게시글 읽기
 router.get("/tourlandBoardNoticeDetail", async (req, res, next) => {
-
+    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
     let notice =
         await models.notice.findOne({
             raw: true,
@@ -1343,7 +1343,6 @@ router.get("/tourlandBoardNoticeDetail", async (req, res, next) => {
 
 
     // userHeader에 들어갈거
-    let Manager = {};
     let searchkeyword = "";
 
     res.render("user/board/tourlandBoardNoticeDetail", {notice, Auth, login, Manager, searchkeyword});
@@ -1351,7 +1350,7 @@ router.get("/tourlandBoardNoticeDetail", async (req, res, next) => {
 
 // FAQ 전체 목록
 router.get('/tourlandBoardFAQ', async (req, res, next) => {
-
+    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
     const usersecess = req.params.usersecess;
     let {searchType, keyword} = req.query;
 
@@ -1386,7 +1385,6 @@ router.get('/tourlandBoardFAQ', async (req, res, next) => {
 
 
     // userHeader 에서 필요한 변수들
-    let Manager = {};
     let searchkeyword = "";
 
 
@@ -1396,7 +1394,7 @@ router.get('/tourlandBoardFAQ', async (req, res, next) => {
 //-------------------------------------상품 문의 사항 상품 문의 사항 상품 문의 사항 상품 문의 사항 상품 문의 사항 상품 문의 사항 --------------------------------------------------
 // 상품 문의 사항
 router.get('/tourlandPlanBoard', async (req, res, next) => {
-
+    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
     const contentSize = 8 // 한페이지에 나올 개수
     const currentPage = Number(req.query.currentPage) || 1; //현재페이
     const {limit, offset} = getPagination(currentPage, contentSize);
@@ -1429,7 +1427,6 @@ router.get('/tourlandPlanBoard', async (req, res, next) => {
     console.log('-----------현재페이지=------', currentPage);
 
     // userHeader 에서 필요한 변수들
-    let Manager = {};
     let searchkeyword = "";
 
 
@@ -1448,6 +1445,7 @@ router.get('/tourlandPlanBoard', async (req, res, next) => {
 
 // 상품 문의 사항 글 눌러서 보기
 router.get('/tourlandPlanBoardDetail', async (req, res, next) => {
+    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
     console.log('=---쿼리추출---', req.query);
 
     let plan =
@@ -1461,7 +1459,6 @@ router.get('/tourlandPlanBoardDetail', async (req, res, next) => {
     let cri = {};
 
     // userHeader 에서 필요한 변수들
-    let Manager = {};
     let searchkeyword = "";
 
     res.render('user/board/tourlandPlanBoardDetail', {plan, Auth, login, Manager, searchkeyword, cri});
