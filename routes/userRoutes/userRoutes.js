@@ -9,6 +9,7 @@ const session = require('express-session');
 const MemoryStore = require('memorystore')(session);
 const {QueryTypes, where} = require("sequelize");
 const moment = require("moment");
+let {userAuth}= require("../../controller/userData");
 
 const {sessionCheck, sessionEmpCheck} = require('../../controller/sessionCtl');
 
@@ -38,54 +39,9 @@ const parser = bodyParser.urlencoded({extended: false});
 const {upload} = require("../../controller/fileupload");
 
 
-let user = {
-    Auth: {
-        id: "0",
-        username: "",
-        userbirth: "",
-        usertel: "",
-        useraddr: "",
-        userpassport: "",
-        userid: "0",
-        usersecess: "",
-        useremail: ""
-    },
-    AuthEmp: {
-        empno: "",
-        empname: "",
-        empbirth: "",
-        emptel: "",
-        empaddr: "",
-        epmauth: "",
-        empid: "",
-        epmretired: ""
-    },
-    Mananger: {name: "", right: 1},
-    User: "",
-    login: "user",
-    mypage: "mypageuser"
-}
-
-
-
 
 // 투어랜드 메인 페이지
 router.get('/', async (req, res, next) => {
-
-    console.log("33333333333333333->", user);
-    let Auth, AuthEmp, Manager, login;
-    if(req.session.user == undefined){
-        Auth = user.Auth;
-        AuthEmp = user.AuthEmp;
-        Manager = user.Mananger;
-        login = user.login;
-    }
-    else {
-        Auth = req.session.user.Auth;
-        AuthEmp = req.session.user.AuthEmp;
-        Manager = req.session.user.Mananger;
-        login = req.session.user.login;
-    }
 
     const currentProductPrice = {};
     const currentProductPrice2 = {};
@@ -145,41 +101,22 @@ router.get('/', async (req, res, next) => {
 
     let msg = `세션이 존재하지 않습니다.`
 
-    if (req.session.user) {
-        msg = `${req.session.user.User}`;
-        if(Auth != null){
-            Auth = {
-                username: req.session.user.User,
-                userid: req.session.user.Auth.userid,
-                userpass: req.session.user.Auth.userpass
-            };
-            Manager : {
-                name: req.session.user.Auth.username
-            }
-        }
-        if(AuthEmp != null){
-            Auth = {
-                username: req.session.user.User,
-                userid: req.session.user.AuthEmp.empid,
-                userpass: req.session.user.AuthEmp.emppass
-            };
-            AuthEmp = {
-                empname: req.session.user.User,
-                emprid: req.session.user.AuthEmp.empid,
-                emppass: req.session.user.AuthEmp.emppass
-            };
-            Manager = {
-                name :  req.session.user.AuthEmp.empname
-            }
-        }
+    // if (req.userAuth) {
+    //     msg = `${req.userAuth.username}`;
+    //     if(userAuth != null){
+    //         userAuth = {
+    //             role : req.userAuth.role,
+    //             username: req.userAuth,username,
+    //         };
+    //     }
+    // }
 
-        login = req.session.user.login;
-    }
-
-    console.log("Auth============->", Auth, AuthEmp, msg);
 
     let {searchType, keyword, keyword2} = req.query;
     let searchkeyword = keyword;
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
 
 
     res.render('tourlandMain', {
@@ -191,18 +128,17 @@ router.get('/', async (req, res, next) => {
         popup2,
         banner1,
         banner2,
-        Auth,
-        AuthEmp,
-        login,
-        Manager,
-        searchkeyword
+        searchkeyword,
+        userAuth
     });
 
 });
 
 // 회원가입
 router.get('/tourlandRegister', function (req, res, next) {
-
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
     let autoNo = "";
 
     let userVO = {};
@@ -212,9 +148,7 @@ router.get('/tourlandRegister', function (req, res, next) {
 
     let msg = `세션이 존재하지 않습니다.`
     if (req.session.user) {
-        msg = `${req.session.user.User}`;
-        Auth = {username: req.session.user.User};
-        login = req.session.user.login;
+        const userAuth = req.session.user.userAuth;
     }
 
     console.log("Auth->", Auth, msg);
@@ -359,32 +293,32 @@ router.post('/EditPasswordCheck1', async (req, res, next) => {
 )
 ;
 
-// 로그인 폼
-router.get('/loginForm', async (req, res, next) => {
-    console.log("3333333333->", req.session.user);
+// // 로그인 폼
+// router.get('/loginForm', async (req, res, next) => {
+//     console.log("3333333333->", req.session.user);
+//
+//     let {Auth, Manager, login} = sessionCheck(req, res);
+//     let {registerSuccess, id} = req.query;
+//     let UserStay = {userid: id};
+//
+//     let EmpStay = {};
+//     let error = "";인
+//     let searchkeyword = "";
+//
+//
+//     res.render("user/tourlandLoginForm", {
+//         Auth,
+//         login,
+//         Manager,
+//         searchkeyword,
+//         registerSuccess,
+//         UserStay,
+//         EmpStay,
+//         error
+//     });
+// });
 
-    let {Auth, Manager, login} = sessionCheck(req, res);
-    let {registerSuccess, id} = req.query;
-    let UserStay = {userid: id};
-
-    let EmpStay = {};
-    let error = "";
-    let searchkeyword = "";
-
-
-    res.render("user/tourlandLoginForm", {
-        Auth,
-        login,
-        Manager,
-        searchkeyword,
-        registerSuccess,
-        UserStay,
-        EmpStay,
-        error
-    });
-});
-
-// 매니저 로그인 폼
+// 매니저 인 폼
 router.get('/loginManagerForm', async (req, res, next) => {
 
     let {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
@@ -475,74 +409,74 @@ const fetchEmpData = async (req) => {
 
 }
 
-// 로그인 전송
-router.post('/loginForm', (req, res, next) => {
-    let {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
-
-
-    let {id, pass} = req.body;
-
-    let empVO = {};
-    let session = {};
-
-    let registerSuccess = {};
-    let UserStay;
-    let EmpStay = {};
-    let error = "";
-    let searchkeyword = "";
-    let loginSuccess = false;
-
-    fetchData(req).then((userVO) => {
-        console.log("11111111111111111111111->",userVO);
-        // 직원 ID가 없는 경우
-        if (userVO == null) {
-            error = "idnoneexist";
-            res.status(405).json({"responseText":error});
-            console.log("2222222222222->",userVO);
-        } else {
-
-            // 직원 ID가 있고 탈퇴한 회원
-            if (userVO.usersecess === 1) {
-                error = "retiredcustomer";
-                res.status(405).json({"responseText":error});
-
-            } else if (userVO.usersecess === 0) {
-
-                bcrypt.compare(req.body.pass, userVO.userpass, (err, result) => {
-                    UserStay = userVO;
-                    if (result) {
-                        loginSuccess = true;
-
-                        req.session.user = {
-                            "User": userVO.username,
-                            "login": "user",
-                            "Auth": userVO,
-                            "pass": pass,
-                            "mypage": "mypageuser",
-                            "userid": id,
-                        }
-                        req.session.save();
-                        Auth = userVO;
-                        login = "user";
-
-                        console.log(`세션 저장 완료! `);
-                        res.status(200).json({"responseText":"loginsuccess"});
-                    } else {
-                        res.status(405).json({"responseText":err});
-                    }
-                })
-
-            } else {
-                error = "usernotfind";
-                res.status(405).json({"responseText":error});
-            }
-
-        }
-
-    })
-
-
-});
+// // 로그인 전송
+// router.post('/loginForm', (req, res, next) => {
+//     let {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
+//
+//
+//     let {id, pass} = req.body;
+//
+//     let empVO = {};
+//     let session = {};
+//
+//     let registerSuccess = {};
+//     let UserStay;
+//     let EmpStay = {};
+//     let error = "";
+//     let searchkeyword = "";
+//     let loginSuccess = false;
+//
+//     fetchData(req).then((userVO) => {
+//         console.log("11111111111111111111111->",userVO);
+//         // 직원 ID가 없는 경우
+//         if (userVO == null) {
+//             error = "idnoneexist";
+//             res.status(405).json({"responseText":error});
+//             console.log("2222222222222->",userVO);
+//         } else {
+//
+//             // 직원 ID가 있고 탈퇴한 회원
+//             if (userVO.usersecess === 1) {
+//                 error = "retiredcustomer";
+//                 res.status(405).json({"responseText":error});
+//
+//             } else if (userVO.usersecess === 0) {
+//
+//                 bcrypt.compare(req.body.pass, userVO.userpass, (err, result) => {
+//                     UserStay = userVO;
+//                     if (result) {
+//                         loginSuccess = true;
+//
+//                         req.session.user = {
+//                             "User": userVO.username,
+//                             "login": "user",
+//                             "Auth": userVO,
+//                             "pass": pass,
+//                             "mypage": "mypageuser",
+//                             "userid": id,
+//                         }
+//                         req.session.save();
+//                         Auth = userVO;
+//                         login = "user";
+//
+//                         console.log(`세션 저장 완료! `);
+//                         res.status(200).json({"responseText":"loginsuccess"});
+//                     } else {
+//                         res.status(405).json({"responseText":err});
+//                     }
+//                 })
+//
+//             } else {
+//                 error = "usernotfind";
+//                 res.status(405).json({"responseText":error});
+//             }
+//
+//         }
+//
+//     })
+//
+//
+// });
 
 
 
@@ -617,7 +551,22 @@ router.post('/loginManagerForm', (req, res, next) => {
 router.get("/logout", (req, res, next) => {
 
     req.session.destroy();
-    Auth = {};
+    userAuth = {
+        id: "",
+        username: "",
+        userbirth: "",
+        usertel: "",
+        userpassport: "",
+        userid: "",
+        usersecess: "",
+        useremail: "",
+        useraddr: "",
+        postcode:"",
+        detailAddress:"",
+        extraAddress:"",
+        role: "customer",
+        accessToken: ""
+    }
     console.log(`session을 삭제하였습니다.`);
     res.redirect("/customer");
 })
