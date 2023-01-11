@@ -34,5 +34,15 @@ const comparePassword = ((userid,userpass,Password) =>{
 
 })
 
-module.exports = {makePassword, comparePassword};
+
+const hashPassword = async function hashPassword(password) {
+    return await bcrypt.hash(password, 10);
+}
+
+const validatePassword = async function validatePassword(plainPassword, hashedPassword) {
+    return await bcrypt.compare(plainPassword, hashedPassword);
+}
+
+
+module.exports = {makePassword, comparePassword,hashPassword, validatePassword};
 

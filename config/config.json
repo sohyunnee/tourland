@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "tourland",
+    "password": "tourland1333",
+    "database": "tourlandnodejs",
+    "host": "docs.yi.or.kr",
+    "dialect": "mariadb"
+  },
+  "test": {
+    "username": "tourland",
+    "password": "tourland1333",
+    "database": "tourlandnodejs",
+    "host": "docs.yi.or.kr",
+    "dialect": "mariadb"
+  },
+  "production": {
+    "username": "tourland",
+    "password": "tourland1333",
+    "database": "tourlandnodejs",
+    "host": "docs.yi.or.kr",
+    "dialect": "mariadb"
+  }
+}
