@@ -131,10 +131,26 @@ router.post('/loginForm', async (req, res, next) => {
 
 });
 
-
+// 로그아웃
 router.get("/logout", (req, res, next) => {
 
     req.session.destroy();
+    userAuth = {
+        id: "",
+        username: "",
+        userbirth: "",
+        usertel: "",
+        userpassport: "",
+        userid: "",
+        usersecess: "",
+        useremail: "",
+        useraddr: "",
+        postcode:"",
+        detailAddress:"",
+        extraAddress:"",
+        role: "customer",
+        accessToken: ""
+    }
     console.log(`session을 삭제하였습니다.`);
     res.redirect("/customer");
 });

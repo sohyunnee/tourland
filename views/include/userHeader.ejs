@@ -139,6 +139,7 @@
 <header>
     <nav id="nav1">
         <ul>
+            <li><a href="/customer/tourlandBoardNotice">고객센터</a></li>
             <%
             console.log(userAuth.role);
             if (userAuth.role == "customer" || userAuth == null) { %>
@@ -157,7 +158,6 @@
                                     href="/manager/statistics">관리자</a></li>
                 <% } %>
             <% } %>
-                <li><a href="/customer/tourlandBoardNotice">고객센터</a></li>
 
         </ul>
     </nav>

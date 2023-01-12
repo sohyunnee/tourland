@@ -33,13 +33,13 @@
 							  <p>
                                   <label>작성자</label>
                                   <% if(mypage === 'mypageuser') { %>
-                                  <%=Auth.username%><br>
-                                  <input type="hidden" name="writer"  value="<%-Auth.username%>" readonly="readonly">
+                                  <%=userAuth.username%><br>
+                                  <input type="hidden" name="writer"  value="<%-userAuth.username%>" readonly="readonly">
                                   <% } %>
 
                                   <% if(mypage === 'mypageemp') { %>
-                                  <%=Auth.empname%>
-                                  <input type="hidden" name="writer"  value="<%-Auth.empname%>" readonly="readonly">
+                                  <%=userAuth.empname%>
+                                  <input type="hidden" name="writer"  value="<%-userAuth.empname%>" readonly="readonly">
                                   <% } %>
 							  </p>
 							  <p>

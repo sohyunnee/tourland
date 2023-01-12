@@ -33,14 +33,14 @@
 							  <p>
                                   <label>작성자</label>
                                   <% if(mypage === 'mypageuser') { %>
-                                  <%=Auth.username%><br>
+                                  <%=userAuth.username%><br>
 								  <input type="hidden" name="id"  value="<%=toUpdate.id%>">
-                                  <input type="hidden" name="writer"  value="<%-Auth.username%>">
+                                  <input type="hidden" name="writer"  value="<%-userAuth.username%>">
                                   <% } %>
 
                                   <% if(mypage === 'mypageemp') { %>
-                                  <%=Auth.empname%>
-                                  <input type="text" name="writer"  value="<%-Auth.empname%>">
+                                  <%=userAuth.empname%>
+                                  <input type="text" name="writer"  value="<%-userAuth.empname%>">
                                   <% } %>
 							  </p>
 							  <p>
