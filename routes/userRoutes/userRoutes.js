@@ -547,29 +547,29 @@ router.post('/loginManagerForm', (req, res, next) => {
 
 });
 
-// // 로그아웃
-// router.get("/logout", (req, res, next) => {
-//
-//     req.session.destroy();
-//     // userAuth = {
-//     //     id: "",
-//     //     username: "",
-//     //     userbirth: "",
-//     //     usertel: "",
-//     //     userpassport: "",
-//     //     userid: "",
-//     //     usersecess: "",
-//     //     useremail: "",
-//     //     useraddr: "",
-//     //     postcode:"",
-//     //     detailAddress:"",
-//     //     extraAddress:"",
-//     //     role: "customer",
-//     //     accessToken: ""
-//     // }
-//     console.log(`session을 삭제하였습니다.`);
-//     res.redirect("/customer");
-// })
+// 로그아웃
+router.get("/logout", (req, res, next) => {
+
+    req.session.destroy();
+    userAuth = {
+        id: "",
+        username: "",
+        userbirth: "",
+        usertel: "",
+        userpassport: "",
+        userid: "",
+        usersecess: "",
+        useremail: "",
+        useraddr: "",
+        postcode:"",
+        detailAddress:"",
+        extraAddress:"",
+        role: "customer",
+        accessToken: ""
+    }
+    console.log(`session을 삭제하였습니다.`);
+    res.redirect("/customer");
+})
 
 // KR 패키지 목록
 router.get("/tourlandProductKRList", async (req, res, next) => {
@@ -796,7 +796,10 @@ router.get("/tourlandProductDetail/:pno", async (req, res, next) => {
 
 // KR 패키지 목록
 router.get("/tourlandProductJPList", async (req, res, next) => {
-    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
+
     const userid = req.params.userid;
     let {ddate, rdate, cnt, searchType, keyword} = req.query;
     const contentSize = Number(process.env.CONTENTSIZE); // 한페이지에 나올 개수
@@ -902,15 +905,12 @@ router.get("/tourlandProductJPList", async (req, res, next) => {
 
         if (list != null) {
             res.render("user/product/tourlandProductKRList", {
-                Auth,
-                AuthEmp,
-                login,
+                userAuth,
                 tourDays,
                 date,
                 capa,
                 countlist,
                 list,
-                Manager,
                 searchkeyword,
                 error,
                 pagingData,
