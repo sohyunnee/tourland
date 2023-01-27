@@ -199,7 +199,7 @@
         $(".selTour").change();
 
         $("#doReserv").click(function () {
-            if ("<%=Auth.userid%>"==null) {
+            if ("<%=userAuth.userid%>"==null) {
                 alert("로그인부터 먼저해주세요");
                 location.href = "/loginForm";
                 return false;
@@ -271,7 +271,7 @@
             })
         });
         $("#doWish").click(function () {
-            if ( "<%=Auth.userid%>"==null ) {
+            if ( "<%=userAuth.userid%>"==null ) {
                 alert("로그인부터 먼저해주세요");
                 location.href = "/loginForm";
                 return false;
@@ -375,9 +375,9 @@
         });
     });
 </script>
-<% if (Auth != null && login == 'user') { %>
+<% if (userAuth != null && userAuth.role == 'customer') { %>
 <script>
-    uno = "<%= Auth.userid %>";
+    uno = "<%= userAuth.userid %>";
 </script>
 <% } %>
 <section>

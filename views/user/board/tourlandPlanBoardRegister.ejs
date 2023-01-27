@@ -41,14 +41,14 @@
 							  <p id="writerP">
 								<label>작성자</label>
 								  <% if(mypage == 'mypageuser') { %> <!--유저일때 -->
-								     <span>[ <%=Auth.username%> ]</span><br>
-								     <input type="hidden" name="writer"  value="<%=Auth.username%>">
-								     <input type="hidden" name="userno" class="form-control" value="<%=Auth.userno%>">
+								     <span>[ <%=userAuth.username%> ]</span><br>
+								     <input type="hidden" name="writer"  value="<%=userAuth.username%>">
+								     <input type="hidden" name="userno" class="form-control" value="<%=userAuth.userno%>">
 								  <% } %>
 								  <% if(mypage == 'mypageemp') { %>
-								   	  <span>[ <%=Auth.empname%> ]</span><br>
-								      <input type="hidden" name="writer"  value="<%=Auth.empname%>">
-								      <input type="hidden" name="empno" class="form-control" value="<%=Auth.empno%>">
+								   	  <span>[ <%=userAuth.empname%> ]</span><br>
+								      <input type="hidden" name="writer"  value="<%=userAuth.empname%>">
+								      <input type="hidden" name="empno" class="form-control" value="<%=userAuth.empno%>">
 								  <% } %>
 							  </p>
 							  <p id="titlaP">

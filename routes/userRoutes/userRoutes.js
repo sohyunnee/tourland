@@ -9,6 +9,7 @@ const session = require('express-session');
 const MemoryStore = require('memorystore')(session);
 const {QueryTypes, where} = require("sequelize");
 const moment = require("moment");
+let {userAuth}= require("../../controller/userData");
 
 const {sessionCheck, sessionEmpCheck} = require('../../controller/sessionCtl');
 
@@ -38,54 +39,9 @@ const parser = bodyParser.urlencoded({extended: false});
 const {upload} = require("../../controller/fileupload");
 
 
-let user = {
-    Auth: {
-        id: "0",
-        username: "",
-        userbirth: "",
-        usertel: "",
-        useraddr: "",
-        userpassport: "",
-        userid: "0",
-        usersecess: "",
-        useremail: ""
-    },
-    AuthEmp: {
-        empno: "",
-        empname: "",
-        empbirth: "",
-        emptel: "",
-        empaddr: "",
-        epmauth: "",
-        empid: "",
-        epmretired: ""
-    },
-    Mananger: {name: "", right: 1},
-    User: "",
-    login: "user",
-    mypage: "mypageuser"
-}
-
-
-
 
 // 투어랜드 메인 페이지
 router.get('/', async (req, res, next) => {
-
-    console.log("33333333333333333->", user);
-    let Auth, AuthEmp, Manager, login;
-    if(req.session.user == undefined){
-        Auth = user.Auth;
-        AuthEmp = user.AuthEmp;
-        Manager = user.Mananger;
-        login = user.login;
-    }
-    else {
-        Auth = req.session.user.Auth;
-        AuthEmp = req.session.user.AuthEmp;
-        Manager = req.session.user.Mananger;
-        login = req.session.user.login;
-    }
 
     const currentProductPrice = {};
     const currentProductPrice2 = {};
@@ -145,41 +101,22 @@ router.get('/', async (req, res, next) => {
 
     let msg = `세션이 존재하지 않습니다.`
 
-    if (req.session.user) {
-        msg = `${req.session.user.User}`;
-        if(Auth != null){
-            Auth = {
-                username: req.session.user.User,
-                userid: req.session.user.Auth.userid,
-                userpass: req.session.user.Auth.userpass
-            };
-            Manager : {
-                name: req.session.user.Auth.username
-            }
-        }
-        if(AuthEmp != null){
-            Auth = {
-                username: req.session.user.User,
-                userid: req.session.user.AuthEmp.empid,
-                userpass: req.session.user.AuthEmp.emppass
-            };
-            AuthEmp = {
-                empname: req.session.user.User,
-                emprid: req.session.user.AuthEmp.empid,
-                emppass: req.session.user.AuthEmp.emppass
-            };
-            Manager = {
-                name :  req.session.user.AuthEmp.empname
-            }
-        }
+    // if (req.userAuth) {
+    //     msg = `${req.userAuth.username}`;
+    //     if(userAuth != null){
+    //         userAuth = {
+    //             role : req.userAuth.role,
+    //             username: req.userAuth,username,
+    //         };
+    //     }
+    // }
 
-        login = req.session.user.login;
-    }
-
-    console.log("Auth============->", Auth, AuthEmp, msg);
 
     let {searchType, keyword, keyword2} = req.query;
     let searchkeyword = keyword;
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
 
 
     res.render('tourlandMain', {
@@ -191,18 +128,17 @@ router.get('/', async (req, res, next) => {
         popup2,
         banner1,
         banner2,
-        Auth,
-        AuthEmp,
-        login,
-        Manager,
-        searchkeyword
+        searchkeyword,
+        userAuth
     });
 
 });
 
 // 회원가입
 router.get('/tourlandRegister', function (req, res, next) {
-
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
     let autoNo = "";
 
     let userVO = {};
@@ -212,9 +148,7 @@ router.get('/tourlandRegister', function (req, res, next) {
 
     let msg = `세션이 존재하지 않습니다.`
     if (req.session.user) {
-        msg = `${req.session.user.User}`;
-        Auth = {username: req.session.user.User};
-        login = req.session.user.login;
+        const userAuth = req.session.user.userAuth;
     }
 
     console.log("Auth->", Auth, msg);
@@ -359,32 +293,32 @@ router.post('/EditPasswordCheck1', async (req, res, next) => {
 )
 ;
 
-// 로그인 폼
-router.get('/loginForm', async (req, res, next) => {
-    console.log("3333333333->", req.session.user);
+// // 로그인 폼
+// router.get('/loginForm', async (req, res, next) => {
+//     console.log("3333333333->", req.session.user);
+//
+//     let {Auth, Manager, login} = sessionCheck(req, res);
+//     let {registerSuccess, id} = req.query;
+//     let UserStay = {userid: id};
+//
+//     let EmpStay = {};
+//     let error = "";인
+//     let searchkeyword = "";
+//
+//
+//     res.render("user/tourlandLoginForm", {
+//         Auth,
+//         login,
+//         Manager,
+//         searchkeyword,
+//         registerSuccess,
+//         UserStay,
+//         EmpStay,
+//         error
+//     });
+// });
 
-    let {Auth, Manager, login} = sessionCheck(req, res);
-    let {registerSuccess, id} = req.query;
-    let UserStay = {userid: id};
-
-    let EmpStay = {};
-    let error = "";
-    let searchkeyword = "";
-
-
-    res.render("user/tourlandLoginForm", {
-        Auth,
-        login,
-        Manager,
-        searchkeyword,
-        registerSuccess,
-        UserStay,
-        EmpStay,
-        error
-    });
-});
-
-// 매니저 로그인 폼
+// 매니저 인 폼
 router.get('/loginManagerForm', async (req, res, next) => {
 
     let {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
@@ -474,74 +408,75 @@ const fetchEmpData = async (req) => {
     return empVO;
 
 }
-// 로그인 전송
-router.post('/loginForm', (req, res, next) => {
-    let {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
 
-
-    let {id, pass} = req.body;
-
-    let empVO = {};
-    let session = {};
-
-    let registerSuccess = {};
-    let UserStay;
-    let EmpStay = {};
-    let error = "";
-    let searchkeyword = "";
-    let loginSuccess = false;
-
-    fetchData(req).then((userVO) => {
-        console.log("11111111111111111111111->",userVO);
-        // 직원 ID가 없는 경우
-        if (userVO == null) {
-            error = "idnoneexist";
-            res.status(405).json({"responseText":error});
-            console.log("2222222222222->",userVO);
-        } else {
-
-            // 직원 ID가 있고 탈퇴한 회원
-            if (userVO.usersecess === 1) {
-                error = "retiredcustomer";
-                res.status(405).json({"responseText":error});
-
-            } else if (userVO.usersecess === 0) {
-
-                bcrypt.compare(req.body.pass, userVO.userpass, (err, result) => {
-                    UserStay = userVO;
-                    if (result) {
-                        loginSuccess = true;
-
-                        req.session.user = {
-                            "User": userVO.username,
-                            "login": "user",
-                            "Auth": userVO,
-                            "pass": pass,
-                            "mypage": "mypageuser",
-                            "userid": id,
-                        }
-                        req.session.save();
-                        Auth = userVO;
-                        login = "user";
-
-                        console.log(`세션 저장 완료! `);
-                        res.status(200).json({"responseText":"loginsuccess"});
-                    } else {
-                        res.status(405).json({"responseText":err});
-                    }
-                })
-
-            } else {
-                error = "usernotfind";
-                res.status(405).json({"responseText":error});
-            }
-
-        }
-
-    })
-
-
-});
+// // 로그인 전송
+// router.post('/loginForm', (req, res, next) => {
+//     let {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
+//
+//
+//     let {id, pass} = req.body;
+//
+//     let empVO = {};
+//     let session = {};
+//
+//     let registerSuccess = {};
+//     let UserStay;
+//     let EmpStay = {};
+//     let error = "";
+//     let searchkeyword = "";
+//     let loginSuccess = false;
+//
+//     fetchData(req).then((userVO) => {
+//         console.log("11111111111111111111111->",userVO);
+//         // 직원 ID가 없는 경우
+//         if (userVO == null) {
+//             error = "idnoneexist";
+//             res.status(405).json({"responseText":error});
+//             console.log("2222222222222->",userVO);
+//         } else {
+//
+//             // 직원 ID가 있고 탈퇴한 회원
+//             if (userVO.usersecess === 1) {
+//                 error = "retiredcustomer";
+//                 res.status(405).json({"responseText":error});
+//
+//             } else if (userVO.usersecess === 0) {
+//
+//                 bcrypt.compare(req.body.pass, userVO.userpass, (err, result) => {
+//                     UserStay = userVO;
+//                     if (result) {
+//                         loginSuccess = true;
+//
+//                         req.session.user = {
+//                             "User": userVO.username,
+//                             "login": "user",
+//                             "Auth": userVO,
+//                             "pass": pass,
+//                             "mypage": "mypageuser",
+//                             "userid": id,
+//                         }
+//                         req.session.save();
+//                         Auth = userVO;
+//                         login = "user";
+//
+//                         console.log(`세션 저장 완료! `);
+//                         res.status(200).json({"responseText":"loginsuccess"});
+//                     } else {
+//                         res.status(405).json({"responseText":err});
+//                     }
+//                 })
+//
+//             } else {
+//                 error = "usernotfind";
+//                 res.status(405).json({"responseText":error});
+//             }
+//
+//         }
+//
+//     })
+//
+//
+// });
 
 
 
@@ -616,15 +551,33 @@ router.post('/loginManagerForm', (req, res, next) => {
 router.get("/logout", (req, res, next) => {
 
     req.session.destroy();
-    Auth = {};
+    userAuth = {
+        id: "",
+        username: "",
+        userbirth: "",
+        usertel: "",
+        userpassport: "",
+        userid: "",
+        usersecess: "",
+        useremail: "",
+        useraddr: "",
+        postcode:"",
+        detailAddress:"",
+        extraAddress:"",
+        role: "customer",
+        accessToken: ""
+    }
     console.log(`session을 삭제하였습니다.`);
     res.redirect("/customer");
 })
 
 // KR 패키지 목록
 router.get("/tourlandProductKRList", async (req, res, next) => {
-    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
-    const userid = req.params.userid;
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
+    console.log('-------userAuth-------', userAuth);
+
     let {ddate, rdate, cnt, searchType, keyword} = req.query;
     const contentSize = Number(process.env.CONTENTSIZE); // 한페이지에 나올 개수
     const currentPage = Number(req.query.currentPage) || 1; //현재페이
@@ -729,15 +682,12 @@ router.get("/tourlandProductKRList", async (req, res, next) => {
 
         if (list != null) {
             res.render("user/product/tourlandProductKRList", {
-                Auth,
-                AuthEmp,
-                login,
+                userAuth,
                 tourDays,
                 date,
                 capa,
                 countlist,
                 list,
-                Manager,
                 searchkeyword,
                 error,
                 pagingData,
@@ -756,12 +706,12 @@ router.get("/tourlandProductKRList", async (req, res, next) => {
 
 // 패키지 제품 상세 리스트
 router.get("/tourlandProductDetail/:pno", async (req, res, next) => {
-    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
+    console.log('-------userAuth-------', userAuth);
     const pno = req.params.pno;
     let {price, rdate, cnt, searchType, keyword} = req.query;
-
-    console.log("1212121212->", Auth);
-
 
     try {
 
@@ -820,9 +770,7 @@ router.get("/tourlandProductDetail/:pno", async (req, res, next) => {
 
         if (vo != null) {
             res.render("user/product/tourlandProductDetail", {
-                Auth,
-                login,
-                Manager,
+                userAuth,
                 searchkeyword,
                 tourDays,
                 date,
@@ -848,7 +796,10 @@ router.get("/tourlandProductDetail/:pno", async (req, res, next) => {
 
 // KR 패키지 목록
 router.get("/tourlandProductJPList", async (req, res, next) => {
-    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
+
     const userid = req.params.userid;
     let {ddate, rdate, cnt, searchType, keyword} = req.query;
     const contentSize = Number(process.env.CONTENTSIZE); // 한페이지에 나올 개수
@@ -954,15 +905,12 @@ router.get("/tourlandProductJPList", async (req, res, next) => {
 
         if (list != null) {
             res.render("user/product/tourlandProductKRList", {
-                Auth,
-                AuthEmp,
-                login,
+                userAuth,
                 tourDays,
                 date,
                 capa,
                 countlist,
                 list,
-                Manager,
                 searchkeyword,
                 error,
                 pagingData,
@@ -1262,7 +1210,11 @@ router.get('/tourlandMyCoupon', async (req, res, next) => {
 
 // 공지사항 전체 목록
 router.get("/tourlandBoardNotice", async (req, res, next) => {
-    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
+    console.log('-----------userAuth-------', userAuth);
+
     const usersecess = req.params.usersecess;
     let {searchType, keyword} = req.query;
 
@@ -1319,9 +1271,7 @@ router.get("/tourlandBoardNotice", async (req, res, next) => {
         noticeFixedList,
         noticeNoFixedList,
         cri,
-        Auth,
-        login,
-        Manager,
+        userAuth,
         searchkeyword,
         pagingData
     });
@@ -1329,7 +1279,6 @@ router.get("/tourlandBoardNotice", async (req, res, next) => {
 
 // 공지사항 게시글 읽기
 router.get("/tourlandBoardNoticeDetail", async (req, res, next) => {
-    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
     let notice =
         await models.notice.findOne({
             raw: true,
@@ -1344,13 +1293,16 @@ router.get("/tourlandBoardNoticeDetail", async (req, res, next) => {
 
     // userHeader에 들어갈거
     let searchkeyword = "";
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
 
-    res.render("user/board/tourlandBoardNoticeDetail", {notice, Auth, login, Manager, searchkeyword});
+    res.render("user/board/tourlandBoardNoticeDetail", {notice, userAuth, searchkeyword});
 });
 
 // FAQ 전체 목록
 router.get('/tourlandBoardFAQ', async (req, res, next) => {
-    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
+
     const usersecess = req.params.usersecess;
     let {searchType, keyword} = req.query;
 
@@ -1386,15 +1338,18 @@ router.get('/tourlandBoardFAQ', async (req, res, next) => {
 
     // userHeader 에서 필요한 변수들
     let searchkeyword = "";
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
 
 
-    res.render('user/board/tourlandBoardFAQ', {list, cri, pagingData, Auth, login, Manager, searchkeyword});
+    res.render('user/board/tourlandBoardFAQ', {list, cri, pagingData, userAuth, searchkeyword});
 })
 
 //-------------------------------------상품 문의 사항 상품 문의 사항 상품 문의 사항 상품 문의 사항 상품 문의 사항 상품 문의 사항 --------------------------------------------------
 // 상품 문의 사항
 router.get('/tourlandPlanBoard', async (req, res, next) => {
-    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
+
     const contentSize = 8 // 한페이지에 나올 개수
     const currentPage = Number(req.query.currentPage) || 1; //현재페이
     const {limit, offset} = getPagination(currentPage, contentSize);
@@ -1422,30 +1377,29 @@ router.get('/tourlandPlanBoard', async (req, res, next) => {
     console.log('--------한 페이지에 나오는 데이터-', listCount);
 
     const cri = {currentPage};
-    const mypage = {};
     const pageMaker = {};
     console.log('-----------현재페이지=------', currentPage);
 
     // userHeader 에서 필요한 변수들
     let searchkeyword = "";
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
 
 
     res.render('user/board/tourlandPlanBoard', {
         list,
         cri,
         pagingData,
-        Auth,
-        login,
-        Manager,
+        userAuth,
         searchkeyword,
-        mypage,
         pageMaker
     });
 })
 
 // 상품 문의 사항 글 눌러서 보기
 router.get('/tourlandPlanBoardDetail', async (req, res, next) => {
-    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
+
     console.log('=---쿼리추출---', req.query);
 
     let plan =
@@ -1460,38 +1414,47 @@ router.get('/tourlandPlanBoardDetail', async (req, res, next) => {
 
     // userHeader 에서 필요한 변수들
     let searchkeyword = "";
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
 
-    res.render('user/board/tourlandPlanBoardDetail', {plan, Auth, login, Manager, searchkeyword, cri});
+    res.render('user/board/tourlandPlanBoardDetail', {plan, userAuth, searchkeyword, cri});
 })
 
 // 상품 문의사항 글 등록하는 화면임
 router.get('/tourlandPlanBoardRegister', (req, res, next) => {
 
     // userHeader 에서 필요한 변수들
-    let Manager = {};
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
     let searchkeyword = "";
     let mypage = {};
-    if (login === 'user') {
+    if (userAuth.role === 'customer') {
+        return res.redirect('/loginForm')
+    } else if (userAuth.role === 'basic') {
         mypage = "mypageuser"
-    } else if (login === 'Manager') {
+    } else if (userAuth.role === 'admin') {
         mypage = "mypageemp"
     }
-    console.log('------------------Auth누구------', Auth);
 
-
-    res.render('user/board/tourlandPlanBoardRegister', {mypage, Auth, login, Manager, searchkeyword});
+    res.render('user/board/tourlandPlanBoardRegister', {mypage, userAuth, searchkeyword});
 })
 
 // 상품 문의 사항 등록하기
 router.post('/tourlandPlanBoardRegister', async (req, res, next) => {
 // userHeader 에서 필요한 변수들
-    let Manager = {};
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
     let searchkeyword = "";
 
     let mypage = {};
-    if (login === 'user') {
+    if (userAuth.role === 'customer') {
+        return res.redirect('/loginForm')
+    } else if (userAuth.role === 'basic') {
         mypage = "mypageuser"
-    } else if (login === 'Manager') {
+    } else if (userAuth.role === 'admin') {
         mypage = "mypageemp"
     }
 
@@ -1535,9 +1498,7 @@ router.post('/tourlandPlanBoardRegister', async (req, res, next) => {
 
     res.render('user/board/tourlandPlanBoard', {
         PlanRegister,
-        Auth,
-        login,
-        Manager,
+        userAuth,
         mypage,
         searchkeyword,
         list,
@@ -1547,11 +1508,13 @@ router.post('/tourlandPlanBoardRegister', async (req, res, next) => {
 });
 
 
-//-----------------------------------------여행후기여행후기여행후기여행후기여행후기여행후기여행후기여행후기여행후기----------------------------------------------------------------
 // 여행 후기 게시판 목록 보기기
 router.get('/tourlandCustBoard', async (req, res, next) => {
     // userHeader 에서 필요한 변수들
-    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
+    console.log('-------userAuth-------', userAuth);
     let searchkeyword = "";
 
     const contentSize = 5 // 한페이지에 나올 개수
@@ -1578,15 +1541,17 @@ router.get('/tourlandCustBoard', async (req, res, next) => {
     const pagingData = getPagingData(listCount, currentPage, limit);
     let cri = currentPage;
     res.render('user/board/tourlandCustBoard', {
-        Auth, AuthEmp, login, Manager, searchkeyword, cri, list, pagingData})
+        userAuth, searchkeyword, cri, list, pagingData})
 })
 
 // 여행 후기 게시글 보기
 router.get('/tourlandCustBoardDetail', async (req, res, next) => {
     // userHeader 에서 필요한 변수들
-    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
-    let mypage = req.session.user.mypage;
-    let username = req.session.user.Auth.username;
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
+    let username = userAuth.username;
+    console.log('-----------userAuth-------', userAuth);
     let searchkeyword = "";
 
     console.log('=---쿼리에서 id 추출 ---', req.query.id);
@@ -1599,20 +1564,11 @@ router.get('/tourlandCustBoardDetail', async (req, res, next) => {
             }
         });
     console.log('----게시글보기====', custBoardVO);
-    // custBoardVO 테이블에 있는 자료중 1개만갖고오기
-
-    console.log('------현재사용자????----->>>>', Auth);
-    console.log('-------현재사용자mypage??------', mypage);
-
 
     res.render('user/board/tourlandCustBoardDetail', {
         custBoardVO,
-        Auth,
-        AuthEmp,
-        login,
-        Manager,
+        userAuth,
         searchkeyword,
-        mypage,
         username
     });
 })
@@ -1624,38 +1580,30 @@ router.get('/tourlandCustBoardRegister', (req, res, next) => {
     let custBoardVO = {};
 
     // userHeader 에서 필요한 변수들
-    let Manager = {};
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
+    console.log('-----------userAuth-------', userAuth);
     let searchkeyword = "";
 
     let mypage = {};
-    if (login === 'user') {
+    if (userAuth.role === 'customer') {
+        return res.redirect('/loginForm')
+    } else if (userAuth.role === 'basic') {
         mypage = "mypageuser"
-    } else if (login === 'Manager') {
+    } else if (userAuth.role === 'admin') {
         mypage = "mypageemp"
     }
 
-    console.log('---------------mypage---------', mypage);
-    console.log('------------------Auth누구------', Auth);
-
-    res.render('user/board/tourlandCustBoardRegister', {mypage, Auth, login, Manager, searchkeyword, custBoardVO})
+    res.render('user/board/tourlandCustBoardRegister', {mypage, userAuth, searchkeyword, custBoardVO})
 })
 
 // 여행 후기 등록하기
 router.post('/tourlandCustBoardRegister', upload.single("image"), async (req, res, next) => {
 // userHeader 에서 필요한 변수들
-    let Manager = {};
-    let searchkeyword = "";
-
-    let mypage = {};
-    if (login === 'user') {
-        mypage = "mypageuser"
-    } else if (login === 'Manager') {
-        mypage = "mypageemp"
+    if (req.session.user) {
+        userAuth = req.session.user;
     }
-
-    // console.log('--------------등록했따Auth누구------', mypage);
-    console.log('------------------Auth누구------', Auth);
-    console.log('---------------auth비밀번호', Auth.userpass);
 
     let body = {};
     if (req.file != null) {
@@ -1679,12 +1627,7 @@ router.post('/tourlandCustBoardRegister', upload.single("image"), async (req, re
     console.log('------------req.body-----', req.body);
     console.log('파일파일파일파일파일파일', req.file);
 
-    // console.log('~~~~~~~ req.session~~~~~~~~',req.session.user.Auth.userpass);
-
-    const custRegister = await models.custboard.create(body, {
-            passwd: req.session.user.Auth.userpass
-        }
-    );
+    const custRegister = await models.custboard.create(body);
 
     console.log('-------이미지 등록???----------', req.file);
     console.log('------------------게시글 등록-----------------', custRegister);
@@ -1717,11 +1660,7 @@ router.post('/tourlandCustBoardRegister', upload.single("image"), async (req, re
 
     res.render('user/board/tourlandCustBoard', {
         custRegister,
-        Auth,
-        login,
-        Manager,
-        mypage,
-        searchkeyword,
+        userAuth,
         list,
         pagingData,
         cri
@@ -1745,22 +1684,24 @@ router.get('/tourlandCustBoardRegisterEdit', upload.single("image"), async (req,
     console.log('----------수정화면입장----------', toUpdate);
 
     // userHeader 에서 필요한 변수들
-    let {Auth, AuthEmp, Manager, login} = sessionCheck(req,res);
-    if (login === 'user') {
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
+    console.log('-----------userAuth-------', userAuth);
+
+    let mypage = {};
+    if (userAuth.role === 'basic') {
         mypage = "mypageuser"
-    } else if (login === 'Manager') {
+    } else if (userAuth.role === 'admin') {
         mypage = "mypageemp"
     }
     let searchkeyword = "";
 
 
     res.render('user/board/tourlandCustBoardRegisterEdit', {
-        Auth,
-        AuthEmp,
+        userAuth,
         mypage,
         custBoardVO,
-        login,
-        Manager,
         searchkeyword,
         cri,
         toUpdate,
@@ -1837,26 +1778,22 @@ router.delete('/tourlandCustBoardDetail', async (req, res, next) => {
     // console.log('=========삭제========', result);
 
     // userHeader 에서 필요한 변수들
-    let Auth = {username: "manager", empname: "테스트"};
-    let login = "";
-    let Manager = {};
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
     let searchkeyword = "";
-    let mypage = "mypageuser";
+
 
 
     res.render('user/board/tourlandCustBoard', {
-        mypage,
-        Auth,
+        userAuth,
         custBoardVO,
-        login,
-        Manager,
         searchkeyword,
     })
 
 });
 
 
-//-----------------------------------이벤트이벤트이벤트이벤트이벤트이벤트이벤트이벤트이벤트이벤트----------------------------------------
 // 이벤트 목록 (현재 진행중인 이벤트들 나옴)
 router.get("/tourlandEventList/ingEvent", async (req, res, next) => {
 
@@ -1871,10 +1808,12 @@ router.get("/tourlandEventList/ingEvent", async (req, res, next) => {
     let mistyrose = {};
 
     // userHeader 에서 필요한 변수들
-    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
     let searchkeyword = "";
 
-    res.render("user/event/tourEventList", {Auth, AuthEmp, login, Manager, searchkeyword, eventList, mistyrose});
+    res.render("user/event/tourEventList", {userAuth, searchkeyword, eventList, mistyrose});
 });
 
 // 만료된 이벤트 목록
@@ -1891,10 +1830,12 @@ router.get("/tourlandEventList/expiredEvent", async (req, res, next) => {
     let mistyrose = {};
 
     // userHeader 에서 필요한 변수들
-    let {Auth, AuthEmp, Manager, login} = sessionCheck(req, res);
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
     let searchkeyword = "";
 
-    res.render("user/event/tourEventEndList", {Auth, AuthEmp, login, Manager, searchkeyword, eventList, mistyrose});
+    res.render("user/event/tourEventEndList", {userAuth, searchkeyword, eventList, mistyrose});
 });
 
 // 이벤트 상세페이지
@@ -1912,11 +1853,13 @@ router.get("/eventDetailPage", async (req, res, next) => {
     console.log(eventVO);
 
     // userHeader 에서 필요한 변수들
-    let {Auth, AuthEmp, Manager, login} = sessionCheck(req,res);
+    if (req.session.user) {
+        userAuth = req.session.user;
+    }
     let searchkeyword = "";
 
 
-    res.render('user/event/eventDetailPage', {Auth, AuthEmp, login, Manager, searchkeyword, eventVO, no});
+    res.render('user/event/eventDetailPage', {userAuth, searchkeyword, eventVO, no});
 });
 
 module.exports = router;

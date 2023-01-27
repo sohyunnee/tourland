@@ -52,6 +52,28 @@ module.exports = function(sequelize, DataTypes) {
     useremail: {
       type: DataTypes.STRING(100),
       allowNull: true
+    },
+    role: {
+      type: DataTypes.ENUM('customer','basic','supervisor','admin'),
+      allowNull: true,
+      defaultValue: "basic",
+      comment: "권한여부"
+    },
+    postcode: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    detailAddress: {
+      type: DataTypes.STRING(100),
+      allowNull: true
+    },
+    extraAddress: {
+      type: DataTypes.STRING(100),
+      allowNull: true
+    },
+    accessToken: {
+      type: DataTypes.STRING(255),
+      allowNull: true
     }
   }, {
     sequelize,
