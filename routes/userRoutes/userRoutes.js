@@ -293,30 +293,30 @@ router.post('/EditPasswordCheck1', async (req, res, next) => {
 )
 ;
 
-// // 로그인 폼
-// router.get('/loginForm', async (req, res, next) => {
-//     console.log("3333333333->", req.session.user);
-//
-//     let {Auth, Manager, login} = sessionCheck(req, res);
-//     let {registerSuccess, id} = req.query;
-//     let UserStay = {userid: id};
-//
-//     let EmpStay = {};
-//     let error = "";인
-//     let searchkeyword = "";
-//
-//
-//     res.render("user/tourlandLoginForm", {
-//         Auth,
-//         login,
-//         Manager,
-//         searchkeyword,
-//         registerSuccess,
-//         UserStay,
-//         EmpStay,
-//         error
-//     });
-// });
+// 로그인 폼
+ router.get('/loginForm', async (req, res, next) => {
+     console.log("3333333333->", req.session.user);
+
+     let {Auth, Manager, login} = sessionCheck(req, res);
+     let {registerSuccess, id} = req.query;
+     let UserStay = {userid: id};
+
+     let EmpStay = {};
+     let error = "";
+     let searchkeyword = "";
+
+
+     res.render("user/tourlandLoginForm", {
+         Auth,
+         login,
+         Manager,
+         searchkeyword,
+         registerSuccess,
+         UserStay,
+         EmpStay,
+         error
+     });
+ });
 
 // 매니저 인 폼
 router.get('/loginManagerForm', async (req, res, next) => {
@@ -390,7 +390,7 @@ const fetchEmpData = async (req) => {
 
     let empVO;
     try {
-        if (id !== null && pass != null) {
+        if (id !== null && pass !== null) {
             // ID,PASS가 입력된 경우
             empVO = await models.employee.findOne({
                 raw: true,
@@ -409,75 +409,73 @@ const fetchEmpData = async (req) => {
 
 }
 
-// // 로그인 전송
-// router.post('/loginForm', (req, res, next) => {
-//     let {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
-//
-//
-//     let {id, pass} = req.body;
-//
-//     let empVO = {};
-//     let session = {};
-//
-//     let registerSuccess = {};
-//     let UserStay;
-//     let EmpStay = {};
-//     let error = "";
-//     let searchkeyword = "";
-//     let loginSuccess = false;
-//
-//     fetchData(req).then((userVO) => {
-//         console.log("11111111111111111111111->",userVO);
-//         // 직원 ID가 없는 경우
-//         if (userVO == null) {
-//             error = "idnoneexist";
-//             res.status(405).json({"responseText":error});
-//             console.log("2222222222222->",userVO);
-//         } else {
-//
-//             // 직원 ID가 있고 탈퇴한 회원
-//             if (userVO.usersecess === 1) {
-//                 error = "retiredcustomer";
-//                 res.status(405).json({"responseText":error});
-//
-//             } else if (userVO.usersecess === 0) {
-//
-//                 bcrypt.compare(req.body.pass, userVO.userpass, (err, result) => {
-//                     UserStay = userVO;
-//                     if (result) {
-//                         loginSuccess = true;
-//
-//                         req.session.user = {
-//                             "User": userVO.username,
-//                             "login": "user",
-//                             "Auth": userVO,
-//                             "pass": pass,
-//                             "mypage": "mypageuser",
-//                             "userid": id,
-//                         }
-//                         req.session.save();
-//                         Auth = userVO;
-//                         login = "user";
-//
-//                         console.log(`세션 저장 완료! `);
-//                         res.status(200).json({"responseText":"loginsuccess"});
-//                     } else {
-//                         res.status(405).json({"responseText":err});
-//                     }
-//                 })
-//
-//             } else {
-//                 error = "usernotfind";
-//                 res.status(405).json({"responseText":error});
-//             }
-//
-//         }
-//
-//     })
-//
-//
-// });
+ // 로그인 전송
+ router.post('/loginForm', (req, res, next) => {
+     let {Auth, AuthEmp, Manager, login} = sessionEmpCheck(req, res);
 
+
+     let {id, pass} = req.body;
+
+     let empVO = {};
+     let session = {};
+
+     let registerSuccess = {};
+     let UserStay;
+     let EmpStay = {};
+     let error = "";
+     let searchkeyword = "";
+     let loginSuccess = false;
+
+     fetchData(req).then((userVO) => {
+         console.log("11111111111111111111111->",userVO);
+         // 직원 ID가 없는 경우
+         if (userVO == null) {
+             error = "idnoneexist";
+             res.status(405).json({"responseText":error});
+             console.log("2222222222222->",userVO);
+         } else {
+             // 직원 ID가 있고 탈퇴한 회원
+             if (userVO.usersecess === 1) {
+                 error = "retiredcustomer";
+                 res.status(405).json({"responseText":error});
+
+             } else if (userVO.usersecess === 0) {
+
+                 bcrypt.compare(req.body.pass, userVO.userpass, (err, result) => {
+                     UserStay = userVO;
+                     if (result) {
+                         loginSuccess = true;
+
+                         req.session.user = {
+                             "User": userVO.username,
+                             "login": "user",
+                             "Auth": userVO,
+                             "pass": pass,
+                             "mypage": "mypageuser",
+                             "userid": id,
+                         }
+                         req.session.save();
+                         Auth = userVO;
+                         login = "user";
+
+                         console.log(`세션 저장 완료! `);
+                         res.status(200).json({"responseText":"loginsuccess"});
+                     } else {
+                         res.status(405).json({"responseText":err});
+                     }
+                 })
+
+             } else {
+                 error = "usernotfind";
+                 res.status(405).json({"responseText":error});
+             }
+
+         }
+
+     })
+
+
+ });
 
 
 
@@ -1037,7 +1035,7 @@ router.get("/tourlandProductDetail/tourlandProductReview/:pno", async (req, res,
 
 });
 
-// 비밀번호 변경
+// 비밀번호 확인
 router.get("/EditPassword", (req, res, next) => {
 
     let {empid, checkPass, userid} = req.body;
@@ -1046,7 +1044,7 @@ router.get("/EditPassword", (req, res, next) => {
     console.log(req.session.user);
     try {
         if (req.session.user) {
-            Auth = { // 비밀번호 변경하면 Auth에 아래 정보 들어감
+            Auth = {
                 userid: req.session.user.Auth.userid,
                 empid: req.session.user.Auth.empid
             };

@@ -101,7 +101,7 @@
                                     <button type="button" class="btn btn-primary active btn-sm " id="btnModify"
                                             data-no="<%= hotel.id %>">수정
                                     </button>
-                                    <button type="button" class="btn btn-primary btn-danger btn-sm " id="btnDelete"
+                                    <button class="btn btn-primary btn-danger btn-sm " id="btnDelete"
                                             data-no="<%= hotel.id %>">삭제
                                     </button>
                                 </td>
@@ -177,12 +177,11 @@ $("#btnModify").click(function(){
     location.href = "hotelModify?id="+id+"&page="+page;
 })
 
-$("btnDelete").click(function(){
-    var id = $(this).attr("data-no");
+$("#btnDelete").click(function(){
     var res = confirm("삭제하시겠습니까?");
     if (res) {
-        alert("삭제되었습니다.");
-        location.href = "hotelDelete?id=" + id;
+        var id = $(this).attr("data-no");
+        location.href = "/manager/hotelDelete?id=" + id;
     }
 });
 </script>
